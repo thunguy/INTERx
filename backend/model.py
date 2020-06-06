@@ -16,6 +16,7 @@ class Patient(db.Model):
     username = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     dob = db.Column(db.Date)
+    sex = db.Column(db.String)
     activityid = db.Column(db.String, db.ForeignKey('activities.activityid'), nullable=True)
 
     activity = db.relationship('Activity', backref='patients')
@@ -36,6 +37,7 @@ class Provider(db.Model):
     password = db.Column(db.String)
     accepting_new_patients = db.Column(db.Boolean, default=True)
     suffix = db.Column(db.String, nullable=True)
+    sex = db.Column(db.String)
 
     def __repr__(self):
         if self.suffix:
