@@ -24,6 +24,18 @@ class Patient(db.Model):
     def __repr__(self):
         return f'<Patient patientid={self.patientid} fname={self.fname} lname={self.lname} birthdate={self.dob}>'
 
+    def to_dict(self):
+        return {
+            'patientid': self.patientid,
+            'fname': self.fname,
+            'lname': self.lname,
+            'email': self.email,
+            'username': self.username,
+            'password': self.password,
+            'dob': str(self.dob),
+            'sex': self.sex
+        }
+
 
 class Provider(db.Model):
     __tablename__ = 'providers'
