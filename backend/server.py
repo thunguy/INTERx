@@ -1,11 +1,14 @@
 from flask import Flask, request, session, redirect, jsonify
+from flask_cors import CORS
 from model import connect_to_db, db, Patient
 
 
 app = Flask(__name__)
-app.secret_key = 'dev'
+cors = CORS(app)
+# app.secret_key = 'dev'
 
 
+# Add a single patient
 @app.route('/patients', methods=['POST'])
 def add_patient():
 
@@ -45,7 +48,7 @@ def get_patients():
     return jsonify([patient.to_dict() for patient in all_patients])
 
 
-# Get single patient
+# Get a single patient
 @app.route('/patients/<patientid>', methods=['GET'])
 def get_patient(patientid):
     patient = Patient.query.get(patientid)
@@ -67,17 +70,23 @@ def update_patient(patientid):
 
     # print(request.json)
 
-    patient.fname = request.json['fname']
-    patient.lname = request.json['lname']
-    patient.email = request.json['email']
-    patient.username = request.json['username']
-    patient.password = request.json['password']
-    patient.dob = request.json['dob']
-    patient.sex = request.json['sex']
+    try:
+        patient.fname = request.json['fname']
+        patient.lname = request.json['lname']
+        patient.email = request.json['email']
+        patient.username = request.json['username']
+        patient.password = request.json['password']
+        patient.dob = request.json['dob']
+        patient.sex = request.json['sex']
 
-    db.session.commit()
+        db.session.commit()
 
-    return jsonify(patient.to_dict())
+        return jsonify(patient.to_dict())
+
+    except Exception as error:
+        return jsonify({
+            'error': str(error)
+        })
 
 
 if __name__ == '__main__':
