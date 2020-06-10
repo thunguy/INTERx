@@ -48,14 +48,31 @@ class Provider(db.Model):
     username = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     accepting_new_patients = db.Column(db.Boolean, default=True)
-    suffix = db.Column(db.String, nullable=True)
+    credential = db.Column(db.String, nullable=True)
     sex = db.Column(db.String)
 
+    activities = db.relationship('ProviderActivity', backref='providers')
+
     def __repr__(self):
-        if self.suffix:
-            return f'<Provider NPI={self.npi} name={self.fname} {self.lname}, {self.suffix}>'
+        if self.credential:
+            return f'<Provider NPI={self.npi} name={self.fname} {self.lname}, {self.credential}>'
         else:
             return f'<Provider NPI={self.npi} name={self.fname} {self.lname}>'
+
+    def to_dict(self):
+        return {
+            'npi': self.npi,
+            'fname': self.fname,
+            'lname': self.lname,
+            'specialty': self.specialty,
+            'email': self.email,
+            'username': self.username,
+            'password': self.password,
+            'accepting_new_patients': self.accepting_new_patients,
+            'credential': self.credential,
+            'sex': self.sex,
+            'activities': [activity.activityid for activity in self.activities]
+        }
 
 
 class Activity(db.Model):
@@ -65,6 +82,11 @@ class Activity(db.Model):
 
     def __repr__(self):
         return f'<Activity activity={self.activityid}>'
+
+    def to_dict(self):
+        return {
+            'activityid': self.activityid
+        }
 
 
 class ProviderActivity(db.Model):

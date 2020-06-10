@@ -18,6 +18,12 @@ import {
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const schema = {
+  npi: {
+    presence: { allowEmpty: false, message: 'is required' },
+    length: {
+      maximum: 32
+    }
+  },
     fname: {
       presence: { allowEmpty: false, message: 'is required' },
       length: {
@@ -91,20 +97,65 @@ const schema = {
     const handleChange = (event) => {
       event.persist();
       console.log('line 91', event.target.name, event.target.value);
+      if (event.target.type === 'checkbox')
+        event.target.value = event.target.checked;
+
       setFormState((formState) => ({
         ...formState,
         values: {
           ...formState.values,
-          [event.target.name]:
-            event.target.type === 'checkbox'
-              ? event.target.checked
-              : event.target.value
+          [event.target.name]: event.target.value
         },
         touched: {
           ...formState.touched,
           [event.target.name]: true
         }
       }));
+      // event.target.type === 'checkbox'
+      //   ? event.target.checked
+      //   : event.target.value
+      if (event.target.name === 'npi' && event.target.value.length >= 10) {
+        handleNPI(event.target.value);
+      }
+    };
+
+    const handleNPI = (npi) => {
+
+      fetch(`/api/?number=${npi}&version=2.1`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success', data);
+        console.log(data.results[0].taxonomies[0].desc);
+        setFormState((formState) => ({
+          ...formState,
+          values: {
+            ...formState.values,
+            'fname': data.results[0].basic.first_name,
+            'lname': data.results[0].basic.last_name,
+            'credential': data.results[0].basic.credential, 
+            'specialty': data.results[0].taxonomies[0].desc,
+          }
+        }));
+      })
+      .catch((error) => {
+        console.error('Error', error);
+      });
+    
+
+      // setFormState((formState) => ({
+      //   ...formState,
+      //   values: {
+      //     ...formState.values,
+      //     [event.target.name]:
+      //       event.target.type === 'checkbox'
+      //         ? event.target.checked
+      //         : event.target.value
+      //   },
+      //   touched: {
+      //     ...formState.touched,
+      //     [event.target.name]: true
+      //   }
+      // }));
     };
   
     const handleBack = () => {
@@ -116,25 +167,15 @@ const schema = {
       console.log('An essay was submitted:', event);
       console.log('An essay was submitted:', formState);
 
-      const data = {
-        fname: formState.values.fname,
-        lname: formState.values.lname,
-        email: formState.values.email,
-        username: formState.values.username,
-        password: formState.values.password,
-        dob: formState.values.dob,
-        sex: formState.values.sex
-      };
+      console.log('line 129',formState.values)
 
-      console.log('line 129',data)
-
-      fetch('http://localhost:5000/patients', {
+      fetch('http://localhost:5000/providers', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         mode: 'cors',
-        body: JSON.stringify(data),
+        body: JSON.stringify(formState.values)
       })
       .then((response) => response.json())
       .then((data) => {
@@ -166,8 +207,22 @@ const schema = {
                 <form onSubmit={handleRegister} >
                   
                   <Typography variant="h2">
-                    NEW PATIENT
+                    NEW PROVIDER
                   </Typography>
+
+                  <TextField
+                    error={hasError('npi')}
+                    fullWidth
+                    helperText={
+                      hasError('npi') ? formState.errors.npi[0] : null
+                    }
+                    label="NPI"
+                    name="npi"
+                    onChange={handleChange}
+                    type="text"
+                    value={formState.values.npi || ''}
+                    variant="outlined"
+                  />
 
                   <TextField
                     error={hasError('fname')}
@@ -240,16 +295,30 @@ const schema = {
                   />
 
                   <TextField
-                    error={hasError('dob')}
+                    error={hasError('specialty')}
                     fullWidth
                     helperText={
-                      hasError('dob') ? formState.errors.dob[0] : null
+                      hasError('specialty') ? formState.errors.specialty[0] : null
                     }
-                    label="Birthdate"
-                    name="dob"
+                    label="Specialty"
+                    name="specialty"
                     onChange={handleChange}
-                    type="date"
-                    defaultValue="new Date()"
+                    type="text"
+                    value={formState.values.specialty || ''}
+                    variant="outlined"
+                  />
+
+                  <TextField
+                    error={hasError('credential')}
+                    fullWidth
+                    helperText={
+                      hasError('credential') ? formState.errors.credential[0] : null
+                    }
+                    label="Credential"
+                    name="credential"
+                    onChange={handleChange}
+                    type="text"
+                    value={formState.values.credential || ''}
                     variant="outlined"
                   />
                   
