@@ -9,14 +9,14 @@ db = SQLAlchemy()
 class Patient(db.Model):
     __tablename__ = 'patients'
 
-    patientid = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    fname = db.Column(db.String)
-    lname = db.Column(db.String)
-    email = db.Column(db.String, unique=True)
-    username = db.Column(db.String, unique=True)
-    password = db.Column(db.String)
-    dob = db.Column(db.Date)
-    sex = db.Column(db.String)
+    patientid = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
+    fname = db.Column(db.String, nullable=False)
+    lname = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    username = db.Column(db.String, unique=True, nullable=False)
+    password = db.Column(db.String, nullable=False)
+    dob = db.Column(db.Date, nullable=False)
+    sex = db.Column(db.String, nullable=False)
     activityid = db.Column(db.String, db.ForeignKey('activities.activityid'), nullable=True)
 
     activity = db.relationship('Activity', backref='patients')
@@ -40,16 +40,16 @@ class Patient(db.Model):
 class Provider(db.Model):
     __tablename__ = 'providers'
 
-    npi = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String)
-    lname = db.Column(db.String)
-    specialty = db.Column(db.String)
-    email = db.Column(db.String, unique=True)
-    username = db.Column(db.String, unique=True)
-    password = db.Column(db.String)
+    npi = db.Column(db.Integer, primary_key=True, nullable=False)
+    fname = db.Column(db.String, nullable=False)
+    lname = db.Column(db.String, nullable=False)
+    specialty = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    username = db.Column(db.String, unique=True, nullable=False)
+    password = db.Column(db.String, nullable=False)
     accepting_new_patients = db.Column(db.Boolean, default=True)
     credential = db.Column(db.String, nullable=True)
-    sex = db.Column(db.String)
+    sex = db.Column(db.String, nullable=False)
 
     activities = db.relationship('ProviderActivity', backref='providers')
 
@@ -78,7 +78,7 @@ class Provider(db.Model):
 class Activity(db.Model):
     __tablename__ = 'activities'
 
-    activityid = db.Column(db.String, primary_key=True)
+    activityid = db.Column(db.String, primary_key=True, nullable=False)
 
     def __repr__(self):
         return f'<Activity activity={self.activityid}>'
