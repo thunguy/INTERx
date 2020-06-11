@@ -3,12 +3,12 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 
 // import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
-import { PatientRegister, ProviderRegister } from './views';
+import { PatientRegister, ProviderRegister, PatientLogin, ProviderLogin } from './views';
 
 const Routes = () => {
   return (
     <Switch>
-      <Redirect exact from="/" to="/providers/register"/>
+      <Redirect exact from="/" to="/patients/login"/>
 
       <Route exact path="/patients/register">
         <PatientRegister/>
@@ -18,13 +18,13 @@ const Routes = () => {
         <ProviderRegister/>
       </Route>
 
-      {/* <Route exact path="/patients/login">
+      <Route exact path="/patients/login">
         <PatientLogin/>
-      </Route> */}
+      </Route>
 
-      {/* <Route exact path="/providers/login">
+      <Route exact path="/providers/login">
         <ProviderLogin/>
-      </Route> */}
+      </Route>
     </Switch>
   );
 };

@@ -12,7 +12,7 @@ const browserHistory = createBrowserHistory();
 function App() {
   return (
     <Router history={browserHistory}>
-      <Routes />
+      <Routes/>
     </Router>
   );
 }

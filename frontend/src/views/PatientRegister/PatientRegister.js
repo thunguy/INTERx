@@ -5,16 +5,7 @@ import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import {
-    Grid,
-    Button,
-    IconButton,
-    TextField,
-    Link,
-    FormHelperText,
-    Checkbox,
-    Typography
-  } from '@material-ui/core';
+import { Grid, Button, IconButton, TextField, Link, FormHelperText, Checkbox, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const schema = {
@@ -162,7 +153,7 @@ const schema = {
                 </IconButton>
               </div>
               <div>
-                <form onSubmit={handleRegister} >
+                <form onSubmit={handleRegister}>
 
                   <Typography variant="h2">
                     NEW PATIENT
@@ -298,7 +289,7 @@ const schema = {
                     type="submit"
                     variant="contained"
                   >
-                    Register now
+                    Register
                   </Button>
 
                   <Typography
@@ -308,10 +299,10 @@ const schema = {
                     Have an account?{' '}
                     <Link
                       component={RouterLink}
-                      to="/login"
+                      to="/patients/login"
                       variant="h6"
                     >
-                      Sign in
+                      Log In
                     </Link>
                   </Typography>
                 </form>

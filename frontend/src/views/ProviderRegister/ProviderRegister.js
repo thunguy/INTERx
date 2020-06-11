@@ -5,16 +5,7 @@ import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import {
-    Grid,
-    Button,
-    IconButton,
-    TextField,
-    Link,
-    FormHelperText,
-    Checkbox,
-    Typography
-  } from '@material-ui/core';
+import { Grid, Button, IconButton, TextField, Link, FormHelperText, Checkbox, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
@@ -414,7 +405,7 @@ const schema = {
                     type="submit"
                     variant="contained"
                   >
-                    Register now
+                    Register
                   </Button>
 
                   <Typography
@@ -424,10 +415,10 @@ const schema = {
                     Have an account?{' '}
                     <Link
                       component={RouterLink}
-                      to="/login"
+                      to="/providers/login"
                       variant="h6"
                     >
-                      Sign in
+                      Log In
                     </Link>
                   </Typography>
                 </form>
