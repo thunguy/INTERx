@@ -16,6 +16,40 @@ import {
     Typography
   } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+function CheckboxesTags(props) {
+  console.log('line 27')
+  return (
+    <Autocomplete
+      multiple
+      // id="checkboxes-tags-demo"
+      options={props.activities || []}
+      disableCloseOnSelect
+      getOptionLabel={(option) => option.activityid}
+      renderOption={(option, { selected }) => (
+        <React.Fragment>
+          <Checkbox
+            icon={icon}
+            checkedIcon={checkedIcon}
+            style={{ marginRight: 8 }}
+            checked={selected}
+          />
+          {option.activityid}
+        </React.Fragment>
+      )}
+      style={{ width: 500 }}
+      renderInput={(params) => (
+        <TextField {...params} variant="outlined" label="Checkboxes" placeholder="Favorites" />
+      )}
+    />
+  );
+}
 
 const schema = {
   npi: {
@@ -72,7 +106,7 @@ const schema = {
       checked: true
     }
   };
-  
+
   const Register = (props) => {
     const { history } = props;
 
@@ -82,11 +116,26 @@ const schema = {
       touched: {},
       errors: {}
     });
-  
+
+    useEffect(() => {
+      fetch("http://localhost:5000/activities")
+      .then(response => response.json())
+      .then(result => setFormState((formState) => {
+        console.log('line 123', result)
+        return {
+          ...formState,
+          "activities": result
+        }
+      }))
+      .catch(error => console.log('error', error));
+    }, [])
+
+
     useEffect(() => {
       // const errors = validate(formState.values, schema);
+      console.log('line 139')
       const errors = null;
-      
+
       setFormState((formState) => ({
         ...formState,
         isValid: errors ? false : true,
@@ -97,23 +146,22 @@ const schema = {
     const handleChange = (event) => {
       event.persist();
       console.log('line 91', event.target.name, event.target.value);
-      if (event.target.type === 'checkbox')
-        event.target.value = event.target.checked;
 
       setFormState((formState) => ({
         ...formState,
         values: {
           ...formState.values,
-          [event.target.name]: event.target.value
+          [event.target.name]:
+           event.target.type === 'checkbox'
+           ? event.target.checked
+           : event.target.value
         },
         touched: {
           ...formState.touched,
           [event.target.name]: true
         }
       }));
-      // event.target.type === 'checkbox'
-      //   ? event.target.checked
-      //   : event.target.value
+
       if (event.target.name === 'npi' && event.target.value.length >= 10) {
         handleNPI(event.target.value);
       }
@@ -132,7 +180,7 @@ const schema = {
             ...formState.values,
             'fname': data.results[0].basic.first_name,
             'lname': data.results[0].basic.last_name,
-            'credential': data.results[0].basic.credential, 
+            'credential': data.results[0].basic.credential,
             'specialty': data.results[0].taxonomies[0].desc,
           }
         }));
@@ -140,7 +188,7 @@ const schema = {
       .catch((error) => {
         console.error('Error', error);
       });
-    
+
 
       // setFormState((formState) => ({
       //   ...formState,
@@ -157,11 +205,11 @@ const schema = {
       //   }
       // }));
     };
-  
+
     const handleBack = () => {
       history.goBack();
     };
-  
+
     const handleRegister = (event) => {
       console.log('An essay was submitted:');
       console.log('An essay was submitted:', event);
@@ -205,7 +253,7 @@ const schema = {
               </div>
               <div>
                 <form onSubmit={handleRegister} >
-                  
+
                   <Typography variant="h2">
                     NEW PROVIDER
                   </Typography>
@@ -321,7 +369,7 @@ const schema = {
                     value={formState.values.credential || ''}
                     variant="outlined"
                   />
-                  
+
                   <FormControl component="fieldset">
                     <FormLabel component="legend">Sex</FormLabel>
                     <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
@@ -330,6 +378,8 @@ const schema = {
                       <FormControlLabel value="other" control={<Radio />} label="Other" />
                     </RadioGroup>
                   </FormControl>
+
+                  <CheckboxesTags activities={formState.activities}/>
 
                   <div>
                     <Checkbox
@@ -356,7 +406,7 @@ const schema = {
                       {formState.errors.policy[0]}
                     </FormHelperText>
                   )}
-                  
+
                   <Button
                     color="primary"
                     disabled={!formState.isValid}
@@ -367,7 +417,7 @@ const schema = {
                   >
                     Register now
                   </Button>
-                  
+
                   <Typography
                     color="textSecondary"
                     variant="body1"
