@@ -45,7 +45,7 @@ function CheckboxesTags(props) {
       )}
       style={{ width: 500 }}
       renderInput={(params) => (
-        <TextField {...params} variant="outlined" label="Checkboxes" placeholder="Favorites" />
+        <TextField {...params} variant="outlined" label="Activities" placeholder="Add an Activity" />
       )}
     />
   );
@@ -168,7 +168,6 @@ const schema = {
     };
 
     const handleNPI = (npi) => {
-
       fetch(`/api/?number=${npi}&version=2.1`)
       .then((response) => response.json())
       .then((data) => {

@@ -250,6 +250,9 @@ const schema = {
                     type="date"
                     defaultValue="new Date()"
                     variant="outlined"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                   />
 
                   <FormControl component="fieldset">
