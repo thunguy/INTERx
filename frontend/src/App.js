@@ -1,13 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 import Routes from './Routes';
 import { Router } from 'react-router-dom';
-
 import { createBrowserHistory } from 'history';
+// import './App.css';
+
 
 const browserHistory = createBrowserHistory();
-
 
 function App() {
   return (

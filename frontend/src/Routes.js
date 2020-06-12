@@ -1,14 +1,14 @@
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
-
+import { PatientRegister, ProviderRegister, PatientLogin, ProviderLogin, SelectProvider } from './views';
 // import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
-import { PatientRegister, ProviderRegister, PatientLogin, ProviderLogin } from './views';
 
 const Routes = () => {
   return (
     <Switch>
-      <Redirect exact from="/" to="/patients/login"/>
+
+      <Redirect exact from="/" to="/patients/register"/>
 
       <Route exact path="/patients/register">
         <PatientRegister/>
@@ -25,6 +25,11 @@ const Routes = () => {
       <Route exact path="/providers/login">
         <ProviderLogin/>
       </Route>
+
+      <Route exact path="/patients/select/provider">
+        <SelectProvider/>
+      </Route>
+
     </Switch>
   );
 };

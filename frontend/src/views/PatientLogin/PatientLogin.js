@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
-import { makeStyles } from '@material-ui/styles';
 import { Grid, Button, IconButton, TextField, Link, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+// import { makeStyles } from '@material-ui/styles';
 
 const schema = {
   username: {
     presence: { allowEmpty: false, message: 'is required' },
-    // email: true,
     length: {
       maximum: 64
     }
@@ -22,7 +21,7 @@ const schema = {
   }
 };
 
-const Login = props => {
+const Login = (props) => {
   const { history } = props;
 
   const [formState, setFormState] = useState({

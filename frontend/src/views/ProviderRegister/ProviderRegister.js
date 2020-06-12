@@ -2,45 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import validate from 'validate.js';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
 import { Grid, Button, IconButton, TextField, Link, FormHelperText, Checkbox, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+// import { makeStyles } from '@material-ui/styles';
+// import validate from 'validate.js';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-function CheckboxesTags(props) {
-  console.log('line 27')
-  return (
-    <Autocomplete
-      multiple
-      // id="checkboxes-tags-demo"
-      options={props.activities || []}
-      disableCloseOnSelect
-      getOptionLabel={(option) => option.activityid}
-      renderOption={(option, { selected }) => (
-        <React.Fragment>
-          <Checkbox
-            icon={icon}
-            checkedIcon={checkedIcon}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option.activityid}
-        </React.Fragment>
-      )}
-      style={{ width: 500 }}
-      renderInput={(params) => (
-        <TextField {...params} variant="outlined" label="Activities" placeholder="Add an Activity" />
-      )}
-    />
-  );
-}
 
 const schema = {
   npi: {
@@ -110,21 +82,16 @@ const schema = {
 
     useEffect(() => {
       fetch("http://localhost:5000/activities")
-      .then(response => response.json())
-      .then(result => setFormState((formState) => {
-        console.log('line 123', result)
-        return {
-          ...formState,
-          "activities": result
-        }
+      .then((response) => response.json())
+      .then((data) => setFormState((formState) => {
+        formState.activities = data
+        return formState
       }))
       .catch(error => console.log('error', error));
     }, [])
 
-
     useEffect(() => {
       // const errors = validate(formState.values, schema);
-      console.log('line 139')
       const errors = null;
 
       setFormState((formState) => ({
@@ -136,8 +103,6 @@ const schema = {
 
     const handleChange = (event) => {
       event.persist();
-      console.log('line 91', event.target.name, event.target.value);
-
       setFormState((formState) => ({
         ...formState,
         values: {
@@ -163,37 +128,38 @@ const schema = {
       .then((response) => response.json())
       .then((data) => {
         console.log('Success', data);
-        console.log(data.results[0].taxonomies[0].desc);
-        setFormState((formState) => ({
-          ...formState,
-          values: {
-            ...formState.values,
-            'fname': data.results[0].basic.first_name,
-            'lname': data.results[0].basic.last_name,
-            'credential': data.results[0].basic.credential,
-            'specialty': data.results[0].taxonomies[0].desc,
-          }
-        }));
+
+        if (data.Errors)
+          setFormState((formState) => {
+            formState.isValid = false
+            formState.errors.npi = [data.Errors[0].description]
+            return formState
+          });
+
+        else if (data.results.length !== 0)
+          setFormState((formState) => ({
+            ...formState,
+            values: {
+              ...formState.values,
+              'fname': data.results[0].basic.first_name,
+              'lname': data.results[0].basic.last_name,
+              'credential': data.results[0].basic.credential,
+              'specialty': data.results[0].taxonomies[0].desc,
+            }
+          }));
+        else
+          setFormState((formState) => ({
+            ...formState,
+            isValid: false,
+            errors: {
+              ...formState.errors,
+              "npi": ["NPI does not exist"]
+            }
+          }));
       })
       .catch((error) => {
         console.error('Error', error);
       });
-
-
-      // setFormState((formState) => ({
-      //   ...formState,
-      //   values: {
-      //     ...formState.values,
-      //     [event.target.name]:
-      //       event.target.type === 'checkbox'
-      //         ? event.target.checked
-      //         : event.target.value
-      //   },
-      //   touched: {
-      //     ...formState.touched,
-      //     [event.target.name]: true
-      //   }
-      // }));
     };
 
     const handleBack = () => {
@@ -201,17 +167,12 @@ const schema = {
     };
 
     const handleRegister = (event) => {
-      console.log('An essay was submitted:');
-      console.log('An essay was submitted:', event);
-      console.log('An essay was submitted:', formState);
-
-      console.log('line 129',formState.values)
+      if (formState.values.activities)
+        formState.values.activities = formState.values.activities.map((activity) => activity.activityid)
 
       fetch('http://localhost:5000/providers', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: {'Content-Type': 'application/json'},
         mode: 'cors',
         body: JSON.stringify(formState.values)
       })
@@ -220,7 +181,6 @@ const schema = {
         console.log('Success', data);
       })
       .catch((error) => {
-        console.log('line 145');
         console.error('Error', error);
       });
 
@@ -228,8 +188,11 @@ const schema = {
       history.push('/');
     };
 
-    const hasError = (field) =>
-      formState.touched[field] && formState.errors[field] ? true : false;
+    const hasError = (field) => {
+      // console.log(formState.touched, formState.errors)
+      return formState.touched[field] && formState.errors[field] ? true : false;
+    }
+
 
     return (
       <div>
@@ -242,7 +205,7 @@ const schema = {
                 </IconButton>
               </div>
               <div>
-                <form onSubmit={handleRegister} >
+                <form onSubmit={handleRegister}>
 
                   <Typography variant="h2">
                     NEW PROVIDER
@@ -369,17 +332,41 @@ const schema = {
                     </RadioGroup>
                   </FormControl>
 
-                  <CheckboxesTags activities={formState.activities}/>
+                  <Autocomplete
+                    multiple
+                    options={formState.activities || []}
+                    onChange={(event, values) => {
+                      event.target = {name: 'activities', value: values}
+                      handleChange(event);
+                    }}
+                    disableCloseOnSelect
+                    getOptionLabel={(option) => option.activityid}
+                    renderOption={(option, { selected }) => (
+                      <React.Fragment>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.activityid}
+                      </React.Fragment>
+                    )}
+                    style={{ width: 500 }}
+                    renderInput={(params) => (
+                      <TextField {...params} variant="outlined" label="Activities" placeholder="Add an Activity" />
+                    )}
+                  />
 
                   <div>
-                    <Checkbox
-                      checked={formState.values.policy || false}
-                      color="primary"
-                      name="policy"
-                      onChange={handleChange}
-                    />
-                    <Typography color="textSecondary" variant="body1">
-                      I have read the{' '}
+                    <span>
+                      <Checkbox
+                        checked={formState.values.policy || false}
+                        color="primary"
+                        name="policy"
+                        onChange={handleChange}
+                      />
+                        I have read the{' '}
                       <Link
                         color="primary"
                         component={RouterLink}
@@ -389,7 +376,7 @@ const schema = {
                       >
                         Terms and Conditions
                       </Link>
-                    </Typography>
+                    </span>
                   </div>
                   {hasError('policy') && (
                     <FormHelperText error>

@@ -58,6 +58,9 @@ const schema = {
     }
   };
 
+  // const Register = (props) => {
+  //   const history = props.history;
+
   const Register = (props) => {
     const { history } = props;
 
@@ -256,24 +259,24 @@ const schema = {
                   </FormControl>
 
                   <div>
-                    <Checkbox
-                      checked={formState.values.policy || false}
-                      color="primary"
-                      name="policy"
-                      onChange={handleChange}
-                    />
-                    <Typography color="textSecondary" variant="body1">
-                      I have read the{' '}
-                      <Link
+                    <span>
+                      <Checkbox
+                        checked={formState.values.policy || false}
                         color="primary"
-                        component={RouterLink}
-                        to="#"
-                        underline="always"
-                        variant="h6"
-                      >
-                        Terms and Conditions
-                      </Link>
-                    </Typography>
+                        name="policy"
+                        onChange={handleChange}
+                      />
+                        I have read the{' '}
+                        <Link
+                          color="primary"
+                          component={RouterLink}
+                          to="#"
+                          underline="always"
+                          variant="h6"
+                        >
+                          Terms and Conditions
+                        </Link>
+                    </span>
                   </div>
                   {hasError('policy') && (
                     <FormHelperText error>
