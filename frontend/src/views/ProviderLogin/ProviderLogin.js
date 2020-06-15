@@ -75,75 +75,71 @@ const Login = props => {
 
   return (
     <div>
-      <Grid container>
-        <Grid item lg={7} xs={12}>
-          <div>
-            <div>
-              <IconButton onClick={handleBack}>
-                <ArrowBackIcon />
-              </IconButton>
-            </div>
-            <div>
-              <form onSubmit={handleLogin}>
+      <div>
+        <div>
+          <IconButton onClick={handleBack}>
+            <ArrowBackIcon />
+          </IconButton>
+        </div>
+        <div>
+          <form onSubmit={handleLogin}>
 
-                <Typography variant="h2">
-                  PROVIDER LOGIN
-                </Typography>
+            <Typography variant="h2">
+              <center>PROVIDER LOGIN</center>
+            </Typography>
 
-                <TextField
-                  error={hasError('username')}
-                  fullWidth
-                  helperText={
-                    hasError('username') ? formState.errors.username[0] : null
-                  }
-                  label="Username"
-                  name="username"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.username || ''}
-                  variant="outlined"
-                />
-                <TextField
-                  error={hasError('password')}
-                  fullWidth
-                  helperText={
-                    hasError('password') ? formState.errors.password[0] : null
-                  }
-                  label="Password"
-                  name="password"
-                  onChange={handleChange}
-                  type="password"
-                  value={formState.values.password || ''}
-                  variant="outlined"
-                />
-                <Button
-                  color="primary"
-                  disabled={!formState.isValid}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                >
-                  Log in
-                </Button>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don't have an account?{' '}
-                  <Link
-                    component={RouterLink}
-                    to="/providers/register"
-                    variant="h6"
-                  >
-                    Register
-                  </Link>
-                </Typography>
-              </form>
-            </div>
-          </div>
-        </Grid>
-      </Grid>
+            <TextField
+              error={hasError('username')}
+              fullWidth
+              helperText={
+                hasError('username') ? formState.errors.username[0] : null
+              }
+              label="Username"
+              name="username"
+              onChange={handleChange}
+              type="text"
+              value={formState.values.username || ''}
+              variant="outlined"
+            />
+            <TextField
+              error={hasError('password')}
+              fullWidth
+              helperText={
+                hasError('password') ? formState.errors.password[0] : null
+              }
+              label="Password"
+              name="password"
+              onChange={handleChange}
+              type="password"
+              value={formState.values.password || ''}
+              variant="outlined"
+            />
+            <Button
+              color="primary"
+              disabled={!formState.isValid}
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+            >
+              Log in
+            </Button>
+            <Typography
+              color="textSecondary"
+              variant="body1"
+            >
+              Don't have an account?{' '}
+              <Link
+                component={RouterLink}
+                to="/providers/register"
+                variant="h6"
+              >
+                Register
+              </Link>
+            </Typography>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

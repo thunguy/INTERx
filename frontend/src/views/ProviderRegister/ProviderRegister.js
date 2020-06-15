@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -82,10 +81,12 @@ const schema = {
 
     useEffect(() => {
       fetch("http://localhost:5000/activities")
-      .then((response) => response.json())
-      .then((data) => setFormState((formState) => {
-        formState.activities = data
-        return formState
+      .then(response => response.json())
+      .then(data => setFormState((formState) => {
+        return {
+          ...formState,
+          "activities": data
+        }
       }))
       .catch(error => console.log('error', error));
     }, [])
@@ -130,11 +131,14 @@ const schema = {
         console.log('Success', data);
 
         if (data.Errors)
-          setFormState((formState) => {
-            formState.isValid = false
-            formState.errors.npi = [data.Errors[0].description]
-            return formState
-          });
+          setFormState((formState) => ({
+            ...formState,
+            isValid: false,
+            errors: {
+              ...formState.errors,
+              'npi': [data.Errors[0].description]
+            }
+          }));
 
         else if (data.results.length !== 0)
           setFormState((formState) => ({
@@ -145,8 +149,9 @@ const schema = {
               'lname': data.results[0].basic.last_name,
               'credential': data.results[0].basic.credential,
               'specialty': data.results[0].taxonomies[0].desc,
-            }
+              'state': data.results[0].taxonomies[0].state            }
           }));
+
         else
           setFormState((formState) => ({
             ...formState,
@@ -189,230 +194,295 @@ const schema = {
     };
 
     const hasError = (field) => {
-      // console.log(formState.touched, formState.errors)
       return formState.touched[field] && formState.errors[field] ? true : false;
     }
 
 
     return (
       <div>
-        <Grid container>
-          <Grid item lg={7} xs={12}>
-            <div>
+        <div>
+          <div>
+            <IconButton onClick={handleBack}>
+              <ArrowBackIcon />
+            </IconButton>
+          </div>
+          <div>
+            <form onSubmit={handleRegister}>
+
+              <Typography variant="h2">
+                <center>NEW PROVIDER</center>
+              </Typography>
+
+              <TextField
+                error={hasError('npi')}
+                fullWidth
+                helperText={
+                  hasError('npi') ? formState.errors.npi[0] : null
+                }
+                label="NPI"
+                name="npi"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.npi || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('fname')}
+                fullWidth
+                helperText={
+                  hasError('fname') ? formState.errors.fname[0] : null
+                }
+                label="First name"
+                name="fname"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.fname || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('lname')}
+                fullWidth
+                helperText={
+                  hasError('lname') ? formState.errors.lname[0] : null
+                }
+                label="Last name"
+                name="lname"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.lname || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('specialty')}
+                fullWidth
+                helperText={
+                  hasError('specialty') ? formState.errors.specialty[0] : null
+                }
+                label="Specialty"
+                name="specialty"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.specialty || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('credential')}
+                fullWidth
+                helperText={
+                  hasError('credential') ? formState.errors.credential[0] : null
+                }
+                label="Credential"
+                name="credential"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.credential || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('email')}
+                fullWidth
+                helperText={
+                  hasError('email') ? formState.errors.email[0] : null
+                }
+                label="Email address"
+                name="email"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.email || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('username')}
+                fullWidth
+                helperText={
+                  hasError('username') ? formState.errors.username[0] : null
+                }
+                label="Username"
+                name="username"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.username || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('password')}
+                fullWidth
+                helperText={
+                  hasError('password') ? formState.errors.password[0] : null
+                }
+                label="Password"
+                name="password"
+                onChange={handleChange}
+                type="password"
+                value={formState.values.password || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('address')}
+                fullWidth
+                helperText={
+                  hasError('address') ? formState.errors.address[0] : null
+                }
+                label="Address"
+                name="address"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.address || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('city')}
+                fullWidth
+                helperText={
+                  hasError('city') ? formState.errors.city[0] : null
+                }
+                label="City"
+                name="city"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.city || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('state')}
+                fullWidth
+                helperText={
+                  hasError('state') ? formState.errors.state[0] : null
+                }
+                label="State"
+                name="state"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.state || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('zipcode')}
+                fullWidth
+                helperText={
+                  hasError('zipcode') ? formState.errors.zipcode[0] : null
+                }
+                label="Zip Code"
+                name="zipcode"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.zipcode || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('phone')}
+                fullWidth
+                helperText={
+                  hasError('phone') ? formState.errors.phone[0] : null
+                }
+                label="Primary Phone"
+                name="phone"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.phone || ''}
+                variant="outlined"
+              />
+
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Sex</FormLabel>
+                <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
+                  <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                  <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                  <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                </RadioGroup>
+              </FormControl>
+
+              <Autocomplete
+                multiple
+                options={formState.activities || []}
+                onChange={(event, values) => {
+                  event.target = {name: 'activities', value: values}
+                  handleChange(event);
+                }}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.activityid}
+                renderOption={(option, { selected }) => (
+                  <React.Fragment>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.activityid}
+                  </React.Fragment>
+                )}
+                style={{ width: 500 }}
+                renderInput={(params) => (
+                  <TextField {...params} variant="outlined" label="Activities" placeholder="Add an Activity" />
+                )}
+              />
+
               <div>
-                <IconButton onClick={handleBack}>
-                  <ArrowBackIcon />
-                </IconButton>
-              </div>
-              <div>
-                <form onSubmit={handleRegister}>
-
-                  <Typography variant="h2">
-                    NEW PROVIDER
-                  </Typography>
-
-                  <TextField
-                    error={hasError('npi')}
-                    fullWidth
-                    helperText={
-                      hasError('npi') ? formState.errors.npi[0] : null
-                    }
-                    label="NPI"
-                    name="npi"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.npi || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('fname')}
-                    fullWidth
-                    helperText={
-                      hasError('fname') ? formState.errors.fname[0] : null
-                    }
-                    label="First name"
-                    name="fname"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.fname || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('lname')}
-                    fullWidth
-                    helperText={
-                      hasError('lname') ? formState.errors.lname[0] : null
-                    }
-                    label="Last name"
-                    name="lname"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.lname || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('email')}
-                    fullWidth
-                    helperText={
-                      hasError('email') ? formState.errors.email[0] : null
-                    }
-                    label="Email address"
-                    name="email"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.email || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('username')}
-                    fullWidth
-                    helperText={
-                      hasError('username') ? formState.errors.username[0] : null
-                    }
-                    label="Username"
-                    name="username"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.username || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('password')}
-                    fullWidth
-                    helperText={
-                      hasError('password') ? formState.errors.password[0] : null
-                    }
-                    label="Password"
-                    name="password"
-                    onChange={handleChange}
-                    type="password"
-                    value={formState.values.password || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('specialty')}
-                    fullWidth
-                    helperText={
-                      hasError('specialty') ? formState.errors.specialty[0] : null
-                    }
-                    label="Specialty"
-                    name="specialty"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.specialty || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('credential')}
-                    fullWidth
-                    helperText={
-                      hasError('credential') ? formState.errors.credential[0] : null
-                    }
-                    label="Credential"
-                    name="credential"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.credential || ''}
-                    variant="outlined"
-                  />
-
-                  <FormControl component="fieldset">
-                    <FormLabel component="legend">Sex</FormLabel>
-                    <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
-                      <FormControlLabel value="female" control={<Radio />} label="Female" />
-                      <FormControlLabel value="male" control={<Radio />} label="Male" />
-                      <FormControlLabel value="other" control={<Radio />} label="Other" />
-                    </RadioGroup>
-                  </FormControl>
-
-                  <Autocomplete
-                    multiple
-                    options={formState.activities || []}
-                    onChange={(event, values) => {
-                      event.target = {name: 'activities', value: values}
-                      handleChange(event);
-                    }}
-                    disableCloseOnSelect
-                    getOptionLabel={(option) => option.activityid}
-                    renderOption={(option, { selected }) => (
-                      <React.Fragment>
-                        <Checkbox
-                          icon={icon}
-                          checkedIcon={checkedIcon}
-                          style={{ marginRight: 8 }}
-                          checked={selected}
-                        />
-                        {option.activityid}
-                      </React.Fragment>
-                    )}
-                    style={{ width: 500 }}
-                    renderInput={(params) => (
-                      <TextField {...params} variant="outlined" label="Activities" placeholder="Add an Activity" />
-                    )}
-                  />
-
-                  <div>
-                    <span>
-                      <Checkbox
-                        checked={formState.values.policy || false}
-                        color="primary"
-                        name="policy"
-                        onChange={handleChange}
-                      />
-                        I have read the{' '}
-                      <Link
-                        color="primary"
-                        component={RouterLink}
-                        to="#"
-                        underline="always"
-                        variant="h6"
-                      >
-                        Terms and Conditions
-                      </Link>
-                    </span>
-                  </div>
-                  {hasError('policy') && (
-                    <FormHelperText error>
-                      {formState.errors.policy[0]}
-                    </FormHelperText>
-                  )}
-
-                  <Button
+                <span>
+                  <Checkbox
+                    checked={formState.values.policy || false}
                     color="primary"
-                    disabled={!formState.isValid}
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
+                    name="policy"
+                    onChange={handleChange}
+                  />
+                    I have read the{' '}
+                  <Link
+                    color="primary"
+                    component={RouterLink}
+                    to="#"
+                    underline="always"
+                    variant="h6"
                   >
-                    Register
-                  </Button>
-
-                  <Typography
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    Have an account?{' '}
-                    <Link
-                      component={RouterLink}
-                      to="/providers/login"
-                      variant="h6"
-                    >
-                      Log In
-                    </Link>
-                  </Typography>
-                </form>
+                    Terms and Conditions
+                  </Link>
+                </span>
               </div>
-            </div>
-          </Grid>
-        </Grid>
+              {hasError('policy') && (
+                <FormHelperText error>
+                  {formState.errors.policy[0]}
+                </FormHelperText>
+              )}
+
+              <Button
+                color="primary"
+                disabled={!formState.isValid}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+              >
+                Register
+              </Button>
+
+              <Typography
+                color="textSecondary"
+                variant="body1"
+              >
+                Have an account?{' '}
+                <Link
+                  component={RouterLink}
+                  to="/providers/login"
+                  variant="h6"
+                >
+                  Log In
+                </Link>
+              </Typography>
+            </form>
+          </div>
+        </div>
       </div>
     );
   };

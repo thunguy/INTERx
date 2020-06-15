@@ -62,7 +62,7 @@ const schema = {
   //   const history = props.history;
 
   const Register = (props) => {
-    const { history } = props;
+    const {history} = props;
 
     const [formState, setFormState] = useState({
       isValid: false,
@@ -120,7 +120,7 @@ const schema = {
       //   sex: formState.values.sex
       // };
 
-      console.log('line 129',formState.values)
+      console.log('line 129', JSON.stringify(formState.values, null, 2))
 
       fetch('http://localhost:5000/patients', {
         method: 'POST',
@@ -147,172 +147,236 @@ const schema = {
 
     return (
       <div>
-        <Grid container>
-          <Grid item lg={7} xs={12}>
-            <div>
+        <div>
+          <div>
+            <IconButton onClick={handleBack}>
+              <ArrowBackIcon />
+            </IconButton>
+          </div>
+          <div>
+            <form onSubmit={handleRegister}>
+              <Typography variant="h2">
+                <center>NEW PATIENT</center>
+              </Typography>
+              <TextField
+                error={hasError('fname')}
+                fullWidth
+                helperText={
+                  hasError('fname') ? formState.errors.fname[0] : null
+                }
+                label="First name"
+                name="fname"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.fname || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('lname')}
+                fullWidth
+                helperText={
+                  hasError('lname') ? formState.errors.lname[0] : null
+                }
+                label="Last name"
+                name="lname"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.lname || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('email')}
+                fullWidth
+                helperText={
+                  hasError('email') ? formState.errors.email[0] : null
+                }
+                label="Email address"
+                name="email"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.email || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('username')}
+                fullWidth
+                helperText={
+                  hasError('username') ? formState.errors.username[0] : null
+                }
+                label="Username"
+                name="username"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.username || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('password')}
+                fullWidth
+                helperText={
+                  hasError('password') ? formState.errors.password[0] : null
+                }
+                label="Password"
+                name="password"
+                onChange={handleChange}
+                type="password"
+                value={formState.values.password || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('dob')}
+                fullWidth
+                helperText={
+                  hasError('dob') ? formState.errors.dob[0] : null
+                }
+                label="Birthdate"
+                name="dob"
+                onChange={handleChange}
+                type="date"
+                defaultValue="new Date()"
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+
+              <TextField
+                error={hasError('address')}
+                fullWidth
+                helperText={
+                  hasError('address') ? formState.errors.address[0] : null
+                }
+                label="Address"
+                name="address"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.address || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('city')}
+                fullWidth
+                helperText={
+                  hasError('city') ? formState.errors.city[0] : null
+                }
+                label="City"
+                name="city"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.city || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('state')}
+                fullWidth
+                helperText={
+                  hasError('state') ? formState.errors.state[0] : null
+                }
+                label="State"
+                name="state"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.state || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('zipcode')}
+                fullWidth
+                helperText={
+                  hasError('zipcode') ? formState.errors.zipcode[0] : null
+                }
+                label="Zip Code"
+                name="zipcode"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.zipcode || ''}
+                variant="outlined"
+              />
+
+              <TextField
+                error={hasError('phone')}
+                fullWidth
+                helperText={
+                  hasError('phone') ? formState.errors.phone[0] : null
+                }
+                label="Primary Phone"
+                name="phone"
+                onChange={handleChange}
+                type="text"
+                value={formState.values.phone || ''}
+                variant="outlined"
+              />
+
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Sex</FormLabel>
+                <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
+                  <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                  <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                  <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                </RadioGroup>
+              </FormControl>
+
               <div>
-                <IconButton onClick={handleBack}>
-                  <ArrowBackIcon />
-                </IconButton>
-              </div>
-              <div>
-                <form onSubmit={handleRegister}>
-
-                  <Typography variant="h2">
-                    NEW PATIENT
-                  </Typography>
-
-                  <TextField
-                    error={hasError('fname')}
-                    fullWidth
-                    helperText={
-                      hasError('fname') ? formState.errors.fname[0] : null
-                    }
-                    label="First name"
-                    name="fname"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.fname || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('lname')}
-                    fullWidth
-                    helperText={
-                      hasError('lname') ? formState.errors.lname[0] : null
-                    }
-                    label="Last name"
-                    name="lname"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.lname || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('email')}
-                    fullWidth
-                    helperText={
-                      hasError('email') ? formState.errors.email[0] : null
-                    }
-                    label="Email address"
-                    name="email"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.email || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('username')}
-                    fullWidth
-                    helperText={
-                      hasError('username') ? formState.errors.username[0] : null
-                    }
-                    label="Username"
-                    name="username"
-                    onChange={handleChange}
-                    type="text"
-                    value={formState.values.username || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('password')}
-                    fullWidth
-                    helperText={
-                      hasError('password') ? formState.errors.password[0] : null
-                    }
-                    label="Password"
-                    name="password"
-                    onChange={handleChange}
-                    type="password"
-                    value={formState.values.password || ''}
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    error={hasError('dob')}
-                    fullWidth
-                    helperText={
-                      hasError('dob') ? formState.errors.dob[0] : null
-                    }
-                    label="Birthdate"
-                    name="dob"
-                    onChange={handleChange}
-                    type="date"
-                    defaultValue="new Date()"
-                    variant="outlined"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-
-                  <FormControl component="fieldset">
-                    <FormLabel component="legend">Sex</FormLabel>
-                    <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
-                      <FormControlLabel value="female" control={<Radio />} label="Female" />
-                      <FormControlLabel value="male" control={<Radio />} label="Male" />
-                      <FormControlLabel value="other" control={<Radio />} label="Other" />
-                    </RadioGroup>
-                  </FormControl>
-
-                  <div>
-                    <span>
-                      <Checkbox
-                        checked={formState.values.policy || false}
-                        color="primary"
-                        name="policy"
-                        onChange={handleChange}
-                      />
-                        I have read the{' '}
-                        <Link
-                          color="primary"
-                          component={RouterLink}
-                          to="#"
-                          underline="always"
-                          variant="h6"
-                        >
-                          Terms and Conditions
-                        </Link>
-                    </span>
-                  </div>
-                  {hasError('policy') && (
-                    <FormHelperText error>
-                      {formState.errors.policy[0]}
-                    </FormHelperText>
-                  )}
-
-                  <Button
+                <span>
+                  <Checkbox
+                    checked={formState.values.policy || false}
                     color="primary"
-                    disabled={!formState.isValid}
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                  >
-                    Register
-                  </Button>
-
-                  <Typography
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    Have an account?{' '}
+                    name="policy"
+                    onChange={handleChange}
+                  />
+                    I have read the{' '}
                     <Link
+                      color="primary"
                       component={RouterLink}
-                      to="/patients/login"
+                      to="#"
+                      underline="always"
                       variant="h6"
                     >
-                      Log In
+                      Terms and Conditions
                     </Link>
-                  </Typography>
-                </form>
+                </span>
               </div>
-            </div>
-          </Grid>
-        </Grid>
+              {hasError('policy') && (
+                <FormHelperText error>
+                  {formState.errors.policy[0]}
+                </FormHelperText>
+              )}
+
+              <Button
+                color="primary"
+                disabled={!formState.isValid}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+              >
+                Register
+              </Button>
+
+              <Typography
+                color="textSecondary"
+                variant="body1"
+              >
+                Have an account?{' '}
+                <Link
+                  component={RouterLink}
+                  to="/patients/login"
+                  variant="h6"
+                >
+                  Log In
+                </Link>
+              </Typography>
+            </form>
+          </div>
+        </div>
       </div>
     );
   };

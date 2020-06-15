@@ -9,6 +9,16 @@ cors = CORS(app)
 # app.secret_key = 'dev'
 
 
+# @app.errorhandler(Exception)
+# def handle_invalid_usage(error):
+#     response = jsonify({
+#         'status': 500,
+#         'error': str(error)
+#     })
+#     response.status_code = 500
+#     return response
+
+
 # ####################################### PATIENTS ######################################## #
 
 
@@ -65,19 +75,26 @@ def get_patient(patientid):
 @app.route('/patients/<patientid>', methods=['PUT'])
 def update_patient(patientid):
 
-    patient = Patient.query.get(patientid)
+    # patient = Patient.query.get(patientid)
 
-    patient.fname = request.json['fname']
-    patient.lname = request.json['lname']
-    patient.email = request.json['email']
-    patient.username = request.json['username']
-    patient.password = request.json['password']
-    patient.dob = request.json['dob']
-    patient.sex = request.json['sex']
+    # patient.fname = request.json['fname']
+    # patient.lname = request.json['lname']
+    # patient.email = request.json['email']
+    # patient.username = request.json['username']
+    # patient.password = request.json['password']
+    # patient.dob = request.json['dob']
+    # patient.sex = request.json['sex']
+    # patient.address = request.json['address']
+    # patient.city = request.json['city']
+    # patient.state = request.json['state']
+    # patient.zipcode = request.json['zipcode']
+    # patient.phone = request.json['phone']
+    # patient.summary = request.json['summary']
 
+    db.session.query(Patient).filter(Patient.patientid == patientid).update(request.json)
     db.session.commit()
 
-    return jsonify(patient.to_dict())
+    return jsonify(request.json)
 
 
 # ###################################### PROVIDERS ######################################## #
@@ -123,24 +140,33 @@ def get_provider(npi):
 
 # Update a single provider
 @app.route('/providers/<npi>', methods=['PUT'])
-def update_providers(npi):
+def update_provider(npi):
 
-    provider = Provider.query.get(npi)
+    # provider = Provider.query.get(npi)
 
-    provider.npi = request.json['npi']
-    provider.fname = request.json['fname']
-    provider.lname = request.json['lname']
-    provider.specialty = request.json['specialty']
-    provider.email = request.json['email']
-    provider.username = request.json['username']
-    provider.password = request.json['password']
-    provider.accepting_new_patients = request.json['accepting_new_patients']
-    provider.credential = request.json['credential']
-    provider.sex = request.json['sex']
+    # provider.npi = request.json['npi']
+    # provider.fname = request.json['fname']
+    # provider.lname = request.json['lname']
+    # provider.specialty = request.json['specialty']
+    # provider.email = request.json['email']
+    # provider.username = request.json['username']
+    # provider.password = request.json['password']
+    # provider.accepting_new_patients = request.json['accepting_new_patients']
+    # provider.credential = request.json['credential']
+    # provider.sex = request.json['sex']
+    # provider.address = request.json['address']
+    # provider.city = request.json['city']
+    # provider.state = request.json['state']
+    # provider.zipcode = request.json['zipcode']
+    # provider.phone = request.json['phone']
+    # provider.summary = request.json['summary']
+    # provider.virtual = request.json['virtual']
+    # provider.inperson = request.json['inperson']
 
+    db.session.query(Provider).filter(Provider.npi == npi).update(request.json)
     db.session.commit()
 
-    return jsonify(provider.to_dict())
+    return jsonify(request.json)
 
 
 # ####################################### ACTIVITIES ######################################## #
@@ -165,6 +191,17 @@ def get_activities():
     all_activities = Activity.query.order_by(Activity.activityid).all()
 
     return jsonify([activity.to_dict() for activity in all_activities])
+
+
+# Get all providers by activity
+@app.route('/providers/activity', methods=['GET'])
+def get_providers_by_activity():
+
+    activity = request.args.get('activity')
+
+    providers = Provider.query.join(ProviderActivity).filter(ProviderActivity.activityid == activity).all()
+
+    return jsonify([provider.to_dict() for provider in providers])
 
 
 if __name__ == '__main__':
