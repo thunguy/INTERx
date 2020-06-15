@@ -1,22 +1,13 @@
 from flask import Flask, request, jsonify
-# from flask import session
+from flask import session
+import requests
 from flask_cors import CORS
 from model import connect_to_db, db, Patient, Provider, Activity, ProviderActivity
 
 
 app = Flask(__name__)
 cors = CORS(app)
-# app.secret_key = 'dev'
-
-
-# @app.errorhandler(Exception)
-# def handle_invalid_usage(error):
-#     response = jsonify({
-#         'status': 500,
-#         'error': str(error)
-#     })
-#     response.status_code = 500
-#     return response
+app.secret_key = 'dev'
 
 
 # ####################################### PATIENTS ######################################## #
@@ -98,6 +89,16 @@ def update_patient(patientid):
 
 
 # ###################################### PROVIDERS ######################################## #
+
+
+# Search a provider by NPI
+@app.route('/api/', methods=['GET'])
+def search_provider():
+
+    number = request.args.get('number')
+    response = requests.get(f'https://npiregistry.cms.hhs.gov/api/?number={number}&version=2.1')
+
+    return jsonify(response.json())
 
 
 # Add a single provider
@@ -202,6 +203,35 @@ def get_providers_by_activity():
     providers = Provider.query.join(ProviderActivity).filter(ProviderActivity.activityid == activity).all()
 
     return jsonify([provider.to_dict() for provider in providers])
+
+
+# ####################################### LOGIN ######################################## #
+
+
+# Create patient session upon successful login
+@app.route('/patients/login', methods=['POST'])
+def patient_login():
+
+    patient = db.session.query(Patient).filter(Patient.username == request.json['username']).first()
+
+    if not patient or patient.password != request.json['password']:
+        return jsonify({'message': 'login failed'}), 401
+    else:
+        session['username'] = patient.username
+        return jsonify(patient.to_dict())
+
+
+# ####################################### TESTING ######################################## #
+
+
+# Test if user session is successful
+@app.route('/test-session', methods=['GET'])
+def test():
+
+    if session['username']:
+        return jsonify({'username': session['username']})
+    else:
+        return jsonify({'message': 'invalid session'}), 401
 
 
 if __name__ == '__main__':

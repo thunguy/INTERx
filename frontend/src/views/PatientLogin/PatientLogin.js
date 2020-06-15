@@ -66,7 +66,20 @@ const Login = (props) => {
 
   const handleLogin = event => {
     event.preventDefault();
-    history.push('/');
+
+    console.log(formState.values, 'line 70')
+
+    fetch('http://localhost:3000/patients/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'},
+      mode: 'cors',
+      body: JSON.stringify(formState.values)
+    })
+    .then((response) => response.json())
+    .then(console.log)
+    .catch(console.error)
+    history.push('/patients/test-session');
   };
 
   const hasError = field =>
