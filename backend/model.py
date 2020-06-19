@@ -17,13 +17,13 @@ class Patient(db.Model):
     password = db.Column(db.String, nullable=False)
     dob = db.Column(db.Date, nullable=False)
     sex = db.Column(db.String, nullable=False)
-    address = db.Column(db.String, nullable=True)
-    city = db.Column(db.String, nullable=True)
-    state = db.Column(db.String(2), nullable=True)
-    zipcode = db.Column(db.String, nullable=True)
-    phone = db.Column(db.String, nullable=True)
-    summary = db.Column(db.Text, nullable=True)
-    activityid = db.Column(db.String, db.ForeignKey('activities.activityid'), nullable=True)
+    address = db.Column(db.String)
+    city = db.Column(db.String)
+    state = db.Column(db.String(2))
+    zipcode = db.Column(db.String)
+    phone = db.Column(db.String)
+    summary = db.Column(db.Text)
+    activityid = db.Column(db.String, db.ForeignKey('activities.activityid'))
 
     activity = db.relationship('Activity', backref='patients')
 
@@ -60,16 +60,16 @@ class Provider(db.Model):
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     sex = db.Column(db.String, nullable=False)
-    credential = db.Column(db.String, nullable=True)
     accepting_new_patients = db.Column(db.Boolean, default=True)
-    address = db.Column(db.String, nullable=True)
-    city = db.Column(db.String, nullable=True)
-    state = db.Column(db.String(2), nullable=True)
-    zipcode = db.Column(db.String, nullable=True)
-    phone = db.Column(db.String, nullable=True)
-    summary = db.Column(db.Text, nullable=True)
     virtual = db.Column(db.Boolean, default=True)
     inperson = db.Column(db.Boolean, default=True)
+    credential = db.Column(db.String)
+    address = db.Column(db.String)
+    city = db.Column(db.String)
+    state = db.Column(db.String(2))
+    zipcode = db.Column(db.String)
+    phone = db.Column(db.String)
+    summary = db.Column(db.Text)
 
     activities = db.relationship('ProviderActivity', backref='providers')
 
@@ -146,6 +146,14 @@ class MedicalRelation(db.Model):
         return (f'<Relation relationid={self.relationid} npi={self.npi} '
                 f'patientid={self.patientid} consent={self.consent}>')
 
+    def to_dict(self):
+        return {
+            'relationid': self.relationid,
+            'consent': self.consent,
+            'patientid': self.patientid,
+            'npi': self.npi
+        }
+
 
 class MedicalRecord(db.Model):
     __tablename__ = 'records'
@@ -154,10 +162,13 @@ class MedicalRecord(db.Model):
     createdat = db.Column(db.DateTime)
     documentation = db.Column(db.Text)
     rx = db.Column(db.Text)
-    goal = db.Column(db.Text)
     relationid = db.Column(db.Integer, db.ForeignKey('relations.relationid'))
-    apptid = db.Column(db.Integer, db.ForeignKey('appts.apptid'), nullable=True)
+    apptid = db.Column(db.Integer, db.ForeignKey('appts.apptid'))
+    patientid = db.Column(db.Integer, db.ForeignKey('patients.patientid'))
+    npi = db.Column(db.Integer, db.ForeignKey('providers.npi'))
 
+    patient = db.relationship('Patient', backref='records')
+    provider = db.relationship('Provider', backref='records')
     relation = db.relationship('MedicalRelation', backref='records')
     appt = db.relationship('Appointment', backref='records')
 
@@ -174,14 +185,33 @@ class Appointment(db.Model):
     end = db.Column(db.DateTime(timezone=True))
     location = db.Column(db.String)
     reason = db.Column(db.Text)
+    goal = db.Column(db.Text)
     status = db.Column(db.String)
+    patientid = db.Column(db.Integer, db.ForeignKey('patients.patientid'))
+    npi = db.Column(db.Integer, db.ForeignKey('providers.npi'))
     relationid = db.Column(db.Integer, db.ForeignKey('relations.relationid'))
 
+    patient = db.relationship('Patient', backref='appts')
+    provider = db.relationship('Provider', backref='appts')
     relation = db.relationship('MedicalRelation', backref='appts')
 
     def __repr__(self):
-        return (f'<Appointment apptid={self.apptid} relationid={self.relationid} '
-                f'when={self.start} status={self.status}>')
+        return (f'<Appointment apptid={self.apptid} patient={self.patientid} provider={self.npi} '
+                f'relationid={self.relationid} when={self.start} status={self.status}>')
+
+    def to_dict(self):
+        return {
+            'apptid': self.apptid,
+            'start': self.start,
+            'end': self.end,
+            'location': self.location,
+            'reason': self.reason,
+            'goal': self.goal,
+            'status': self.status,
+            'patientid': self.patientid,
+            'npi': self.npi,
+            'relationid': self.relationid
+        }
 
 
 def connect_to_db(app):
