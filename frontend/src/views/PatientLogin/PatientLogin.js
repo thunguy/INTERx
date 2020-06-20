@@ -21,7 +21,7 @@ const schema = {
   }
 };
 
-const Login = (props) => {
+const PatientLogin = (props) => {
   const { history } = props;
 
   const [formState, setFormState] = useState({
@@ -64,10 +64,8 @@ const Login = (props) => {
     }));
   };
 
-  const handleLogin = event => {
+  const handlePatientLogin = event => {
     event.preventDefault();
-
-    console.log(formState.values, 'line 70')
 
     fetch('http://localhost:3000/patients/login', {
       method: 'POST',
@@ -79,7 +77,8 @@ const Login = (props) => {
     .then((response) => response.json())
     .then(console.log)
     .catch(console.error)
-    history.push('/patients/test-session');
+
+    history.push('/test-session');
   };
 
   const hasError = field =>
@@ -94,7 +93,7 @@ const Login = (props) => {
           </IconButton>
         </div>
         <div>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handlePatientLogin}>
 
             <Typography variant="h2">
               <center>PATIENT LOGIN</center>
@@ -156,8 +155,8 @@ const Login = (props) => {
   );
 };
 
-Login.propTypes = {
+PatientLogin.propTypes = {
   history: PropTypes.object
 };
 
-export default withRouter(Login);
+export default withRouter(PatientLogin);

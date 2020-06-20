@@ -4,4 +4,5 @@ export { default as PatientLogin } from './PatientLogin';
 export { default as ProviderLogin } from './ProviderLogin';
 export { default as SelectProvider } from './SelectProvider';
 export { default as Homepage } from './Homepage';
-export { default as TestPatientSession } from './TestPatientSession';
+
+export { default as TestSession } from './TestSession';

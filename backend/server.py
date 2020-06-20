@@ -6,6 +6,7 @@ from model import connect_to_db, db, Patient, Provider, Activity, ProviderActivi
 
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 cors = CORS(app)
 app.secret_key = 'dev'
 
@@ -267,45 +268,31 @@ def add_relation():
         return jsonify({'message': 'invalid session -- login required'}), 401
 
 
-# If provider in session, get all provider's patients by existing relations
-@app.route('/providers/medical-relations/<npi>', methods=['GET'])
-def get_provider_relations(npi):
-
-    if 'npi' in session:
-        npi = session.get('npi')
-
-        if npi == request.json['npi']:
-            relations = db.session.query(MedicalRelation).filter(MedicalRelation.npi == npi).all()
-            return jsonify([relation.to_dict() for relation in relations])
-        else:
-            return jsonify({'message': 'unauthorized access'}), 403
-    else:
-        return jsonify({'message': 'invalid session -- login required'}), 401
-
-
-# If patient in session, get all patient's providers by existing relations
-@app.route('/patients/medical-relations/<patientid>', methods=['GET'])
-def get_patient_relations(patientid):
+# If patient or provider in session, get all user's existing relations
+@app.route('/medical-relations', methods=['GET'])
+def get_relations():
 
     if 'patientid' in session:
         patientid = session.get('patientid')
+        relations = db.session.query(MedicalRelation).filter(MedicalRelation.patientid == patientid).all()
+        return jsonify([relation.to_dict() for relation in relations])
 
-        if patientid == request.json['patientid']:
-            relations = db.session.query(MedicalRelation).filter(MedicalRelation.patientid == patientid).all()
-            return jsonify([relation.to_dict() for relation in relations])
-        else:
-            return jsonify({'message': 'unauthorized access'}), 403
+    elif 'npi' in session:
+        npi = session.get('npi')
+        relations = db.session.query(MedicalRelation).filter(MedicalRelation.npi == npi).all()
+        return jsonify([relation.to_dict() for relation in relations])
+
     else:
         return jsonify({'message': 'invalid session -- login required'}), 401
 
 
-# Get all medical relations between patients and providers
-@app.route('/medical-relations', methods=['GET'])
-def get_all_relations():
+# # Get all medical relations between patients and providers
+# @app.route('/medical-relations', methods=['GET'])
+# def get_all_relations():
 
-    all_relations = MedicalRelation.query.all()
+#     all_relations = MedicalRelation.query.all()
 
-    return jsonify([relation.to_dict() for relation in all_relations])
+#     return jsonify([relation.to_dict() for relation in all_relations])
 
 
 # # Update the state of an exisiting relationship between patient and provider

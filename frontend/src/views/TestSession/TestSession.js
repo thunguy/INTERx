@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 
 
-const TestPatientSession = (props) => {
+const TestSession = (props) => {
 
-  const { history } = props;
+  const {history} = props;
 
   const [session, setSession] = useState({})
 
@@ -26,4 +26,4 @@ const TestPatientSession = (props) => {
     )
 }
 
-export default withRouter(TestPatientSession);
+export default withRouter(TestSession);

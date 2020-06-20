@@ -22,7 +22,7 @@ const schema = {
   }
 };
 
-const Login = props => {
+const ProviderLogin = props => {
   const { history } = props;
 
   const [formState, setFormState] = useState({
@@ -65,9 +65,21 @@ const Login = props => {
     }));
   };
 
-  const handleLogin = event => {
+  const handleProviderLogin = event => {
     event.preventDefault();
-    history.push('/');
+
+    fetch('http://localhost:3000/providers/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'},
+      mode: 'cors',
+      body: JSON.stringify(formState.values)
+    })
+    .then((response) => response.json())
+    .then(console.log)
+    .catch(console.error)
+
+    history.push('/test-session');
   };
 
   const hasError = field =>
@@ -82,7 +94,7 @@ const Login = props => {
           </IconButton>
         </div>
         <div>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleProviderLogin}>
 
             <Typography variant="h2">
               <center>PROVIDER LOGIN</center>
@@ -144,8 +156,8 @@ const Login = props => {
   );
 };
 
-Login.propTypes = {
+ProviderLogin.propTypes = {
   history: PropTypes.object
 };
 
-export default withRouter(Login);
+export default withRouter(ProviderLogin);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import MaterialTable from 'material-table'
 import PropTypes from 'prop-types';
@@ -17,21 +17,63 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css";
+// import { Consent } from './components';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
+
+const BookAppointment = (props) => {
+  const [startDate, setStartDate] = useState();
+
+  return (
+    <div>
+    <DatePicker
+      selected={startDate}
+      onChange={date => setStartDate(date)}
+      minDate={new Date()}
+      showTimeSelect
+      inline
+      dateFormat="MMMM d, yyyy h:mm aa"
+    />
+    </div>
+  )
+}
+
+const Consent = (props) => {
+  const [consent, setConsent] = useState();
+
+  const handleOnClickAgree = (event) => {
+    // consent = true
+
+  }
+
+  return (
+    <Button
+      variant="outlined"
+      color="primary"
+      onClick={handleOnClickAgree}
+    >
+      AGREE TO CONNECT WITH {props.fname}
+    </Button>
+  )
+}
+
+
 const SelectProvider = (props) => {
   const {history} = props;
 
-  const [isValid, setIsValid] = useState(false)
+  // const [isValid, setIsValid] = useState(false)
+  // const [errors, setErrors] = useState({})
   const [values, setValues] = useState({})
-  const [errors, setErrors] = useState({})
   const [activities, setActivities] = useState([])
   const [providers, setProviders] = useState([])
   const [activity, setActivity] = useState(null)
+  const [relations, setRelations] = useState([])
 
-
+  // fetch list of activities on first page load
   useEffect(() => {
     fetch("http://localhost:5000/activities")
     .then((response) => response.json())
@@ -39,7 +81,7 @@ const SelectProvider = (props) => {
     .catch((error) => console.error('error', error));
   }, [])
 
-
+  // upon selection of an ectivity, fetch all providers associated to the selected activity
   useEffect(() => {
     fetch(`http://localhost:5000/providers/activity?activity=${activity}`)
     .then((response) => response.json())
@@ -51,6 +93,17 @@ const SelectProvider = (props) => {
     .catch((error) => console.error('error', error));
   }, [activity])
 
+  // fetch existing medical relations for patient in session
+  useEffect(() => {
+    fetch("http://localhost:3000/medical-relations", {
+      method: 'GET',
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'},
+    })
+    .then((response) => response.json())
+    .then((result) => {console.log(result); setRelations(result)})
+    .catch((error) => console.error('error', error));
+  }, [])
 
   const handleChange = (event) => {
     event.persist();
@@ -83,7 +136,7 @@ const SelectProvider = (props) => {
         <Autocomplete
           options={activities || []}
           onChange={(event, value) => {
-            setActivity((value || {}).activityid)
+            setActivity(value?.activityid)
           }}
           getOptionLabel={(option) => option.activityid}
           renderOption={(option, { selected }) => (
@@ -107,8 +160,7 @@ const SelectProvider = (props) => {
         <MaterialTable
           title=''
           options={{
-            search: false,
-            searchFieldAlignment: 'left',
+            search: false
           }}
           icons={{
             Search: SearchIcon,
@@ -146,7 +198,7 @@ const SelectProvider = (props) => {
                       backgroundColor: '#43A047',
                     }}
                   >
-                    ABOUT {rowData.fname}
+                    ABOUT {rowData.summary}
                   </div>
                 )
               },
@@ -165,13 +217,13 @@ const SelectProvider = (props) => {
                     }}
                   >
                     VIEW {rowData.fname}'S AVAILABILITY
+                    <BookAppointment/>
                   </div>
                 )
               },
             },
             {
               icon: PersonAddIcon,
-              // openIcon:
               tooltip: 'Connect',
               render: rowData => {
                 return (
@@ -180,10 +232,11 @@ const SelectProvider = (props) => {
                       fontSize: 70,
                       textAlign: 'center',
                       color: 'white',
-                      backgroundColor: '#FDD835',
+                      backgroundColor: '#FFFFFF',
                     }}
                   >
-                    CONNECT WITH {rowData.fname}
+                      <Consent
+                        fname={rowData.fname}/>
                   </div>
                 )
               },
