@@ -8,7 +8,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
@@ -19,47 +18,12 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
-// import { Consent } from './components';
+import { setHours, setMinutes, getDay }from 'date-fns'
+import { BookAppointment } from './components';
+
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-
-const BookAppointment = (props) => {
-  const [startDate, setStartDate] = useState();
-
-  return (
-    <div>
-    <DatePicker
-      selected={startDate}
-      onChange={date => setStartDate(date)}
-      minDate={new Date()}
-      showTimeSelect
-      inline
-      dateFormat="MMMM d, yyyy h:mm aa"
-    />
-    </div>
-  )
-}
-
-const Consent = (props) => {
-  const [consent, setConsent] = useState();
-
-  const handleOnClickAgree = (event) => {
-    // consent = true
-
-  }
-
-  return (
-    <Button
-      variant="outlined"
-      color="primary"
-      onClick={handleOnClickAgree}
-    >
-      AGREE TO CONNECT WITH {props.fname}
-    </Button>
-  )
-}
 
 
 const SelectProvider = (props) => {
@@ -72,6 +36,10 @@ const SelectProvider = (props) => {
   const [providers, setProviders] = useState([])
   const [activity, setActivity] = useState(null)
   const [relations, setRelations] = useState([])
+  const [consent, setConsent] = useState();
+  const [appointment, setAppointment] = useState();
+  // const [reason, setReason] = useState();
+  // const [goal, setGoal] = useState();
 
   // fetch list of activities on first page load
   useEffect(() => {
@@ -114,6 +82,22 @@ const SelectProvider = (props) => {
     if (type === 'checkbox')
     return setValues({ [name]: checked })
     return setValues({ [name]: value })
+  }
+
+  // Create appointment oject between patient in session and provider
+  const handleBookAppointment = (event) => {
+    event.preventDefault();
+
+    fetch('http://localhost:3000/appointments', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'},
+      mode: 'cors',
+      body: JSON.stringify(appointment.values)
+    })
+    .then((response) => response.json())
+    .then(console.log)
+    .catch(console.error)
   }
 
   const handleBack = () => {
@@ -198,7 +182,7 @@ const SelectProvider = (props) => {
                       backgroundColor: '#43A047',
                     }}
                   >
-                    ABOUT {rowData.summary}
+                    ABOUT {rowData.fname}
                   </div>
                 )
               },
@@ -206,41 +190,14 @@ const SelectProvider = (props) => {
             {
               icon: CalendarTodayIcon,
               tooltip: 'Schedule',
-              render: rowData => {
+              render: (rowData) => {
                 return (
-                  <div
-                    style={{
-                      fontSize: 70,
-                      textAlign: 'center',
-                      color: 'white',
-                      backgroundColor: '#E53935',
-                    }}
-                  >
-                    VIEW {rowData.fname}'S AVAILABILITY
-                    <BookAppointment/>
-                  </div>
+                  <BookAppointment
+                    provider={rowData}
+                  />
                 )
               },
-            },
-            {
-              icon: PersonAddIcon,
-              tooltip: 'Connect',
-              render: rowData => {
-                return (
-                  <div
-                    style={{
-                      fontSize: 70,
-                      textAlign: 'center',
-                      color: 'white',
-                      backgroundColor: '#FFFFFF',
-                    }}
-                  >
-                      <Consent
-                        fname={rowData.fname}/>
-                  </div>
-                )
-              },
-            },
+            }
           ]}
         />
       </div>

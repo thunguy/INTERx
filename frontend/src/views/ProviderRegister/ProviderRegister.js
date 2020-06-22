@@ -214,6 +214,7 @@ const schema = {
               </Typography>
 
               <TextField
+                required
                 error={hasError('npi')}
                 fullWidth
                 helperText={
@@ -228,6 +229,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('fname')}
                 fullWidth
                 helperText={
@@ -242,6 +244,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('lname')}
                 fullWidth
                 helperText={
@@ -256,6 +259,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('specialty')}
                 fullWidth
                 helperText={
@@ -270,6 +274,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('credential')}
                 fullWidth
                 helperText={
@@ -284,6 +289,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('email')}
                 fullWidth
                 helperText={
@@ -298,6 +304,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('username')}
                 fullWidth
                 helperText={
@@ -312,6 +319,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('password')}
                 fullWidth
                 helperText={
@@ -326,6 +334,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('address')}
                 fullWidth
                 helperText={
@@ -340,6 +349,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('city')}
                 fullWidth
                 helperText={
@@ -354,6 +364,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('state')}
                 fullWidth
                 helperText={
@@ -368,6 +379,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('zipcode')}
                 fullWidth
                 helperText={
@@ -382,6 +394,7 @@ const schema = {
               />
 
               <TextField
+                required
                 error={hasError('phone')}
                 fullWidth
                 helperText={
@@ -395,7 +408,7 @@ const schema = {
                 variant="outlined"
               />
 
-              <FormControl component="fieldset">
+              <FormControl component="fieldset" required>
                 <FormLabel component="legend">Sex</FormLabel>
                 <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
                   <FormControlLabel value="Female" control={<Radio />} label="Female" />
