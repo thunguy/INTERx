@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 
 
-const TestSession = (props) => {
+const Session = (props) => {
 
   const {history} = props;
 
   const [session, setSession] = useState({})
 
   useEffect(() => {
-    fetch('/test-session')
+    fetch('/session')
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -26,4 +26,4 @@ const TestSession = (props) => {
     )
 }
 
-export default withRouter(TestSession);
+export default withRouter(Session);

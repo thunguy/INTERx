@@ -78,7 +78,7 @@ const PatientLogin = (props) => {
     .then(console.log)
     .catch(console.error)
 
-    history.push('/test-session');
+    history.push('/session');
   };
 
   const hasError = field =>

@@ -1,6 +1,7 @@
 """Models for INTERx app."""
 
 from flask_sqlalchemy import SQLAlchemy
+import bcrypt
 # from datetime import datetime
 
 db = SQLAlchemy()
@@ -14,7 +15,7 @@ class Patient(db.Model):
     lname = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     username = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
+    password_hash = db.Column(db.Binary(128), nullable=False)
     dob = db.Column(db.Date, nullable=False)
     sex = db.Column(db.String, nullable=False)
     address = db.Column(db.String)
@@ -28,7 +29,12 @@ class Patient(db.Model):
     activity = db.relationship('Activity', backref='patients')
 
     def __repr__(self):
-        return f'<Patient patientid={self.patientid} fname={self.fname} lname={self.lname} birthdate={self.dob}>'
+        return f'<Patient patientid={self.patientid} fname={self.fname} lname={self.lname} username={self.username} birthdate={self.dob}>'
+
+    # Check if password matches with hashed password
+    def check_password(self, password):
+        password = password.encode('utf-8')
+        return bcrypt.checkpw(password, self.password_hash)
 
     def to_dict(self):
         return {
@@ -37,7 +43,6 @@ class Patient(db.Model):
             'lname': self.lname,
             'email': self.email,
             'username': self.username,
-            'password': self.password,
             'address': self.address,
             'city': self.city,
             'state': self.state,
@@ -58,7 +63,7 @@ class Provider(db.Model):
     specialty = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     username = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
+    password_hash = db.Column(db.Binary(128), nullable=False)
     sex = db.Column(db.String, nullable=False)
     accepting_new_patients = db.Column(db.Boolean, default=True)
     virtual = db.Column(db.Boolean, default=True)
@@ -75,9 +80,14 @@ class Provider(db.Model):
 
     def __repr__(self):
         if self.credential:
-            return f'<Provider NPI={self.npi} name={self.fname} {self.lname}, {self.credential}>'
+            return f'<Provider NPI={self.npi} username={self.username} name={self.fname} {self.lname}, {self.credential}>'
         else:
-            return f'<Provider NPI={self.npi} name={self.fname} {self.lname}>'
+            return f'<Provider NPI={self.npi} username={self.username} name={self.fname} {self.lname}>'
+
+    # Check if password matches with hashed password
+    def check_password(self, password):
+        password = password.encode("utf-8")
+        return bcrypt.checkpw(password, self.password_hash)
 
     def to_dict(self):
         return {
@@ -87,7 +97,6 @@ class Provider(db.Model):
             'specialty': self.specialty,
             'email': self.email,
             'username': self.username,
-            'password': self.password,
             'address': self.address,
             'city': self.city,
             'state': self.state,
@@ -197,13 +206,13 @@ class Appointment(db.Model):
 
     def __repr__(self):
         return (f'<Appointment apptid={self.apptid} patient={self.patientid} provider={self.npi} '
-                f'relationid={self.relationid} when={self.start} status={self.status}>')
+                f'relationid={self.relationid} start={self.start.isoformat()} status={self.status}>')
 
     def to_dict(self):
         return {
             'apptid': self.apptid,
-            'start': self.start,
-            'end': self.end,
+            'start': self.start.isoformat(),
+            'end': self.end.isoformat(),
             'location': self.location,
             'reason': self.reason,
             'goal': self.goal,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
-import { PatientRegister, ProviderRegister, PatientLogin, ProviderLogin, SelectProvider, Homepage, TestSession } from './views';
+import { PatientRegister, ProviderRegister, PatientLogin, ProviderLogin, SelectProvider, Homepage, Session } from './views';
 // import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 
@@ -33,8 +33,8 @@ const Routes = () => {
               <SelectProvider/>
             </Route>
 
-            <Route exact path="/test-session">
-              <TestSession/>
+            <Route exact path="/session">
+              <Session/>
             </Route>
         </Switch>
     );

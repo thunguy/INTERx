@@ -3,6 +3,8 @@ from flask import session
 import requests
 from flask_cors import CORS
 from model import connect_to_db, db, Patient, Provider, Activity, ProviderActivity, Appointment, MedicalRelation
+import bcrypt
+import dateutil.parser
 
 
 app = Flask(__name__)
@@ -11,10 +13,15 @@ cors = CORS(app)
 app.secret_key = 'dev'
 
 
+# Generate hash for user passwords
+def get_hash(password):
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt(15))
+
+
 # ####################################### PATIENTS ######################################## #
 
 
-# Add a single patient
+# Register a patient
 @app.route('/patients', methods=['POST'])
 def add_patient():
 
@@ -37,12 +44,26 @@ def add_patient():
     if 'policy' in request.json:
         del request.json['policy']
 
-    new_patient = Patient(**request.json)
+    username = request.json['username']
+    email = request.json['email']
+    password = request.json['password']
 
-    db.session.add(new_patient)
-    db.session.commit()
+    patient = db.session.query(Patient).filter((Patient.username == username) | (Patient.email == email)).all()
+    provider = db.session.query(Provider).filter((Provider.username == username) | (Provider.email == email)).all()
 
-    return jsonify(new_patient.to_dict())
+    if not patient and not provider:
+        request.json['password_hash'] = get_hash(password)
+        del request.json['password']
+        new_patient = Patient(**request.json)
+        db.session.add(new_patient)
+        db.session.commit()
+        return jsonify(new_patient.to_dict())
+
+    else:
+        if Patient.query.filter_by(email=email).all() or Provider.query.filter_by(email=email).all():
+            return jsonify({'message': 'email has already been registered -- registration required'})
+        else:
+            return jsonify({'message': 'username unavailable -- registration required'})
 
 
 # Get all patients
@@ -67,22 +88,6 @@ def get_patient(patientid):
 @app.route('/patients/<patientid>', methods=['PUT'])
 def update_patient(patientid):
 
-    # patient = Patient.query.get(patientid)
-
-    # patient.fname = request.json['fname']
-    # patient.lname = request.json['lname']
-    # patient.email = request.json['email']
-    # patient.username = request.json['username']
-    # patient.password = request.json['password']
-    # patient.dob = request.json['dob']
-    # patient.sex = request.json['sex']
-    # patient.address = request.json['address']
-    # patient.city = request.json['city']
-    # patient.state = request.json['state']
-    # patient.zipcode = request.json['zipcode']
-    # patient.phone = request.json['phone']
-    # patient.summary = request.json['summary']
-
     db.session.query(Patient).filter(Patient.patientid == patientid).update(request.json)
     db.session.commit()
 
@@ -102,24 +107,38 @@ def search_provider():
     return jsonify(response.json())
 
 
-# Add a single provider
+# Register a provider
 @app.route('/providers', methods=['POST'])
 def add_provider():
 
     if 'activities' in request.json:
         for activity in request.json['activities']:
             db.session.add(ProviderActivity(npi=request.json['npi'], activityid=activity))
-
         del request.json['activities']
 
     if 'policy' in request.json:
         del request.json['policy']
 
-    new_provider = Provider(**request.json)
-    db.session.add(new_provider)
-    db.session.commit()
+    username = request.json['username']
+    email = request.json['email']
+    password = request.json['password']
 
-    return jsonify(new_provider.to_dict())
+    provider = db.session.query(Provider).filter((Provider.username == username) | (Provider.email == email)).all()
+    patient = db.session.query(Patient).filter((Patient.username == username) | (Patient.email == email)).all()
+
+    if not provider and not patient:
+        request.json['password_hash'] = get_hash(password)
+        del request.json['password']
+        new_provider = Provider(**request.json)
+        db.session.add(new_provider)
+        db.session.commit()
+        return jsonify(new_provider.to_dict())
+
+    else:
+        if Provider.query.filter_by(email=email).all() or Patient.query.filter_by(email=email).all():
+            return jsonify({'message': 'email is already registered -- registration/login required'})
+        else:
+            return jsonify({'message': 'username unavailable -- registration/login required'})
 
 
 # Get all providers
@@ -206,37 +225,59 @@ def get_providers_by_activity():
     return jsonify([provider.to_dict() for provider in providers])
 
 
-# ####################################### LOGIN ######################################## #
+# ####################################### LOGIN / LOGOUT ######################################## #
 
 
 # Create patient session upon successful login
 @app.route('/patients/login', methods=['POST'])
 def patient_login():
 
-    patient = db.session.query(Patient).filter(Patient.username == request.json['username']).first()
+    username = request.json['username']
+    password = request.json['password']
 
-    if not patient or patient.password != request.json['password']:
-        return jsonify({'message': 'login failed'}), 401
-    else:
+    patient = db.session.query(Patient).filter(Patient.username == username).first()
+
+    if patient and patient.check_password(password):
+        print('line 252')
         session['username'] = patient.username
         session['patientid'] = patient.patientid
         print(session)
         return jsonify(patient.to_dict())
+    else:
+        return jsonify({'message': 'login failed'}), 401
 
 
 # Create provider session upon successful login
 @app.route('/providers/login', methods=['POST'])
 def provider_login():
 
-    provider = db.session.query(Provider).filter(Provider.username == request.json['username']).first()
+    username = request.json['username']
+    password = request.json['password']
 
-    if not provider or provider.password != request.json['password']:
-        return jsonify({'message': 'login failed'}), 401
-    else:
+    provider = db.session.query(Provider).filter(Provider.username == username).first()
+
+    if provider and provider.check_password(password):
         session['username'] = provider.username
         session['npi'] = provider.npi
         print(session)
         return jsonify(provider.to_dict())
+    else:
+        return jsonify({'message': 'login failed'}), 401
+
+
+# Delete user session on logout
+@app.route('/logout', methods=['POST'])
+def logout():
+
+    if 'patientid' and 'username' in session:
+        del session['patientid']
+        del session['username']
+        return jsonify({'message': 'logged out'}), 200
+
+    if 'npi' and 'username' in session:
+        del session['npi']
+        del session['username']
+        return jsonify({'message': 'logged out'}), 200
 
 
 # ####################################### RELATIONS ######################################## #
@@ -249,7 +290,7 @@ def add_relation():
     if 'patientid' in session:
         patientid = session.get('patientid')
 
-        if (patientid == request.json['patientid']):
+        if patientid == request.json['patientid']:
             relation = db.session.query(MedicalRelation).filter(MedicalRelation.npi == request.json['npi'], MedicalRelation.patientid == patientid).first()
             relations = db.session.query(MedicalRelation).all()
 
@@ -286,15 +327,6 @@ def get_relations():
         return jsonify({'message': 'invalid session -- login required'}), 401
 
 
-# # Get all medical relations between patients and providers
-# @app.route('/medical-relations', methods=['GET'])
-# def get_all_relations():
-
-#     all_relations = MedicalRelation.query.all()
-
-#     return jsonify([relation.to_dict() for relation in all_relations])
-
-
 # # Update the state of an exisiting relationship between patient and provider
 # @app.route('/medical-relation/<relationid>', methods=['PUT'])
 # def update_relation(relationid):
@@ -324,24 +356,33 @@ def get_relations():
 @app.route('/appointments', methods=['POST'])
 def book_appt():
 
-    if 'patientid' in session:
-        patientid = session.get('patientid')
+    appointments = db.session.query(Appointment).all()
+    appointment = db.session.query(Appointment).filter_by(start=dateutil.parser.parse(request.json['start']),
+                                                          npi=request.json['npi'],
+                                                          status='Scheduled').first()
 
-        if patientid == request.json['patientid']:
-            relation = db.session.query(MedicalRelation).filter(MedicalRelation.patientid == patientid,
-                                                                MedicalRelation.npi == request.json['npi']).one()
+    if appointment in appointments:
+        return jsonify({'message': 'appointment time/day conflict -- provider unavailable'}), 409
 
-            if relation.consent:
-                new_appt = Appointment(**request.json)  # todo: check if relationid is recorded in request.json for each appt booked
-                db.session.add(new_appt)
-                db.session.commit()
-                return jsonify(new_appt.to_dict())
-            else:
-                return jsonify({'message': 'unauthorized access -- consent required'}), 403
-        else:
-            return jsonify({'message': 'unauthorized access'}), 403
     else:
-        return jsonify({'message': 'invalid session -- login required'}), 401
+        if 'patientid' in session:
+            patientid = session.get('patientid')
+
+            if patientid == request.json['patientid']:
+                relation = db.session.query(MedicalRelation).filter(MedicalRelation.patientid == patientid,
+                                                                    MedicalRelation.npi == request.json['npi']).one()
+
+                if relation.consent:
+                    new_appt = Appointment(**request.json, relationid=relation.relationid)
+                    db.session.add(new_appt)
+                    db.session.commit()
+                    return jsonify(new_appt.to_dict())
+                else:
+                    return jsonify({'message': 'unauthorized access -- consent required'}), 403
+            else:
+                return jsonify({'message': 'unauthorized access'}), 403
+        else:
+            return jsonify({'message': 'invalid session -- login required'}), 401
 
 
 # If provider in session, get all provider's appointments
@@ -401,7 +442,7 @@ def get_patient_appts(patientid):
 
 
 # Test if user session is successful
-@app.route('/test-session', methods=['GET'])
+@app.route('/session', methods=['GET'])
 def test():
 
     if 'patientid' and 'username' in session:
@@ -413,6 +454,24 @@ def test():
         return jsonify({'npi': session['npi'], 'username': session['username']})
     else:
         return jsonify({'message': 'invalid session'}), 401
+
+
+# Get all medical relations between patients and providers
+@app.route('/medical-relations', methods=['GET'])
+def get_all_relations():
+
+    all_relations = MedicalRelation.query.all()
+
+    return jsonify([relation.to_dict() for relation in all_relations])
+
+
+# Get all appointments
+@app.route('/appointments', methods=['GET'])
+def get_all_appts():
+
+    all_appts = Appointment.query.all()
+
+    return jsonify([appt.to_dict() for appt in all_appts])
 
 
 if __name__ == '__main__':

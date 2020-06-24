@@ -1,10 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
-import { Grid, Button, IconButton, TextField, Link, FormHelperText, Checkbox, Typography } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
-import { setHours, setMinutes, getDay }from 'date-fns'
+import { setHours, setMinutes, getDay, setMilliseconds } from 'date-fns'
 import { Formik } from 'formik';
 import moment from 'moment';
 
@@ -15,25 +14,8 @@ const isWeekday = (date) => {
 };
 
 
-// COMPONENT: book appointment with provider
-const Book = ({fname}) => {
-
-  return (
-    <Button
-      type="submit"
-      variant="outlined"
-      color="primary"
-      // onClick={}
-    >
-      BOOK {fname}
-    </Button>
-  )
-}
-
-
 // COMPONENT: appointment reason and patient goal form
 const PatientText = (props) => {
-
   return (
     <div>
       <div>
@@ -69,17 +51,46 @@ const PatientText = (props) => {
 }
 
 
-const BookAppointment = (props) => {
+// COMPONENT: book appointment with provider
+const Book = ({fname}) => {
+  return (
+    <Button
+      type="submit"
+      variant="outlined"
+      color="primary"
+    >
+      BOOK {fname}
+    </Button>
+  )
+}
+
+
+const BookAppointment = ({provider, patient}) => {
 
   const today = new Date()
   const tomorrow = new Date(today)
   tomorrow.setDate(today.getDate() + 1)
 
   const handleSubmit = (values, { setSubmitting }) => {
+
     values.end = moment(values.start).add(45, 'm').toDate();
-    values.location = `${props.provider.address}, ${props.provider.city}, ${props.provider.state}, ${props.provider.zipcode}`
-    values.npi = props.provider.npi
+    values.location = `${provider.address}, ${provider.city}, ${provider.state}, ${provider.zipcode}`
+    values.npi = provider.npi
+    values.patientid = patient.patientid
+    values.status = 'Scheduled'
     console.log(values)
+
+    fetch('http://localhost:3000/appointments', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'},
+      mode: 'cors',
+      body: JSON.stringify(values)
+    })
+    .then((response) => response.json())
+    .then((result) => console.log(result))
+    .catch(console.error)
+
     alert(JSON.stringify(values, null, 2));
     setSubmitting(false);
   };
@@ -93,12 +104,12 @@ const BookAppointment = (props) => {
         backgroundColor: '#FFFFFF',
       }}
     >
-      {props.provider.fname}'S AVAILABILITY
+      {provider.fname}'S AVAILABILITY
       <Formik
         initialValues={{
           start: isWeekday(today) ? today : tomorrow,
           reason: '',
-          goal: ''
+          goal: '',
         }}
         onSubmit={handleSubmit}
       >
@@ -108,7 +119,7 @@ const BookAppointment = (props) => {
             <form onSubmit={handleSubmit}>
               <DatePicker
                 selected={values.start}
-                onChange={(value) => setFieldValue("start", value)}
+                onChange={(value) => setFieldValue("start", setMilliseconds(value, 0))}
                 minDate={new Date()}
                 showTimeSelect
                 inline
@@ -119,7 +130,7 @@ const BookAppointment = (props) => {
                 dateFormat="MMMM d, yyyy h:mm aa"
               />
               <PatientText onChange={handleChange}/>
-              <Book fname={props.provider.fname}/>
+              <Book fname={provider.fname}/>
             </form>
           )}
         }
