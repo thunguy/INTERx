@@ -139,7 +139,7 @@ const schema = {
       });
 
       event.preventDefault();
-      history.push('/');
+      history.push('/patients/login');
     };
 
     const hasError = (field) =>

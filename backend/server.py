@@ -6,7 +6,6 @@ from model import connect_to_db, db, Patient, Provider, Activity, ProviderActivi
 import bcrypt
 import dateutil.parser
 
-
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 cors = CORS(app)
@@ -61,7 +60,7 @@ def add_patient():
 
     else:
         if Patient.query.filter_by(email=email).all() or Provider.query.filter_by(email=email).all():
-            return jsonify({'message': 'email has already been registered -- registration required'})
+            return jsonify({'message': 'email address already registered with an existing account -- registration or login required'})
         else:
             return jsonify({'message': 'username unavailable -- registration required'})
 
@@ -238,7 +237,6 @@ def patient_login():
     patient = db.session.query(Patient).filter(Patient.username == username).first()
 
     if patient and patient.check_password(password):
-        print('line 252')
         session['username'] = patient.username
         session['patientid'] = patient.patientid
         print(session)
@@ -266,15 +264,15 @@ def provider_login():
 
 
 # Delete user session on logout
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['DELETE'])
 def logout():
 
-    if 'patientid' and 'username' in session:
+    if 'patientid' in session and 'username' in session:
         del session['patientid']
         del session['username']
         return jsonify({'message': 'logged out'}), 200
 
-    if 'npi' and 'username' in session:
+    if 'npi' in session and 'username' in session:
         del session['npi']
         del session['username']
         return jsonify({'message': 'logged out'}), 200
@@ -285,7 +283,7 @@ def logout():
 
 # Either update an existing relation between patient and provider, or create relation if none exists
 @app.route('/medical-relations', methods=['POST', 'PUT'])
-def add_relation():
+def add_or_update_relation():
 
     if 'patientid' in session:
         patientid = session.get('patientid')
@@ -385,36 +383,29 @@ def book_appt():
             return jsonify({'message': 'invalid session -- login required'}), 401
 
 
-# If provider in session, get all provider's appointments
-@app.route('/providers/appointments/<npi>', methods=['GET'])
-def get_provider_appts(npi):
-
-    if 'npi' in session:
-        npi = session.get('npi')
-
-        if npi == request.json['npi']:
-            appointments = db.session.query(Appointment).filter(Appointment.npi == npi).order_by(Appointment.start.desc()).all()
-            return jsonify([appointment.to_dict() for appointment in appointments])
-        else:
-            return jsonify({'message': 'unauthorized access'}), 403
-    else:
-        return jsonify({'message': 'invalid session -- login required'}), 401
-
-
-# If patient in session, get all patient's appointments
-@app.route('/patients/appointments/<patientid>', methods=['GET'])
-def get_patient_appts(patientid):
+# If user in session, get all user's appointments
+@app.route('/appointments', methods=['GET'])
+def get_appts():
 
     if 'patientid' in session:
         patientid = session.get('patientid')
+        appointments = db.session.query(Appointment).filter(Appointment.patientid == patientid).order_by(Appointment.start.desc()).all()
+        return jsonify([appointment.to_dict() for appointment in appointments])
 
-        if patientid == request.json['patientid']:
-            appointments = db.session.query(Appointment).filter(Appointment.patientid == patientid).order_by(Appointment.start.desc()).all()
-            return jsonify([appointment.to_dict() for appointment in appointments])
-        else:
-            return jsonify({'message': 'unauthorized access'}), 403
+    elif 'npi' in session:
+        npi = session.get('npi')
+        appointments = db.session.query(Appointment).filter(Appointment.npi == npi).order_by(Appointment.start.desc()).all()
+        return jsonify([appointment.to_dict() for appointment in appointments])
+
     else:
         return jsonify({'message': 'invalid session -- login required'}), 401
+
+
+# # Cancel an appointment with a provider
+# @app.route('/update-appointment', methods=[''])
+# def cancel_appt():
+#     update appt status to cancelled
+#     add appointment day/time back into appointment selection
 
 
 # If patient in session, get all provider's past apppointments
@@ -426,38 +417,25 @@ def get_patient_appts(patientid):
 # If patient in session, get all patient's appointments for today
 
 
-# # Get available appointments for a provider
-# @app.route('/providers/<npi>/open-availability', methods=['GET'])
-# def get_provider_availability(npi):
-
-#     start = request.args.get()
-#     end = request.args.get()
-
-# # Cancel an appointment with a provider
-# @app.route('/appointments', methods=['PUT'])
-# def book_appt():
-
-
 # ####################################### TESTING ######################################## #
 
 
 # Test if user session is successful
 @app.route('/session', methods=['GET'])
-def test():
+def get_session_data():
 
-    if 'patientid' and 'username' in session:
+    if 'patientid' in session and 'username' in session:
         return jsonify({'patientid': session['patientid'], 'username': session['username']})
-    else:
-        return jsonify({'message': 'invalid session'}), 401
 
-    if 'npi' and 'username' in session:
+    elif 'npi' in session and 'username' in session:
         return jsonify({'npi': session['npi'], 'username': session['username']})
+
     else:
         return jsonify({'message': 'invalid session'}), 401
 
 
 # Get all medical relations between patients and providers
-@app.route('/medical-relations', methods=['GET'])
+@app.route('/medical-relations/all', methods=['GET'])
 def get_all_relations():
 
     all_relations = MedicalRelation.query.all()
@@ -466,7 +444,7 @@ def get_all_relations():
 
 
 # Get all appointments
-@app.route('/appointments', methods=['GET'])
+@app.route('/appointments/all', methods=['GET'])
 def get_all_appts():
 
     all_appts = Appointment.query.all()

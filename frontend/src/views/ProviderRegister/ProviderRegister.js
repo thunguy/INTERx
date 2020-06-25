@@ -190,13 +190,12 @@ const schema = {
       });
 
       event.preventDefault();
-      history.push('/');
+      history.push('/providers/login');
     };
 
     const hasError = (field) => {
       return formState.touched[field] && formState.errors[field] ? true : false;
     }
-
 
     return (
       <div>

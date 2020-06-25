@@ -75,11 +75,15 @@ const ProviderLogin = props => {
       mode: 'cors',
       body: JSON.stringify(formState.values)
     })
-    .then((response) => response.json())
-    .then(console.log)
+    .then((response) => {
+      if (response.status === 200)
+        history.push('/providers/dashboard')
+      else
+        history.push('/providers/login')
+      return response.json()
+    })
+    .then((result) => console.log(result))
     .catch(console.error)
-
-    history.push('/session');
   };
 
   const hasError = field =>

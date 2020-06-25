@@ -7,11 +7,11 @@ import { createBrowserHistory } from 'history';
 const browserHistory = createBrowserHistory();
 
 function App() {
-    return (
-        <Router history={browserHistory}>
-            <Routes/>
-        </Router>
-    );
+  return (
+    <Router history={browserHistory}>
+      <Routes/>
+    </Router>
+  );
 }
 
 export default App;

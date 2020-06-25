@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
-import { PatientRegister, ProviderRegister, PatientLogin, ProviderLogin, SelectProvider, Homepage, Session } from './views';
+import { PatientRegister, ProviderRegister, PatientLogin, ProviderLogin, SelectProvider, Homepage, PatientDashboard, ProviderDashboard } from './views';
 // import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 
@@ -17,24 +17,28 @@ const Routes = () => {
               <PatientRegister/>
             </Route>
 
-            <Route exact path="/providers/register">
-              <ProviderRegister/>
-            </Route>
-
             <Route exact path="/patients/login">
               <PatientLogin/>
             </Route>
 
-            <Route exact path="/providers/login">
-              <ProviderLogin/>
+            <Route exact path="/patients/dashboard">
+              <PatientDashboard/>
             </Route>
 
             <Route exact path="/patients/select-provider">
               <SelectProvider/>
             </Route>
 
-            <Route exact path="/session">
-              <Session/>
+            <Route exact path="/providers/register">
+              <ProviderRegister/>
+            </Route>
+
+            <Route exact path="/providers/login">
+              <ProviderLogin/>
+            </Route>
+
+            <Route exact path="/providers/dashboard">
+              <ProviderDashboard/>
             </Route>
         </Switch>
     );
