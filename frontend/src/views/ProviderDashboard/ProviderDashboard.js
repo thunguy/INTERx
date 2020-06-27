@@ -10,7 +10,7 @@ const ProviderDashboard = (props) => {
   const [appointments, setAppointments] = useState({})
   const [patients, setPatients] = useState({})
 
-  // fetch session object and appointments of user in session
+  // fetch user in session object
   useEffect(() => {
     fetch('/session')
     .then((response) => response.json())
@@ -28,7 +28,7 @@ const ProviderDashboard = (props) => {
     .catch(console.error)
   }, [])
 
-  // fetch all user's appointments
+  // fetch all user in session appointments
   useEffect(() => {
     fetch('/appointments')
     .then((response) => response.json())
@@ -36,7 +36,7 @@ const ProviderDashboard = (props) => {
     .catch(console.error)
   }, [])
 
-  // fetch all user's medical relationships
+  // fetch all user in seesion medical relationships
   useEffect(() => {
     fetch('/medical-relations')
     .then((response) => response.json())

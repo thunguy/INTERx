@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { BookAppointment } from './components';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 import InfoIcon from '@material-ui/icons/Info';
@@ -16,7 +17,6 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import { BookAppointment } from './components';
 import queryString from 'query-string';
 
 
@@ -175,7 +175,8 @@ const SelectProvider = (props) => {
         <MaterialTable
           title=''
           options={{
-            search: false
+            search: false,
+            filtering: true
           }}
           icons={{
             Search: SearchIcon,
@@ -184,6 +185,7 @@ const SelectProvider = (props) => {
             LastPage: LastPageIcon,
             NextPage: ArrowForwardIosIcon,
             PreviousPage: ArrowBackIosIcon,
+            Filter: SearchIcon,
           }}
           columns={[
             { title: 'First Name', field: 'fname', searchable: false },
@@ -257,6 +259,7 @@ const SelectProvider = (props) => {
                     provider={rowData}
                     relation={relations.filter((relation) => relation.npi === rowData.npi)[0]}
                     patient={patient}
+                    activity={activity}
                   />
                 )
               },

@@ -18,12 +18,14 @@ class Patient(db.Model):
     password_hash = db.Column(db.Binary(128), nullable=False)
     dob = db.Column(db.Date, nullable=False)
     sex = db.Column(db.String, nullable=False)
-    address = db.Column(db.String)
-    city = db.Column(db.String)
-    state = db.Column(db.String(2))
-    zipcode = db.Column(db.String)
-    phone = db.Column(db.String)
+    address = db.Column(db.String, nullable=False)
+    city = db.Column(db.String, nullable=False)
+    state = db.Column(db.String(2), nullable=False)
+    zipcode = db.Column(db.String, nullable=False)
+    phone = db.Column(db.String, nullable=False)
+    virtualid = db.Column(db.String)
     summary = db.Column(db.Text)
+
     activityid = db.Column(db.String, db.ForeignKey('activities.activityid'))
 
     activity = db.relationship('Activity', backref='patients')
@@ -50,7 +52,9 @@ class Patient(db.Model):
             'phone': self.phone,
             'dob': str(self.dob),
             'sex': self.sex,
-            'summary': self.summary
+            'virtualid': self.virtualid,
+            'summary': self.summary,
+            'user': 'patient'
         }
 
 
@@ -65,15 +69,16 @@ class Provider(db.Model):
     username = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.Binary(128), nullable=False)
     sex = db.Column(db.String, nullable=False)
+    address = db.Column(db.String, nullable=False)
+    city = db.Column(db.String, nullable=False)
+    state = db.Column(db.String(2), nullable=False)
+    zipcode = db.Column(db.String, nullable=False)
+    phone = db.Column(db.String, nullable=False)
     accepting_new_patients = db.Column(db.Boolean, default=True)
-    virtual = db.Column(db.Boolean, default=True)
     inperson = db.Column(db.Boolean, default=True)
+    virtual = db.Column(db.Boolean, default=True)
+    virtualid = db.Column(db.String)
     credential = db.Column(db.String)
-    address = db.Column(db.String)
-    city = db.Column(db.String)
-    state = db.Column(db.String(2))
-    zipcode = db.Column(db.String)
-    phone = db.Column(db.String)
     summary = db.Column(db.Text)
 
     activities = db.relationship('ProviderActivity', backref='providers')
@@ -107,8 +112,10 @@ class Provider(db.Model):
             'sex': self.sex,
             'activities': [activity.activityid for activity in self.activities],
             'summary': self.summary,
+            'inperson': self.inperson,
             'virtual': self.virtual,
-            'inperson': self.inperson
+            'virtualid': self.virtualid,
+            'user': 'provider'
         }
 
 
@@ -199,10 +206,12 @@ class Appointment(db.Model):
     patientid = db.Column(db.Integer, db.ForeignKey('patients.patientid'))
     npi = db.Column(db.Integer, db.ForeignKey('providers.npi'))
     relationid = db.Column(db.Integer, db.ForeignKey('relations.relationid'))
+    activityid = db.Column(db.String, db.ForeignKey('activities.activityid'))
 
     patient = db.relationship('Patient', backref='appts')
     provider = db.relationship('Provider', backref='appts')
     relation = db.relationship('MedicalRelation', backref='appts')
+    activity = db.relationship('Activity', backref='appts')
 
     def __repr__(self):
         return (f'<Appointment apptid={self.apptid} patient={self.patientid} provider={self.npi} '
@@ -219,7 +228,8 @@ class Appointment(db.Model):
             'status': self.status,
             'patientid': self.patientid,
             'npi': self.npi,
-            'relationid': self.relationid
+            'relationid': self.relationid,
+            'activityid': self.activityid
         }
 
 

@@ -6,3 +6,5 @@ export { default as ProviderLogin } from './ProviderLogin';
 export { default as SelectProvider } from './SelectProvider';
 export { default as PatientDashboard } from './PatientDashboard';
 export { default as ProviderDashboard } from './ProviderDashboard';
+export { default as ManagePatientDetails } from './ManagePatientDetails';
+export { default as ManagePatientSecurity } from './ManagePatientSecurity';

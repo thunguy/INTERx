@@ -24,22 +24,6 @@ def get_hash(password):
 @app.route('/patients', methods=['POST'])
 def add_patient():
 
-    # fname = request.json['fname']
-    # lname = request.json['lname']
-    # email = request.json['email']
-    # username = request.json['username']
-    # password = request.json['password']
-    # dob = request.json['dob']
-    # sex = request.json['sex']
-
-    # new_patient = Patient(fname=fname,
-    #                       lname=lname,
-    #                       email=email,
-    #                       username=username,
-    #                       password=password,
-    #                       dob=dob,
-    #                       sex=sex)
-
     if 'policy' in request.json:
         del request.json['policy']
 
@@ -87,10 +71,81 @@ def get_patient(patientid):
 @app.route('/patients/<patientid>', methods=['PUT'])
 def update_patient(patientid):
 
-    db.session.query(Patient).filter(Patient.patientid == patientid).update(request.json)
-    db.session.commit()
+    if 'patientid' in session:
+        patientid = session.get('patientid')
 
-    return jsonify(request.json)
+        if patientid == request.json['patientid']:
+            db.session.query(Patient).filter(Patient.patientid == patientid).update(request.json)
+            db.session.commit()
+            return jsonify(request.json)
+        else:
+            return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
+
+
+# Update patient password
+@app.route('/patients/<patientid>/update-password', methods=['PUT'])
+def update_patient_password(patientid):
+
+    if 'patientid' in session:
+        patientid = session.get('patientid')
+
+        if patientid == request.json['patientid']:
+            old_password = request.json['old_password']
+            new_password = request.json['new_password']
+            patient = Patient.query.get(patientid)
+
+            if patient and patient.check_password(old_password):
+                request.json['password_hash'] = get_hash(new_password)
+                del request.json['old_password']
+                del request.json['new_password']
+                db.session.query(Patient).filter(Patient.patientid == patientid).update(request.json)
+                db.session.commit()
+                return jsonify(patient.to_dict())
+
+            else:
+                return jsonify({'message': 'access denied -- incorrect password'}), 403
+        else:
+            return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
+
+
+# Update patient email
+@app.route('/patients/<patientid>/update-email', methods=['PUT'])
+def update_patient_email(patientid):
+
+    if 'patientid' in session:
+        patientid = session.get('patientid')
+
+        if patientid == request.json['patientid']:
+            old_email = request.json['old_email']
+            new_email = request.json['new_email']
+            password = request.json['password']
+            patient = Patient.query.get(patientid)
+
+            if (patient) and (patient.email == old_email) and (patient.check_password(password)):
+                patient_email = db.session.query(Patient).filter(Patient.email == new_email).all()
+                provider_email = db.session.query(Provider).filter(Provider.email == new_email).all()
+
+                if not patient_email and not provider_email:
+                    request.json['email'] = new_email
+                    del request.json['old_email']
+                    del request.json['new_email']
+                    del request.json['password']
+                    db.session.query(Patient).filter(Patient.patientid == patientid).update(request.json)
+                    db.session.commit()
+                    return jsonify(patient.to_dict())
+
+                else:
+                    return jsonify({'message': 'access denied -- email address already registered with an existing account'}), 403
+            else:
+                return jsonify({'message': 'access denied -- incorrect credentials'}), 403
+        else:
+            return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
 
 
 # ###################################### PROVIDERS ######################################## #
@@ -325,6 +380,18 @@ def get_relations():
         return jsonify({'message': 'invalid session -- login required'}), 401
 
 
+# Get all providers for a patient in session
+@app.route('/patient/<patientid>/providers', methods=['GET'])
+def get_my_providers(patientid):
+
+    if 'patientid' in session:
+        patientid = session.get('patientid')
+        providers = db.session.query(Provider).join(MedicalRelation).filter(MedicalRelation.patientid == patientid).all()
+        return jsonify([provider.to_dict() for provider in providers])
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
+
+
 # # Update the state of an exisiting relationship between patient and provider
 # @app.route('/medical-relation/<relationid>', methods=['PUT'])
 # def update_relation(relationid):
@@ -401,8 +468,21 @@ def get_appts():
         return jsonify({'message': 'invalid session -- login required'}), 401
 
 
-# # Cancel an appointment with a provider
+# Get all scheduled appointment times for a provider
+@app.route('/providers/<npi>/appointments', methods=['GET'])
+def get_provider_appt_times(npi):
+
+    keepers = set(['start', 'end', 'status'])
+
+    all_appts = db.session.query(Appointment).filter_by(npi=npi).all()
+    appt_obj_list = [appt.to_dict() for appt in all_appts]
+    scheduled_times = [{k: appt[k] for k in keepers} for appt in appt_obj_list]
+
+    return jsonify(scheduled_times)
+
+
 # @app.route('/update-appointment', methods=[''])
+# # Cancel an appointment with a provider
 # def cancel_appt():
 #     update appt status to cancelled
 #     add appointment day/time back into appointment selection

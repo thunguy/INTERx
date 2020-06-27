@@ -2,8 +2,9 @@ import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, TextField } from '@material-ui/core';
 import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css";
-import { setHours, setMinutes, getDay, setMilliseconds } from 'date-fns'
+import 'react-datepicker/dist/react-datepicker.css';
+import './style.css';
+import { setHours, setMinutes, getDay, setMilliseconds } from 'date-fns';
 import { Formik } from 'formik';
 import moment from 'moment';
 
@@ -13,6 +14,14 @@ const isWeekday = (date) => {
   return day !== 0;
 };
 
+const fetchAndSet = (url, setter) => {
+  fetch(url)
+  .then((response) => response.json())
+  .then((result) => {
+    console.log(result);
+    return setter(result);
+  });
+};
 
 // COMPONENT: appointment reason and patient goal form
 const PatientText = (props) => {
@@ -53,23 +62,23 @@ const PatientText = (props) => {
 
 // COMPONENT: book appointment with provider
 const Book = ({fname}) => {
-  return (
-    <Button
-      type="submit"
-      variant="outlined"
-      color="primary"
-    >
-      BOOK {fname}
-    </Button>
-  )
+  return (<Button type="submit" variant="outlined" color="primary">BOOK {fname}</Button>)
 }
 
 
-const BookAppointment = ({provider, patient}) => {
+const BookAppointment = ({provider, patient, activity}) => {
 
-  const today = new Date()
-  const tomorrow = new Date(today)
-  tomorrow.setDate(today.getDate() + 1)
+  const [patientAppts, setPatientAppts] = useState([]);
+  const [providerAppts, setProviderAppts] = useState([]);
+
+  console.log(activity, 'line74')
+
+  useEffect(() => fetchAndSet('/appointments', setPatientAppts), []);
+  useEffect(() => fetchAndSet(`/providers/${provider.npi}/appointments`, setProviderAppts), []);
+
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
 
   const handleSubmit = (values, { setSubmitting }) => {
 
@@ -77,6 +86,7 @@ const BookAppointment = ({provider, patient}) => {
     values.location = `${provider.address}, ${provider.city}, ${provider.state}, ${provider.zipcode}`
     values.npi = provider.npi
     values.patientid = patient.patientid
+    values.activityid = activity
     values.status = 'Scheduled'
     console.log(values)
 
@@ -114,7 +124,6 @@ const BookAppointment = ({provider, patient}) => {
         onSubmit={handleSubmit}
       >
         {({values, handleChange, handleSubmit, setFieldValue}) => {
-
           return (
             <form onSubmit={handleSubmit}>
               <DatePicker
@@ -127,13 +136,14 @@ const BookAppointment = ({provider, patient}) => {
                 filterDate={isWeekday}
                 minTime={setHours(setMinutes(new Date(), 0), 8)}
                 maxTime={setHours(setMinutes(new Date(), 30), 18)}
+                excludeTimes={providerAppts.map((appt) => new Date(appt.start))}
                 dateFormat="MMMM d, yyyy h:mm aa"
               />
               <PatientText onChange={handleChange}/>
               <Book fname={provider.fname}/>
             </form>
-          )}
-        }
+          )
+        }}
       </Formik>
     </div>
   );
