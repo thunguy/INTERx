@@ -125,8 +125,9 @@ const ManagePatientDetails = (props) => {
                 /></p>
                 <RegionDropdown
                   defaultOptionLabel={patient.state}
-                  name="STATE"
+                  name="state"
                   country="United States"
+                  labelType="full"
                   valueType="short"
                   value={values.state}
                   onChange={(_, e) => handleChange(e)}
