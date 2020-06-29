@@ -8,3 +8,4 @@ export { default as PatientDashboard } from './PatientDashboard';
 export { default as ProviderDashboard } from './ProviderDashboard';
 export { default as ManagePatientDetails } from './ManagePatientDetails';
 export { default as ManagePatientSecurity } from './ManagePatientSecurity';
+export { default as ViewAppointments } from './ViewAppointments';

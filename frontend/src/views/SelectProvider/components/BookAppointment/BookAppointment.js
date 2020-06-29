@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button, TextField } from '@material-ui/core';
 import DatePicker from "react-datepicker"
@@ -153,4 +154,4 @@ BookAppointment.propTypes = {
   history: PropTypes.object
 };
 
-export default BookAppointment;
+export default withRouter(BookAppointment);

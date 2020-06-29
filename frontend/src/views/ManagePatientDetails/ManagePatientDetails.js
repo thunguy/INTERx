@@ -183,11 +183,11 @@ const ManagePatientDetails = (props) => {
                   </RadioGroup>
                 </FormControl>
                 <p><TextField
+                  label="PATIENT SUMMARY"
+                  name="summary"
                   multiline
                   margin="dense"
-                  name="summary"
                   value={values.summary}
-                  label="PATIENT SUMMARY"
                   placeholder={patient.summary ? patient.summary : "Introduce yourself..."}
                   rows={4}
                   variant="outlined"

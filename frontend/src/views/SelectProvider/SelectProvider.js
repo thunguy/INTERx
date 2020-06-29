@@ -188,13 +188,13 @@ const SelectProvider = (props) => {
             Filter: SearchIcon,
           }}
           columns={[
-            { title: 'First Name', field: 'fname', searchable: false },
-            { title: 'Last Name', field: 'lname', searchable: false },
-            { title: 'Specialty', field: 'specialty', searchable: false },
-            { title: 'Credential', field: 'credential', searchable: false },
-            { title: 'Location', field: 'location', searchable: false },
-            { title: 'Phone', field: 'phone', searchable: false },
-            { title: 'Sex', field: 'sex', searchable: false },
+            { title: 'First Name', field: 'fname' },
+            { title: 'Last Name', field: 'lname' },
+            { title: 'Specialty', field: 'specialty' },
+            { title: 'Credential', field: 'credential' },
+            { title: 'Location', field: 'location' },
+            { title: 'Phone', field: 'phone' },
+            { title: 'Sex', field: 'sex' },
             // { title: 'Activities', field: 'activities', searchable: true },
           ]}
           data={providers.map((provider) => ({

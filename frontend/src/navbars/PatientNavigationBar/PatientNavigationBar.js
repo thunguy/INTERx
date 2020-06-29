@@ -102,12 +102,12 @@ const PatientNavigationBar = (props) => {
 
   // BUTTON COMPONENT: view user's appointments
   const ViewAppointments = () => {
-    return (<div><Button color="primary" href='/patients/view-appointments'>VIEW MY APPOINTMENTS</Button></div>)
+    return (<div><Button color="primary" href='/patients/view-appointments'>MY APPOINTMENTS</Button></div>)
   }
 
   // BUTTON COMPONENT: view user's providers
   const ViewProviders = () => {
-    return (<div><Button color="primary" href='/patients/view-providers'>VIEW MY PROVIDERS</Button></div>)
+    return (<div><Button color="primary" href='/patients/view-providers'>MY PROVIDERS</Button></div>)
   }
 
   // BUTTON COMPONENT: select a provider by activity to schedule an appointment
@@ -189,6 +189,8 @@ const PatientNavigationBar = (props) => {
         </div>
         <Divider/>
         <List>
+          <ListItem> <ViewAppointments/> </ListItem>
+          <ListItem> <ViewProviders/> </ListItem>
           <ListItem> <ScheduleAppointment/> </ListItem>
         </List>
         <Divider/>

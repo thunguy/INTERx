@@ -21,6 +21,7 @@
     "formik-material-ui-pickers": "0.0.10",
     "history": "^4.10.1",
     "material-table": "^1.60.0",
+    "material-ui-confirm": "^2.1.1",
     "material-ui-theme-state": "^1.0.17",
     "moment": "^2.27.0",
     "react": "^16.13.1",
