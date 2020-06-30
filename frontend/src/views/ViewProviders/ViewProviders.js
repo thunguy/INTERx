@@ -9,18 +9,16 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import InfoIcon from '@material-ui/icons/Info';
-import CancelIcon from '@material-ui/icons/Cancel'
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
-
-const ViewAppointments = (props) => {
+const ViewProviders = (props) => {
   const { history } = props;
   const [patient, setPatient] = useState({})
   const [appointments, setAppointments] = useState([])
-
-  const getDuration = (datetime1, datetime2) => {
-    return ((datetime2.getMinutes()) - (datetime1.getMinutes()))
-  }
+  const [providers, setProviders] = useState([])
+  const [relations, setRelations] = useState()
 
   // fetch user in session object
   useEffect(() => {
@@ -36,7 +34,13 @@ const ViewAppointments = (props) => {
       console.log(result);
       return result
     })
-    .then((result) => setPatient(result))
+    .then((result) => {
+      setPatient(result);
+      return result
+    })
+    .then((result) => fetch(`/patient/${result.patientid}/providers`))
+    .then((response) => response.json())
+    .then((result) => setProviders(result))
     .catch(console.error)
   }, [])
 
@@ -48,16 +52,24 @@ const ViewAppointments = (props) => {
     .catch(console.error)
   }, [])
 
+  // fetch all user in session medical relationships
+  useEffect(() => {
+    fetch('/medical-relations')
+    .then((response) => response.json())
+    .then((result) => setRelations(result))
+    .catch(console.error)
+  }, [])
+
   return (
     <div>
-      {console.log(appointments)}
+      {console.log(providers, 'line 65')}
+      {console.log(appointments, 'line 66')}
       <MaterialTable
-        title="My Appointments"
+        title="My Providers"
         options={{
           search: false,
           filtering: true,
           actionsColumnIndex: -1,
-          pageSize:10
         }}
         icons={{
           Search: SearchIcon,
@@ -71,31 +83,23 @@ const ViewAppointments = (props) => {
         }}
         columns={[
           { title: 'Provider', field: 'provider' },
-          { title: 'Date', field: 'date', type: 'date' },
-          { title: 'Time', field: 'time' },
-          { title: 'Duration', field: 'duration', filtering: false },
-          { title: 'Activity', field: 'activityid' },
-          { title: 'Status', field: 'status' },
+          { title: 'NPI', field: 'npi' },
+          { title: 'Relation Status', field: 'connected' },
         ]}
-        data={appointments.map((appointment) => ({
-          ...appointment,
-          date: `${new Date(appointment.start).toDateString()}`,
-          time: `${new Date(appointment.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${new Date(appointment.end).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`,
-          duration: `${getDuration(new Date(appointment.start), new Date(appointment.end))} minutes`
+        data={providers.map((providers) => ({
+          ...providers,
+          connected: providers.consent ? 'Active' : 'Inactive',
         }))}
         actions={[
           (rowData) => ({
-            icon: CancelIcon,
-            tooltip: 'CANCEL APPOINTMENT',
+            icon: rowData.consent ? RemoveCircleIcon : PersonAddIcon,
+            tooltip: rowData.consent ? `TERMINATE RELATION WITH ${rowData.fname}` : `CONSENT TO TREATMENT WITH ${rowData.fname}`,
             onClick: (event, rowData) => {
-              const values = {
-                patientid: rowData.patientid,
-                npi: rowData.npi,
-                start:rowData.start,
-                apptid: rowData.apptid,
-                status: "Cancelled"
-              }
-              fetch(`/appointments/${rowData.apptid}/cancel-appointment`, {
+              const values = {}
+              values.patientid = rowData.patientid
+              values.consent = !(rowData.consent)
+              values.npi = rowData.npi
+              fetch('http://localhost:3000/medical-relations', {
                 method: 'PUT',
                 credentials: 'include',
                 headers: {'Content-Type': 'application/json'},
@@ -103,24 +107,23 @@ const ViewAppointments = (props) => {
                 body: JSON.stringify(values)
               })
               .then((response) => response.json())
-              .then((result) => setAppointments(appointments.filter((appointment) => appointment.npi !== result.npi).concat([result])))
+              .then((result) => setRelations(relations.filter((relation) => relation.npi !== result.npi).concat([result])))
               .catch(console.error)
-              alert("You have cancelled your appointment with  " + rowData.provider + " on " + rowData.date + " at " + rowData.time)
               history.go(0)
             },
-            disabled: rowData.status === 'Cancelled'
+            disabled: appointments.filter((appointment) => (appointment.npi === rowData.npi) && (appointment.status === 'Scheduled') && (new Date(appointment.start) > new Date())).length > 0
           })
         ]}
         detailPanel={[
           (rowData) => ({
             icon: InfoIcon,
-            tooltip: 'DETAILS',
+            tooltip: 'ABOUT',
             render: () => {
               return (
                 <div style={{ fontSize: 20, textAlign: 'left', color: '#000000', backgroundColor: '#FFFFFF' }}>
-                  <ul><b>Location:</b> {rowData.location}</ul>
-                  <ul><b>Appointment Reason:</b> {rowData.reason}</ul>
-                  <ul><b>Appointment Goal: </b> {rowData.goal}</ul>
+                  <ul><b>Location: </b>{rowData.address}, {rowData.city}, {rowData.state}, {rowData.zipcode}</ul>
+                  <ul><b>Email: </b>{rowData.email}</ul>
+                  <ul><b>Phone: </b>{rowData.phone}</ul>
                 </div>
               )
             },
@@ -131,8 +134,8 @@ const ViewAppointments = (props) => {
   )
 }
 
-ViewAppointments.propTypes = {
+ViewProviders.propTypes = {
   history: PropTypes.object
 };
 
-export default withRouter(ViewAppointments);
+export default withRouter(ViewProviders);

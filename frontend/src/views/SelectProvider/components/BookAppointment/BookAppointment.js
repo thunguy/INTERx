@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button, TextField } from '@material-ui/core';
@@ -67,7 +67,7 @@ const Book = ({fname}) => {
 }
 
 
-const BookAppointment = ({provider, patient, activity}) => {
+const BookAppointment = ({provider, patient, activity, history}) => {
 
   const [patientAppts, setPatientAppts] = useState([]);
   const [providerAppts, setProviderAppts] = useState([]);
@@ -104,9 +104,9 @@ const BookAppointment = ({provider, patient, activity}) => {
     .then((response) => response.json())
     .then((result) => console.log(result))
     .catch(console.error)
-
     alert(JSON.stringify(values, null, 2));
     setSubmitting(false);
+    history.push('/patients/view-appointments')
   };
 
   return (

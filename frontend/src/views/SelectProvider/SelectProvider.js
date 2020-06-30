@@ -17,6 +17,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import queryString from 'query-string';
 
 
@@ -186,6 +187,7 @@ const SelectProvider = (props) => {
             NextPage: ArrowForwardIosIcon,
             PreviousPage: ArrowBackIosIcon,
             Filter: SearchIcon,
+            SortArrow: ArrowDownward,
           }}
           columns={[
             { title: 'First Name', field: 'fname' },
@@ -204,7 +206,7 @@ const SelectProvider = (props) => {
           detailPanel={[
             (rowData) => ({
               icon: InfoIcon,
-              tooltip: 'About',
+              tooltip: 'ABOUT',
               render: () => {
                 return (
                   <div
@@ -226,7 +228,7 @@ const SelectProvider = (props) => {
                 const relation = relations.filter((relation) => relation.npi === rowData.npi)[0]
                 return (relation && relation.consent)
               })(),
-              tooltip: 'Connect',
+              tooltip: 'CONSENT',
               render: () => {
                 return (
                   <div
@@ -252,7 +254,7 @@ const SelectProvider = (props) => {
                 const relation = relations.filter((relation) => relation.npi === rowData.npi)[0]
                 return !(relation && relation.consent)
               })(),
-              tooltip: 'Schedule',
+              tooltip: 'SCHEDULE',
               render: () => {
                 return (
                   <BookAppointment

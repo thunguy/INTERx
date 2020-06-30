@@ -380,14 +380,26 @@ def get_relations():
         return jsonify({'message': 'invalid session -- login required'}), 401
 
 
-# Get all providers for a patient in session
+# Get all providers for a patient in session joined
 @app.route('/patient/<patientid>/providers', methods=['GET'])
 def get_my_providers(patientid):
+
+    provider_relation_objs = []
 
     if 'patientid' in session:
         patientid = session.get('patientid')
         providers = db.session.query(Provider).join(MedicalRelation).filter(MedicalRelation.patientid == patientid).all()
-        return jsonify([provider.to_dict() for provider in providers])
+
+        for provider in providers:
+            npi = provider.npi
+            relation = db.session.query(MedicalRelation).filter(MedicalRelation.npi == npi, MedicalRelation.patientid == patientid).first()
+            relation_obj = relation.to_dict()
+            provider_obj = provider.to_dict()
+            provider_relation_obj = {**provider_obj, **relation_obj}
+            provider_relation_objs.append(provider_relation_obj)
+
+        return jsonify(provider_relation_objs)
+
     else:
         return jsonify({'message': 'invalid session -- login required'}), 401
 
@@ -450,6 +462,26 @@ def book_appt():
             return jsonify({'message': 'invalid session -- login required'}), 401
 
 
+# Cancel an appointment
+@app.route('/appointments/<apptid>/cancel-appointment', methods=['PUT'])
+def cancel_appt(apptid):
+
+    if 'patientid' in session:
+        patientid = session.get('patientid')
+
+        if patientid == request.json['patientid']:
+            npi = request.json['npi']
+            start = request.json['start']
+            apptid = request.json['apptid']
+            db.session.query(Appointment).filter_by(patientid=patientid, npi=npi, start=start, apptid=apptid).update(request.json)
+            db.session.commit()
+            return jsonify(request.json)
+        else:
+            return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
+
+
 # If user in session, get all user's appointments
 @app.route('/appointments', methods=['GET'])
 def get_appts():
@@ -474,18 +506,11 @@ def get_provider_appt_times(npi):
 
     keepers = set(['start', 'end', 'status'])
 
-    all_appts = db.session.query(Appointment).filter_by(npi=npi).all()
+    all_appts = db.session.query(Appointment).filter_by(npi=npi, status='Scheduled').all()
     appt_obj_list = [appt.to_dict() for appt in all_appts]
     scheduled_times = [{k: appt[k] for k in keepers} for appt in appt_obj_list]
 
     return jsonify(scheduled_times)
-
-
-# @app.route('/update-appointment', methods=[''])
-# # Cancel an appointment with a provider
-# def cancel_appt():
-#     update appt status to cancelled
-#     add appointment day/time back into appointment selection
 
 
 # If patient in session, get all provider's past apppointments

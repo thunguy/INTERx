@@ -167,7 +167,9 @@ class MedicalRelation(db.Model):
             'relationid': self.relationid,
             'consent': self.consent,
             'patientid': self.patientid,
-            'npi': self.npi
+            'npi': self.npi,
+            'patient': f'{self.patient.fname} {self.patient.lname}',
+            'provider': f'{self.provider.fname} {self.provider.lname}, {self.provider.credential}'
         }
 
 

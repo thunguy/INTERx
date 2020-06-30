@@ -12,7 +12,8 @@ import { PatientRegister,
          ProviderDashboard,
          ManagePatientDetails,
          ManagePatientSecurity,
-         ViewAppointments
+         ViewAppointments,
+         ViewProviders
         } from './views';
 
 // import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
@@ -48,6 +49,7 @@ const Routes = () => {
             <WithNavigationBar exact path='/patients/account-details' navbar={PatientNavigationBar} component={ManagePatientDetails}/>
             <WithNavigationBar exact path='/patients/manage-security' navbar={PatientNavigationBar} component={ManagePatientSecurity}/>
             <WithNavigationBar exact path='/patients/view-appointments' navbar={PatientNavigationBar} component={ViewAppointments}/>
+            <WithNavigationBar exact path='/patients/view-providers' navbar={PatientNavigationBar} component={ViewProviders}/>
 
             <Route exact path='/providers/dashboard'>
               <ProviderDashboard/>
