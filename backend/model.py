@@ -215,13 +215,13 @@ class Appointment(db.Model):
 
     def __repr__(self):
         return (f'<Appointment apptid={self.apptid} patient={self.patientid} provider={self.npi} '
-                f'relationid={self.relationid} start={self.start.isoformat()} status={self.status}>')
+                f'relationid={self.relationid} start={self.start} status={self.status}>')
 
     def to_dict(self):
         return {
             'apptid': self.apptid,
-            'start': self.start.isoformat(),
-            'end': self.end.isoformat(),
+            'start': self.start,
+            'end': self.end,
             'location': self.location,
             'reason': self.reason,
             'goal': self.goal,

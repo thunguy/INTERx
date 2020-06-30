@@ -80,6 +80,9 @@ const BookAppointment = ({provider, patient, activity}) => {
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);
+  const isSameDay = (date1, date2) => {
+    return date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear()
+  }
 
   const handleSubmit = (values, { setSubmitting }) => {
 
@@ -125,6 +128,7 @@ const BookAppointment = ({provider, patient, activity}) => {
         onSubmit={handleSubmit}
       >
         {({values, handleChange, handleSubmit, setFieldValue}) => {
+          console.log(values.start)
           return (
             <form onSubmit={handleSubmit}>
               <DatePicker
@@ -137,7 +141,7 @@ const BookAppointment = ({provider, patient, activity}) => {
                 filterDate={isWeekday}
                 minTime={setHours(setMinutes(new Date(), 0), 8)}
                 maxTime={setHours(setMinutes(new Date(), 30), 18)}
-                excludeTimes={providerAppts.map((appt) => new Date(appt.start))}
+                excludeTimes={providerAppts.map((appt) => new Date(appt.start)).filter((date) => isSameDay(date, values.start))}
                 dateFormat="MMMM d, yyyy h:mm aa"
               />
               <PatientText onChange={handleChange}/>

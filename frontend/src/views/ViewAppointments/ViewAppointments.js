@@ -9,11 +9,18 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import InfoIcon from '@material-ui/icons/Info';
+import CancelIcon from '@material-ui/icons/Cancel'
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+
 
 const ViewAppointments = (props) => {
   const { history } = props;
   const [patient, setPatient] = useState({})
   const [appointments, setAppointments] = useState([])
+
+  const getDuration = (datetime1, datetime2) => {
+    return ((datetime2.getMinutes()) - (datetime1.getMinutes()))
+  }
 
   // fetch user in session object
   useEffect(() => {
@@ -59,21 +66,27 @@ const ViewAppointments = (props) => {
           NextPage: ArrowForwardIosIcon,
           PreviousPage: ArrowBackIosIcon,
           Filter: SearchIcon,
+          SortArrow: ArrowDownward,
         }}
         columns={[
           { title: 'Provider', field: 'provider' },
+          { title: 'Date', field: 'date' },
+          { title: 'Time', field: 'time' },
+          { title: 'Duration', field: 'duration', filtering: false },
           { title: 'Activity', field: 'activityid' },
-          { title: 'Start', field: 'start' },
-          { title: 'Goal', field: 'goal' },
           { title: 'Status', field: 'status' },
         ]}
-        data={appointments}
+        data={appointments.map((appointment) => ({
+          ...appointment,
+          date: `${new Date(appointment.start).toDateString()}`,
+          time: `${new Date(appointment.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${new Date(appointment.end).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`,
+          duration: `${getDuration(new Date(appointment.start), new Date(appointment.end))} minutes`
+        }))}
         actions={[
-          { icon: 'save', tooltip: 'Save User', onClick: (event, rowData) => alert("You saved " + rowData.name) },
-          rowData => ({
-            icon: 'delete',
-            tooltip: 'Delete User',
-            onClick: (event, rowData) => alert("You have deleted " + rowData.name),
+          (rowData) => ({
+            icon: CancelIcon,
+            tooltip: 'Cancel Appointment',
+            onClick: (event, rowData) => alert("You have cancelled your appointment with  " + rowData.provider + " on " + rowData.date + " at " + rowData.time),
             disabled: rowData.birthYear < 2000
           })
         ]}
@@ -83,10 +96,10 @@ const ViewAppointments = (props) => {
             tooltip: 'About',
             render: () => {
               return (
-                <div style={{ fontSize: 20, textAlign: 'center', color: '#000000', backgroundColor: '#FFFFFF' }}>
-                  Location: {rowData.location}<br/>
-                  Reason: {rowData.reason}<br/>
-                  Goal: {rowData.goal}<br/>
+                <div style={{ fontSize: 20, textAlign: 'left', color: '#000000', backgroundColor: '#FFFFFF' }}>
+                  <ul><b>Location:</b> {rowData.location}</ul>
+                  <ul><b>Appointment Reason:</b> {rowData.reason}</ul>
+                  <ul><b>Appointment Goal: </b> {rowData.goal}</ul>
                 </div>
               )
             },
