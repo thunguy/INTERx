@@ -1,16 +1,17 @@
 import React from "react";
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import { Button } from '@material-ui/core';
+import '../../index.css';
 
 
 const Homepage = (props) => {
   const { history } = props;
 
   return (
-    <div align="center">
-      <Button variant="outlined" color="primary" href="http://localhost:3000/patients/login">PATIENT</Button>
-      <br/>
-      <Button variant="outlined" color="primary" href="http://localhost:3000/providers/login">PROVIDER</Button>
+    <div className="container">
+        <center><Button variant="outlined" color="primary" href="/patients/login" size="large">PATIENT LOGIN</Button></center>
+        <br/>
+        <center><Button variant="outlined" color="primary" href="/providers/login" size="large">PROVIDER LOGIN</Button></center>
     </div>
   )
 }

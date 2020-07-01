@@ -44,9 +44,9 @@ const PatientDashboard = (props) => {
 
   return(
     <div>
-      <p>{JSON.stringify(appointments, null, 2)}</p>
+      {/* <p>{JSON.stringify(appointments, null, 2)}</p>
       <p>{JSON.stringify(providers, null, 2)}</p>
-      <p>{JSON.stringify(patient, null, 2)}</p>
+      <p>{JSON.stringify(patient, null, 2)}</p> */}
     </div>
   )
 }

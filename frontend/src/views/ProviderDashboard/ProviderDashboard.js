@@ -62,10 +62,9 @@ const ProviderDashboard = (props) => {
 
   return (
     <div>
-      <p>{JSON.stringify(provider, null, 2)}</p>
+      {/* <p>{JSON.stringify(provider, null, 2)}</p>
       <p>{JSON.stringify(appointments, null, 2)}</p>
-      <p>{JSON.stringify(patients, null, 2)}</p>
-      <Logout/>
+      <p>{JSON.stringify(patients, null, 2)}</p> */}
     </div>
   )
 }

@@ -3,11 +3,11 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button, TextField } from '@material-ui/core';
 import DatePicker from "react-datepicker"
-import 'react-datepicker/dist/react-datepicker.css';
-import './style.css';
 import { setHours, setMinutes, getDay, setMilliseconds } from 'date-fns';
 import { Formik } from 'formik';
 import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
+import './style.css';
 
 
 const isWeekday = (date) => {
@@ -62,8 +62,8 @@ const PatientText = (props) => {
 
 
 // COMPONENT: book appointment with provider
-const Book = ({fname}) => {
-  return (<Button type="submit" variant="outlined" color="primary">BOOK {fname}</Button>)
+const Book = ({fname, lname, credential}) => {
+return (<Button type="submit" variant="outlined" color="primary">BOOK: {fname} {lname}, {credential}</Button>)
 }
 
 
@@ -71,8 +71,6 @@ const BookAppointment = ({provider, patient, activity, history}) => {
 
   const [patientAppts, setPatientAppts] = useState([]);
   const [providerAppts, setProviderAppts] = useState([]);
-
-  console.log(activity, 'line74')
 
   useEffect(() => fetchAndSet('/appointments', setPatientAppts), []);
   useEffect(() => fetchAndSet(`/providers/${provider.npi}/appointments`, setProviderAppts), []);
@@ -116,9 +114,10 @@ const BookAppointment = ({provider, patient, activity, history}) => {
         textAlign: 'center',
         color: '#E53935',
         backgroundColor: '#FFFFFF',
+        font: 'sans-serif',
       }}
     >
-      {provider.fname}'S AVAILABILITY
+      {provider.fname}'s Availability
       <Formik
         initialValues={{
           start: isWeekday(today) ? today : tomorrow,
@@ -145,7 +144,7 @@ const BookAppointment = ({provider, patient, activity, history}) => {
                 dateFormat="MMMM d, yyyy h:mm aa"
               />
               <PatientText onChange={handleChange}/>
-              <Book fname={provider.fname}/>
+              <Book fname={provider.fname} lname={provider.lname} credential={provider.credential}/>
             </form>
           )
         }}

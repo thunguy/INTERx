@@ -7,6 +7,8 @@ import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@ma
 import { makeStyles } from '@material-ui/styles';
 import { Grid, Button, IconButton, TextField, Link, FormHelperText, Checkbox, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { RegionDropdown } from 'react-country-region-selector';
+
 
 const schema = {
   fname: {
@@ -98,7 +100,7 @@ const PatientRegister = (props) => {
   };
 
   const handleBack = () => {
-    history.goBack();
+    history.goBack('/');
   };
 
   const handleRegister = (event) => {
@@ -144,10 +146,10 @@ const PatientRegister = (props) => {
         </div>
         <div>
           <form onSubmit={handleRegister}>
-            <Typography variant="h2">
+            <Typography variant="h3">
               <center>NEW PATIENT</center>
             </Typography>
-            <TextField
+            <p><TextField
               required
               error={hasError('fname')}
               fullWidth
@@ -160,9 +162,8 @@ const PatientRegister = (props) => {
               type="text"
               value={formState.values.fname || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('lname')}
               fullWidth
@@ -175,9 +176,8 @@ const PatientRegister = (props) => {
               type="text"
               value={formState.values.lname || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('email')}
               fullWidth
@@ -190,9 +190,8 @@ const PatientRegister = (props) => {
               type="text"
               value={formState.values.email || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('username')}
               fullWidth
@@ -205,9 +204,8 @@ const PatientRegister = (props) => {
               type="text"
               value={formState.values.username || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('password')}
               fullWidth
@@ -220,9 +218,8 @@ const PatientRegister = (props) => {
               type="password"
               value={formState.values.password || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('dob')}
               fullWidth
@@ -238,9 +235,8 @@ const PatientRegister = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('address')}
               fullWidth
@@ -253,9 +249,8 @@ const PatientRegister = (props) => {
               type="text"
               value={formState.values.address || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('city')}
               fullWidth
@@ -268,24 +263,18 @@ const PatientRegister = (props) => {
               type="text"
               value={formState.values.city || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><center><RegionDropdown
               required
-              error={hasError('state')}
-              fullWidth
-              helperText={
-                hasError('state') ? formState.errors.state[0] : null
-              }
-              label="State"
+              defaultOptionLabel="STATE"
               name="state"
-              onChange={handleChange}
-              type="text"
+              country="United States"
+              labelType="full"
+              valueType="short"
               value={formState.values.state || ''}
-              variant="outlined"
-            />
-
-            <TextField
+              onChange={(_, e) => handleChange(e)}
+            /></center></p>
+            <p><TextField
               required
               error={hasError('zipcode')}
               fullWidth
@@ -298,9 +287,8 @@ const PatientRegister = (props) => {
               type="text"
               value={formState.values.zipcode || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('phone')}
               fullWidth
@@ -313,8 +301,7 @@ const PatientRegister = (props) => {
               type="text"
               value={formState.values.phone || ''}
               variant="outlined"
-            />
-
+            /></p>
             <FormControl component="fieldset" required>
               <FormLabel component="legend">Sex</FormLabel>
               <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
@@ -324,56 +311,23 @@ const PatientRegister = (props) => {
               </RadioGroup>
             </FormControl>
 
-            <div>
+            {/* <div>
               <span>
-                <Checkbox
-                  checked={formState.values.policy || false}
-                  color="primary"
-                  name="policy"
-                  onChange={handleChange}
-                />
-                  I have read the{' '}
-                  <Link
-                    color="primary"
-                    component={RouterLink}
-                    to="#"
-                    underline="always"
-                    variant="h6"
-                  >
-                    Terms and Conditions
-                  </Link>
+                <Checkbox checked={formState.values.policy || false} color="primary" name="policy" onChange={handleChange}/>
+                I accept the{' '} <Link color="primary" component={RouterLink} to="#" underline="always" variant="h6"> Terms & Conditions </Link>
               </span>
             </div>
-
             {hasError('policy') && (
               <FormHelperText error>
                 {formState.errors.policy[0]}
               </FormHelperText>
-            )}
+            )} */}
 
-            <Button
-              color="primary"
-              disabled={!formState.isValid}
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-            >
-              Register
-            </Button>
+            <Button color="primary" disabled={!formState.isValid} size="large" type="submit" variant="contained" fullWidth> Register </Button>
 
-            <Typography
-              color="textSecondary"
-              variant="body1"
-            >
+            <Typography color="textSecondary" variant="body1">
               Have an account?{' '}
-              <Link
-                component={RouterLink}
-                to="/patients/login"
-                variant="h6"
-              >
-                Log In
-              </Link>
+              <Link component={RouterLink} to="/patients/login" variant="h6"> Log In </Link>
             </Typography>
           </form>
         </div>

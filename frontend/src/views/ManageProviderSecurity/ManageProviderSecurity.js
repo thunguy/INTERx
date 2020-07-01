@@ -5,9 +5,9 @@ import { Formik, Form } from 'formik';
 import { Button, TextField } from '@material-ui/core';
 
 
-const ManagePatientSecurity= (props) => {
+const ManageProviderSecurity= (props) => {
   const { history } = props
-  const [patient, setPatient] = useState({})
+  const [provider, setProvider] = useState({})
 
   // fetch session object and appointments of user in session
   useEffect(() => {
@@ -17,13 +17,13 @@ const ManagePatientSecurity= (props) => {
       console.log(result);
       return result;
     })
-    .then((result) => fetch(`/patients/${result.patientid}`))
+    .then((result) => fetch(`/providers/${result.npi}`))
     .then((response) => response.json())
     .then((result) => {
       console.log(result);
       return result
     })
-    .then((result) => setPatient(result))
+    .then((result) => setProvider(result))
     .catch(console.error)
   }, [])
 
@@ -33,10 +33,10 @@ const ManagePatientSecurity= (props) => {
   }
 
   const handleUpdatePassword = (values, { setSubmitting }) => {
-    values.patientid = patient.patientid
+    values.npi = provider.npi
     console.log(values)
 
-    fetch(`http://localhost:3000/patients/${patient.patientid}/update-password`, {
+    fetch(`http://localhost:3000/providers/${provider.npi}/update-password`, {
       method: 'PUT',
       credentials: 'include',
       headers: {'Content-Type': 'application/json'},
@@ -57,10 +57,10 @@ const ManagePatientSecurity= (props) => {
   }
 
   const handleUpdateEmail = (values, { setSubmitting }) => {
-    values.patientid = patient.patientid
+    values.npi = provider.npi
     console.log(values)
 
-    fetch(`http://localhost:3000/patients/${patient.patientid}/update-email`, {
+    fetch(`http://localhost:3000/providers/${provider.npi}/update-email`, {
       method: 'PUT',
       credentials: 'include',
       headers: {'Content-Type': 'application/json'},
@@ -167,8 +167,8 @@ const ManagePatientSecurity= (props) => {
   )
 }
 
-ManagePatientSecurity.propTypes = {
+ManageProviderSecurity.propTypes = {
   history: PropTypes.object
 };
 
-export default withRouter(ManagePatientSecurity);
+export default withRouter(ManageProviderSecurity);

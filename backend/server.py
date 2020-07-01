@@ -94,18 +94,22 @@ def update_patient_password(patientid):
         if patientid == request.json['patientid']:
             old_password = request.json['old_password']
             new_password = request.json['new_password']
-            patient = Patient.query.get(patientid)
 
-            if patient and patient.check_password(old_password):
-                request.json['password_hash'] = get_hash(new_password)
-                del request.json['old_password']
-                del request.json['new_password']
-                db.session.query(Patient).filter(Patient.patientid == patientid).update(request.json)
-                db.session.commit()
-                return jsonify(patient.to_dict())
+            if old_password != new_password:
+                patient = Patient.query.get(patientid)
 
+                if patient and patient.check_password(old_password):
+                    request.json['password_hash'] = get_hash(new_password)
+                    del request.json['old_password']
+                    del request.json['new_password']
+                    db.session.query(Patient).filter(Patient.patientid == patientid).update(request.json)
+                    db.session.commit()
+                    return jsonify(patient.to_dict())
+
+                else:
+                    return jsonify({'message': 'access denied -- incorrect password'}), 403
             else:
-                return jsonify({'message': 'access denied -- incorrect password'}), 403
+                return jsonify({'message': 'request cannot be completed -- new password must be different from current password'}), 409
         else:
             return jsonify({'message': 'unauthorized access -- invalid session'}), 403
     else:
@@ -217,32 +221,98 @@ def get_provider(npi):
 @app.route('/providers/<npi>', methods=['PUT'])
 def update_provider(npi):
 
-    # provider = Provider.query.get(npi)
+    if 'activities' in request.json:
 
-    # provider.npi = request.json['npi']
-    # provider.fname = request.json['fname']
-    # provider.lname = request.json['lname']
-    # provider.specialty = request.json['specialty']
-    # provider.email = request.json['email']
-    # provider.username = request.json['username']
-    # provider.password = request.json['password']
-    # provider.accepting_new_patients = request.json['accepting_new_patients']
-    # provider.credential = request.json['credential']
-    # provider.sex = request.json['sex']
-    # provider.address = request.json['address']
-    # provider.city = request.json['city']
-    # provider.state = request.json['state']
-    # provider.zipcode = request.json['zipcode']
-    # provider.phone = request.json['phone']
-    # provider.summary = request.json['summary']
-    # provider.virtual = request.json['virtual']
-    # provider.inperson = request.json['inperson']
+        for activity in request.json['activities']:
+            provider_activity = db.session.query(ProviderActivity).filter_by(npi=request.json['npi'], activityid=activity).first()
+            provider_activities = db.session.query(ProviderActivity).all()
 
-    db.session.query(Provider).filter(Provider.npi == npi).update(request.json)
-    db.session.commit()
+            if provider_activity not in provider_activities:
+                db.session.add(ProviderActivity(npi=request.json['npi'], activityid=activity))
+            else:
+                continue
 
-    return jsonify(request.json)
+        del request.json['activities']
 
+    if 'npi' in session:
+        npi = session.get('npi')
+
+        if npi == request.json['npi']:
+            db.session.query(Provider).filter(Provider.npi == npi).update(request.json)
+            db.session.commit()
+            return jsonify(request.json)
+        else:
+            return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
+
+
+# Update provider password
+@app.route('/providers/<npi>/update-password', methods=['PUT'])
+def update_provider_password(npi):
+
+    if 'npi' in session:
+        npi = session.get('npi')
+
+        if npi == request.json['npi']:
+            old_password = request.json['old_password']
+            new_password = request.json['new_password']
+
+            if old_password != new_password:
+                provider = Provider.query.get(npi)
+
+                if provider and provider.check_password(old_password):
+                    request.json['password_hash'] = get_hash(new_password)
+                    del request.json['old_password']
+                    del request.json['new_password']
+                    db.session.query(Provider).filter(Provider.npi == npi).update(request.json)
+                    db.session.commit()
+                    return jsonify(provider.to_dict())
+
+                else:
+                    return jsonify({'message': 'access denied -- incorrect password'}), 403
+            else:
+                return jsonify({'message': 'request cannot be completed -- new password must be different from current password'}), 409
+        else:
+            return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
+
+
+# Update provider email
+@app.route('/providers/<npi>/update-email', methods=['PUT'])
+def update_provider_email(npi):
+
+    if 'npi' in session:
+        npi = session.get('npi')
+
+        if npi == request.json['npi']:
+            old_email = request.json['old_email']
+            new_email = request.json['new_email']
+            password = request.json['password']
+            provider = Provider.query.get(npi)
+
+            if (provider) and (provider.email == old_email) and (provider.check_password(password)):
+                provider_email = db.session.query(Provider).filter(Provider.email == new_email).first()
+                patient_email = db.session.query(Patient).filter(Patient.email == new_email).first()
+
+                if not provider_email and not patient_email:
+                    request.json['email'] = new_email
+                    del request.json['old_email']
+                    del request.json['new_email']
+                    del request.json['password']
+                    db.session.query(Provider).filter(Provider.npi == npi).update(request.json)
+                    db.session.commit()
+                    return jsonify(provider.to_dict())
+
+                else:
+                    return jsonify({'message': 'access denied -- email address already registered with an existing account'}), 403
+            else:
+                return jsonify({'message': 'access denied -- incorrect credentials'}), 403
+        else:
+            return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
 
 # ####################################### ACTIVITIES ######################################## #
 

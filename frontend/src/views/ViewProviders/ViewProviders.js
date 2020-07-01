@@ -2,16 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MaterialTable from 'material-table';
-import ClearIcon from '@material-ui/icons/Clear';
-import SearchIcon from '@material-ui/icons/Search';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import InfoIcon from '@material-ui/icons/Info';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { GiEnvelope } from 'react-icons/gi';
+import { MdPhoneInTalk, MdClose } from 'react-icons/md';
+import { IoMdSkipForward, IoMdSkipBackward, IoIosArrowForward, IoIosArrowBack, IoMdClose, IoIosArrowDown, IoMdContact } from 'react-icons/io';
+import { FcEmptyFilter } from 'react-icons/fc';
+import { TiLocation } from 'react-icons/ti';
+import { FaLink } from 'react-icons/fa';
+import '../../index.css'
+
 
 const ViewProviders = (props) => {
   const { history } = props;
@@ -72,18 +70,17 @@ const ViewProviders = (props) => {
           actionsColumnIndex: -1,
         }}
         icons={{
-          Search: SearchIcon,
-          ResetSearch: ClearIcon,
-          FirstPage: FirstPageIcon,
-          LastPage: LastPageIcon,
-          NextPage: ArrowForwardIosIcon,
-          PreviousPage: ArrowBackIosIcon,
-          Filter: SearchIcon,
-          SortArrow: ArrowDownward,
+          ResetSearch: IoMdClose,
+          FirstPage: IoMdSkipBackward,
+          LastPage: IoMdSkipForward,
+          NextPage: IoIosArrowForward,
+          PreviousPage: IoIosArrowBack,
+          Filter: FcEmptyFilter,
+          SortArrow: IoIosArrowDown,
         }}
         columns={[
           { title: 'Provider', field: 'provider' },
-          { title: 'NPI', field: 'npi' },
+          { title: 'National Provider ID', field: 'npi' },
           { title: 'Relation Status', field: 'connected' },
         ]}
         data={providers.map((providers) => ({
@@ -92,8 +89,8 @@ const ViewProviders = (props) => {
         }))}
         actions={[
           (rowData) => ({
-            icon: rowData.consent ? RemoveCircleIcon : PersonAddIcon,
-            tooltip: rowData.consent ? `TERMINATE RELATION WITH ${rowData.fname}` : `CONSENT TO TREATMENT WITH ${rowData.fname}`,
+            icon: rowData.consent ? MdClose : FaLink,
+            tooltip: rowData.consent ? 'Deactivate Relation' : 'Activate Relation',
             onClick: (event, rowData) => {
               const values = {}
               values.patientid = rowData.patientid
@@ -116,14 +113,14 @@ const ViewProviders = (props) => {
         ]}
         detailPanel={[
           (rowData) => ({
-            icon: InfoIcon,
-            tooltip: 'ABOUT',
+            icon: IoMdContact,
+            tooltip: `About ${rowData.fname}`,
             render: () => {
               return (
-                <div style={{ fontSize: 20, textAlign: 'left', color: '#000000', backgroundColor: '#FFFFFF' }}>
-                  <ul><b>Location: </b>{rowData.address}, {rowData.city}, {rowData.state}, {rowData.zipcode}</ul>
-                  <ul><b>Email: </b>{rowData.email}</ul>
-                  <ul><b>Phone: </b>{rowData.phone}</ul>
+                <div class="container-table" style={{ fontSize: 18, fontFamily: 'Lucida Console', color: '#515050' }}>
+                  <div class="item"><MdPhoneInTalk color='#3754A4' fontSize='25'/>&nbsp;&nbsp;{rowData.phone}</div>
+                  <div class="item"><TiLocation color='#3754A4' fontSize='25'/>&nbsp;{rowData.address}, {rowData.city}, {rowData.state}, {rowData.zipcode}</div>
+                  <div class="item"><GiEnvelope color='#3754A4' fontSize='25'/>&nbsp;{rowData.email}</div>
                 </div>
               )
             },

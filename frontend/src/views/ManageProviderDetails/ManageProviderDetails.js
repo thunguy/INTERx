@@ -6,9 +6,9 @@ import { RegionDropdown } from 'react-country-region-selector';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import { Button, TextField } from '@material-ui/core';
 
-const ManagePatientDetails = (props) => {
+const ManageProviderDetails = (props) => {
   const { history } = props
-  const [patient, setPatient] = useState({})
+  const [provider, setProvider] = useState({})
 
   // fetch session object and appointments of user in session
   useEffect(() => {
@@ -18,13 +18,13 @@ const ManagePatientDetails = (props) => {
       console.log(result);
       return result;
     })
-    .then((result) => fetch(`/patients/${result.patientid}`))
+    .then((result) => fetch(`/providers/${result.npi}`))
     .then((response) => response.json())
     .then((result) => {
       console.log(result);
       return result
     })
-    .then((result) => setPatient(result))
+    .then((result) => setProvider(result))
     .catch(console.error)
   }, [])
 
@@ -34,10 +34,10 @@ const ManagePatientDetails = (props) => {
   }
 
   const handleSubmit = (values, { setSubmitting }) => {
-    values.patientid = patient.patientid
+    values.npi = provider.npi
     console.log(values)
 
-    fetch(`http://localhost:3000/patients/${patient.patientid}`, {
+    fetch(`http://localhost:3000/providers/${provider.npi}`, {
       method: 'PUT',
       credentials: 'include',
       headers: {'Content-Type': 'application/json'},
@@ -56,17 +56,23 @@ const ManagePatientDetails = (props) => {
     <div>
       <Formik
         initialValues={{
-          fname: patient.fname,
-          lname: patient.lname,
-          dob: patient.dob,
-          sex: patient.sex,
-          address: patient.address,
-          city: patient.city,
-          state: patient.state,
-          zipcode: patient.zipcode,
-          phone: patient.phone,
-          virtualid: patient.virtualid,
-          summary: patient.summary
+          npi: provider.npi,
+          fname: provider.fname,
+          lname: provider.lname,
+          credential: provider.credential,
+          specialty: provider.specialty,
+          sex: provider.sex,
+          address: provider.address,
+          city: provider.city,
+          state: provider.state,
+          zipcode: provider.zipcode,
+          phone: provider.phone,
+          virtualid: provider.virtualid,
+          summary: provider.summary,
+          // activities: provider.activities,
+          // accepting_new_patients: provider.accepting_new_patients,
+          // inperson: provider.inperson,
+          // virtual: provider.virtual,
         }}
         onSubmit={handleSubmit}
       >
@@ -75,13 +81,25 @@ const ManagePatientDetails = (props) => {
             <form onSubmit={handleSubmit}>
               <Form>
                 <p><TextField
+                  label="NPI (cannot be modified)"
+                  name="npi"
+                  type="number"
+                  value={provider.npi}
+                  variant="outlined"
+                  onChange={handleChange}
+                  defaultValue={provider.npi}
+                  InputProps={{readOnly: true}}
+                  InputLabelProps={{shrink: true}}
+                  fullWidth
+                /></p>
+                <p><TextField
                   label="FIRST NAME"
                   name="fname"
                   onChange={handleChange}
                   type="text"
                   value={values.fname}
                   variant="outlined"
-                  placeholder={patient.fname}
+                  placeholder={provider.fname}
                   InputLabelProps={{shrink: true}}
                   fullWidth
                 /></p>
@@ -92,7 +110,29 @@ const ManagePatientDetails = (props) => {
                   type="text"
                   value={values.lname}
                   variant="outlined"
-                  placeholder={patient.lname}
+                  placeholder={provider.lname}
+                  InputLabelProps={{shrink: true}}
+                  fullWidth
+                /></p>
+                <p><TextField
+                  label="CREDENTIAL"
+                  name="credential"
+                  onChange={handleChange}
+                  type="text"
+                  value={values.credential}
+                  variant="outlined"
+                  placeholder={provider.credential}
+                  InputLabelProps={{shrink: true}}
+                  fullWidth
+                /></p>
+                <p><TextField
+                  label="SPECIALTY"
+                  name="specialty"
+                  onChange={handleChange}
+                  type="text"
+                  value={values.specialty}
+                  variant="outlined"
+                  placeholder={provider.specialty}
                   InputLabelProps={{shrink: true}}
                   fullWidth
                 /></p>
@@ -103,7 +143,7 @@ const ManagePatientDetails = (props) => {
                   type="text"
                   value={values.address}
                   variant="outlined"
-                  placeholder={patient.address}
+                  placeholder={provider.address}
                   InputLabelProps={{shrink: true}}
                   fullWidth
                 /></p>
@@ -114,12 +154,12 @@ const ManagePatientDetails = (props) => {
                   type="text"
                   value={values.city}
                   variant="outlined"
-                  placeholder={patient.city}
+                  placeholder={provider.city}
                   InputLabelProps={{shrink: true}}
                   fullWidth
                 /></p>
                 <RegionDropdown
-                  defaultOptionLabel={patient.state}
+                  defaultOptionLabel={provider.state}
                   name="state"
                   country="United States"
                   labelType="full"
@@ -134,7 +174,7 @@ const ManagePatientDetails = (props) => {
                   type="text"
                   value={values.zipcode}
                   variant="outlined"
-                  placeholder={patient.zipcode}
+                  placeholder={provider.zipcode}
                   InputLabelProps={{shrink: true}}
                   fullWidth
                 /></p>
@@ -145,10 +185,20 @@ const ManagePatientDetails = (props) => {
                   type="tel"
                   value={values.phone}
                   variant="outlined"
-                  placeholder={patient.phone}
+                  placeholder={provider.phone}
                   InputLabelProps={{shrink: true}}
                   fullWidth
                 /></p>
+                <div display="flex">
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">SEX</FormLabel>
+                    <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
+                      <FormControlLabel value="Female" control={<Radio/>} label="Female" />
+                      <FormControlLabel value="Male" control={<Radio/>} label="Male" />
+                      <FormControlLabel value="Other" control={<Radio/>} label="Other" />
+                    </RadioGroup>
+                  </FormControl>
+                </div>
                 <p><TextField
                   label="VIRTUAL ID"
                   name="virtualid"
@@ -156,35 +206,17 @@ const ManagePatientDetails = (props) => {
                   type="text"
                   value={values.virtualid}
                   variant="outlined"
-                  placeholder={patient.virtualid}
+                  placeholder={provider.virtualid}
                   InputLabelProps={{shrink: true}}
                   fullWidth
                 /></p>
                 <p><TextField
-                  label="BIRTHDATE"
-                  name="dob"
-                  onChange={handleChange}
-                  type="date"
-                  variant="outlined"
-                  value={values.dob}
-                  InputLabelProps={{shrink: true}}
-                  fullWidth
-                /></p>
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">SEX</FormLabel>
-                  <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
-                    <FormControlLabel value="Female" control={<Radio/>} label="Female" />
-                    <FormControlLabel value="Male" control={<Radio/>} label="Male" />
-                    <FormControlLabel value="Other" control={<Radio/>} label="Other" />
-                  </RadioGroup>
-                </FormControl>
-                <p><TextField
-                  label="PATIENT SUMMARY"
+                  label="PROVIDER SUMMARY"
                   name="summary"
                   multiline
                   margin="dense"
                   value={values.summary}
-                  placeholder={patient.summary ? patient.summary : "Introduce yourself..."}
+                  placeholder={provider.summary ? provider.summary : "Introduce yourself..."}
                   rows={4}
                   variant="outlined"
                   fullWidth
@@ -201,8 +233,8 @@ const ManagePatientDetails = (props) => {
   )
 }
 
-ManagePatientDetails.propTypes = {
+ManageProviderDetails.propTypes = {
     history: PropTypes.object
 };
 
-export default withRouter(ManagePatientDetails);
+export default withRouter(ManageProviderDetails);

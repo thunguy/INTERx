@@ -9,4 +9,6 @@ export { default as ProviderDashboard } from './ProviderDashboard';
 export { default as ManagePatientDetails } from './ManagePatientDetails';
 export { default as ManagePatientSecurity } from './ManagePatientSecurity';
 export { default as ViewAppointments } from './ViewAppointments';
-export {default as ViewProviders} from './ViewProviders';
+export { default as ViewProviders } from './ViewProviders';
+export { default as ManageProviderDetails } from './ManageProviderDetails';
+export { default as ManageProviderSecurity } from './ManageProviderSecurity';

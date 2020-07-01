@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
-import { Grid, Button, IconButton, TextField, Link, Typography } from '@material-ui/core';
+import { Button, IconButton, TextField, Link, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-// import { makeStyles } from '@material-ui/styles';
 
 const schema = {
   username: {
@@ -42,7 +41,7 @@ const PatientLogin = (props) => {
   }, [formState.values]);
 
   const handleBack = () => {
-    history.goBack();
+    history.goBack('/');
   };
 
   const handleChange = event => {
@@ -93,7 +92,7 @@ const PatientLogin = (props) => {
       <div>
         <div>
           <IconButton onClick={handleBack}>
-            <ArrowBackIcon />
+            <ArrowBackIcon/>
           </IconButton>
         </div>
         <div>
@@ -103,7 +102,7 @@ const PatientLogin = (props) => {
               <center>PATIENT LOGIN</center>
             </Typography>
 
-            <TextField
+            <p><TextField
               error={hasError('username')}
               fullWidth
               helperText={
@@ -115,8 +114,8 @@ const PatientLogin = (props) => {
               type="text"
               value={formState.values.username || ''}
               variant="outlined"
-            />
-            <TextField
+            /></p>
+            <p><TextField
               error={hasError('password')}
               fullWidth
               helperText={
@@ -128,29 +127,10 @@ const PatientLogin = (props) => {
               type="password"
               value={formState.values.password || ''}
               variant="outlined"
-            />
-            <Button
-              color="primary"
-              disabled={!formState.isValid}
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-            >
-              Log in
-            </Button>
-            <Typography
-              color="textSecondary"
-              variant="body1"
-            >
-              Don't have an account?{' '}
-              <Link
-                component={RouterLink}
-                to="/patients/register"
-                variant="h6"
-              >
-                Register
-              </Link>
+            /></p>
+            <Button color="primary" disabled={!formState.isValid} fullWidth size="large" type="submit" variant="contained"> LOG IN </Button>
+            <Typography color="textSecondary" variant="body1">
+              <p>Don't have an account?{' '} <Link component={RouterLink} to="/patients/register" variant="h6"> REGISTER </Link></p>
             </Typography>
           </form>
         </div>

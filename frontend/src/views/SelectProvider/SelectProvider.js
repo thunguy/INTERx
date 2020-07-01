@@ -3,22 +3,16 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 import { BookAppointment } from './components';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
-import InfoIcon from '@material-ui/icons/Info';
-import ClearIcon from '@material-ui/icons/Clear';
-import SearchIcon from '@material-ui/icons/Search';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import { Button, IconButton, TextField, Checkbox } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Button, IconButton, TextField, Checkbox } from '@material-ui/core';
+import queryString from 'query-string';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import queryString from 'query-string';
+import { IoMdSkipForward, IoMdSkipBackward, IoIosArrowForward, IoIosArrowBack, IoMdClose, IoIosArrowDown } from 'react-icons/io';
+import { FcEmptyFilter, FcLeft, FcCalendar, FcApproval } from 'react-icons/fc';
+import { MdEventBusy } from 'react-icons/md';
+import { BsPersonLinesFill } from 'react-icons/bs'
+import { FaLink } from 'react-icons/fa';
 
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -60,7 +54,7 @@ const SelectProvider = (props) => {
 
   // fetch patientid of patient in sesion
   useEffect(() => {
-    fetch ("http://localhost:3000/session", {
+    fetch ("/session", {
       method: 'GET',
       credentials: 'include',
       headers: {'Content-Type': 'application/json'},
@@ -73,7 +67,7 @@ const SelectProvider = (props) => {
 
   // fetch existing medical relations for patient in session
   useEffect(() => {
-    fetch("http://localhost:3000/medical-relations", {
+    fetch("/medical-relations", {
       method: 'GET',
       credentials: 'include',
       headers: {'Content-Type': 'application/json'},
@@ -116,7 +110,7 @@ const SelectProvider = (props) => {
         color="primary"
         onClick={handleAgree}
       >
-        CONSENT TO TREATMENT WITH {provider.fname}
+        I CONSENT TO TREATMENT WITH {provider.fname} {provider.lname}, {provider.credential}
       </Button>
     )
   }
@@ -145,7 +139,7 @@ const SelectProvider = (props) => {
     <div>
       <div>
         <IconButton onClick={handleBack}>
-          <ArrowBackIcon />
+          <FcLeft/>
         </IconButton>
       </div>
       <div>
@@ -180,14 +174,13 @@ const SelectProvider = (props) => {
             filtering: true
           }}
           icons={{
-            Search: SearchIcon,
-            ResetSearch: ClearIcon,
-            FirstPage: FirstPageIcon,
-            LastPage: LastPageIcon,
-            NextPage: ArrowForwardIosIcon,
-            PreviousPage: ArrowBackIosIcon,
-            Filter: SearchIcon,
-            SortArrow: ArrowDownward,
+            ResetSearch: IoMdClose,
+            FirstPage: IoMdSkipBackward,
+            LastPage: IoMdSkipForward,
+            NextPage: IoIosArrowForward,
+            PreviousPage: IoIosArrowBack,
+            Filter: FcEmptyFilter,
+            SortArrow: IoIosArrowDown,
           }}
           columns={[
             { title: 'First Name', field: 'fname' },
@@ -205,8 +198,8 @@ const SelectProvider = (props) => {
           }))}
           detailPanel={[
             (rowData) => ({
-              icon: InfoIcon,
-              tooltip: 'ABOUT',
+              icon: BsPersonLinesFill,
+              tooltip: `About ${rowData.fname}`,
               render: () => {
                 return (
                   <div
@@ -217,18 +210,21 @@ const SelectProvider = (props) => {
                       backgroundColor: '#43A047',
                     }}
                   >
-                    ABOUT {rowData.fname}
+                    About {rowData.fname}
                   </div>
                 )
               },
             }),
             (rowData) => ({
-              icon: PersonAddIcon,
+              icon: (() => {
+                const relation = relations.filter((relation) => relation.npi === rowData.npi)[0]
+                return !(relation && relation.consent) ? FaLink : FcApproval
+              })(),
               disabled: (() => {
                 const relation = relations.filter((relation) => relation.npi === rowData.npi)[0]
                 return (relation && relation.consent)
               })(),
-              tooltip: 'CONSENT',
+              tooltip: 'Consent Required',
               render: () => {
                 return (
                   <div
@@ -249,12 +245,15 @@ const SelectProvider = (props) => {
               },
             }),
             (rowData) => ({
-              icon: CalendarTodayIcon,
+              icon: (() => {
+                const relation = relations.filter((relation) => relation.npi === rowData.npi)[0]
+                return (relation && relation.consent) ? FcCalendar : MdEventBusy
+              })(),
               disabled: (() => {
                 const relation = relations.filter((relation) => relation.npi === rowData.npi)[0]
                 return !(relation && relation.consent)
               })(),
-              tooltip: 'SCHEDULE',
+              tooltip: 'View Availability',
               render: () => {
                 return (
                   <BookAppointment

@@ -31,7 +31,7 @@ class Patient(db.Model):
     activity = db.relationship('Activity', backref='patients')
 
     def __repr__(self):
-        return f'<Patient patientid={self.patientid} fname={self.fname} lname={self.lname} username={self.username} birthdate={self.dob}>'
+        return f'<Patient patientid={self.patientid} fname={self.fname.title()} lname={self.lname.title()} username={self.username} birthdate={self.dob}>'
 
     # Check if password matches with hashed password
     def check_password(self, password):
@@ -41,8 +41,8 @@ class Patient(db.Model):
     def to_dict(self):
         return {
             'patientid': self.patientid,
-            'fname': self.fname,
-            'lname': self.lname,
+            'fname': self.fname.title(),
+            'lname': self.lname.title(),
             'email': self.email,
             'username': self.username,
             'address': self.address,
@@ -85,9 +85,9 @@ class Provider(db.Model):
 
     def __repr__(self):
         if self.credential:
-            return f'<Provider NPI={self.npi} username={self.username} name={self.fname} {self.lname}, {self.credential}>'
+            return f'<Provider NPI={self.npi} username={self.username} name={self.fname.title()} {self.lname.title()}, {self.credential}>'
         else:
-            return f'<Provider NPI={self.npi} username={self.username} name={self.fname} {self.lname}>'
+            return f'<Provider NPI={self.npi} username={self.username} name={self.fname.title()} {self.lname.title()}>'
 
     # Check if password matches with hashed password
     def check_password(self, password):
@@ -97,8 +97,8 @@ class Provider(db.Model):
     def to_dict(self):
         return {
             'npi': self.npi,
-            'fname': self.fname,
-            'lname': self.lname,
+            'fname': self.fname.title(),
+            'lname': self.lname.title(),
             'specialty': self.specialty,
             'email': self.email,
             'username': self.username,
@@ -168,8 +168,8 @@ class MedicalRelation(db.Model):
             'consent': self.consent,
             'patientid': self.patientid,
             'npi': self.npi,
-            'patient': f'{self.patient.fname} {self.patient.lname}',
-            'provider': f'{self.provider.fname} {self.provider.lname}, {self.provider.credential}'
+            'patient': f'{self.patient.fname.title()} {self.patient.lname.title()}',
+            'provider': f'{self.provider.fname.title()} {self.provider.lname.title()}, {self.provider.credential}'
         }
 
 
@@ -232,7 +232,7 @@ class Appointment(db.Model):
             'npi': self.npi,
             'relationid': self.relationid,
             'activityid': self.activityid,
-            'provider': f'{self.provider.fname} {self.provider.lname}, {self.provider.credential}'
+            'provider': f'{self.provider.fname.title()} {self.provider.lname.title()}, {self.provider.credential}'
         }
 
 

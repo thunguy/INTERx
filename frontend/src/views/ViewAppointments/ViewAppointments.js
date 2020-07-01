@@ -2,15 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MaterialTable from 'material-table';
-import ClearIcon from '@material-ui/icons/Clear';
-import SearchIcon from '@material-ui/icons/Search';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import InfoIcon from '@material-ui/icons/Info';
-import CancelIcon from '@material-ui/icons/Cancel'
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import { IoMdSkipForward, IoMdSkipBackward, IoIosArrowForward, IoIosArrowBack, IoMdClose } from "react-icons/io";
+import { FaNotesMedical, FaMapMarkedAlt, FaTrophy, FaAngleDown } from "react-icons/fa";
+import { FcCancel, FcInfo, FcEmptyFilter } from "react-icons/fc";
+import '../../index.css'
 
 
 const ViewAppointments = (props) => {
@@ -57,17 +52,17 @@ const ViewAppointments = (props) => {
           search: false,
           filtering: true,
           actionsColumnIndex: -1,
-          pageSize:10
+          pageSize: 10,
+          sorting: false,
         }}
         icons={{
-          Search: SearchIcon,
-          ResetSearch: ClearIcon,
-          FirstPage: FirstPageIcon,
-          LastPage: LastPageIcon,
-          NextPage: ArrowForwardIosIcon,
-          PreviousPage: ArrowBackIosIcon,
-          Filter: SearchIcon,
-          SortArrow: ArrowDownward,
+          ResetSearch: IoMdClose,
+          FirstPage: IoMdSkipBackward,
+          LastPage: IoMdSkipForward,
+          NextPage: IoIosArrowForward,
+          PreviousPage: IoIosArrowBack,
+          Filter: FcEmptyFilter,
+          SortArrow: FaAngleDown,
         }}
         columns={[
           { title: 'Provider', field: 'provider' },
@@ -79,21 +74,21 @@ const ViewAppointments = (props) => {
         ]}
         data={appointments.map((appointment) => ({
           ...appointment,
-          date: `${new Date(appointment.start).toDateString()}`,
+          date: `${new Date(appointment.start).toLocaleString('en-us', {  weekday: 'short' })} ${new Date(appointment.start).toLocaleDateString()}`,
           time: `${new Date(appointment.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${new Date(appointment.end).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`,
           duration: `${getDuration(new Date(appointment.start), new Date(appointment.end))} minutes`
         }))}
         actions={[
           (rowData) => ({
-            icon: CancelIcon,
-            tooltip: 'CANCEL APPOINTMENT',
+            icon: rowData.status === 'Scheduled' ? FcCancel : '',
+            tooltip: rowData.status === 'Scheduled' ? 'Cancel Appointment' : null,
             onClick: (event, rowData) => {
               const values = {
                 patientid: rowData.patientid,
                 npi: rowData.npi,
                 start:rowData.start,
                 apptid: rowData.apptid,
-                status: "Cancelled"
+                status: "Canceled"
               }
               fetch(`/appointments/${rowData.apptid}/cancel-appointment`, {
                 method: 'PUT',
@@ -105,22 +100,22 @@ const ViewAppointments = (props) => {
               .then((response) => response.json())
               .then((result) => setAppointments(appointments.filter((appointment) => appointment.npi !== result.npi).concat([result])))
               .catch(console.error)
-              alert("You have cancelled your appointment with  " + rowData.provider + " on " + rowData.date + " at " + rowData.time)
+              alert("You have canceled your appointment with  " + rowData.provider + " on " + rowData.date + " at " + rowData.time)
               history.go(0)
             },
-            disabled: rowData.status === 'Cancelled'
+            disabled: rowData.status !== 'Scheduled'
           })
         ]}
         detailPanel={[
           (rowData) => ({
-            icon: InfoIcon,
-            tooltip: 'DETAILS',
+            icon: FcInfo,
+            tooltip: 'Details',
             render: () => {
               return (
-                <div style={{ fontSize: 20, textAlign: 'left', color: '#000000', backgroundColor: '#FFFFFF' }}>
-                  <ul><b>Location:</b> {rowData.location}</ul>
-                  <ul><b>Appointment Reason:</b> {rowData.reason}</ul>
-                  <ul><b>Appointment Goal: </b> {rowData.goal}</ul>
+                <div class='container-table'style={{ fontFamily: 'Lucida Console', fontSize: 18, textAlign: 'center', color: '#515050' }}>
+                  <div class='item'><FaMapMarkedAlt color='#3754A4' fontSize='25'/>&nbsp;&nbsp;&nbsp;{rowData.location}</div>
+                  <div class='item'><FaNotesMedical color='#3754A4' fontSize='25'/>&nbsp;&nbsp;{rowData.reason}</div>
+                  <div class='item'><FaTrophy color='#3754A4' fontSize='25'/>&nbsp;&nbsp;{rowData.goal}</div>
                 </div>
               )
             },

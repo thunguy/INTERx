@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Grid, Button, IconButton, TextField, Link, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+
 const schema = {
   username: {
     presence: { allowEmpty: false, message: 'is required' },
@@ -43,7 +44,7 @@ const ProviderLogin = props => {
   }, [formState.values]);
 
   const handleBack = () => {
-    history.goBack();
+    history.goBack('/');
   };
 
   const handleChange = event => {
@@ -104,7 +105,7 @@ const ProviderLogin = props => {
               <center>PROVIDER LOGIN</center>
             </Typography>
 
-            <TextField
+            <p><TextField
               error={hasError('username')}
               fullWidth
               helperText={
@@ -116,8 +117,8 @@ const ProviderLogin = props => {
               type="text"
               value={formState.values.username || ''}
               variant="outlined"
-            />
-            <TextField
+            /></p>
+            <p><TextField
               error={hasError('password')}
               fullWidth
               helperText={
@@ -129,29 +130,10 @@ const ProviderLogin = props => {
               type="password"
               value={formState.values.password || ''}
               variant="outlined"
-            />
-            <Button
-              color="primary"
-              disabled={!formState.isValid}
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-            >
-              Log in
-            </Button>
-            <Typography
-              color="textSecondary"
-              variant="body1"
-            >
-              Don't have an account?{' '}
-              <Link
-                component={RouterLink}
-                to="/providers/register"
-                variant="h6"
-              >
-                Register
-              </Link>
+            /></p>
+            <Button color="primary" disabled={!formState.isValid} fullWidth size="large" type="submit" variant="contained"> LOG IN </Button>
+            <Typography color="textSecondary" variant="body1">
+              <p>Don't have an account?{' '} <Link component={RouterLink} to="/providers/register" variant="h6"> REGISTER </Link></p>
             </Typography>
           </form>
         </div>

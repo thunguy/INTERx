@@ -204,7 +204,7 @@ const Register = (props) => {
               <center>NEW PROVIDER</center>
             </Typography>
 
-            <TextField
+            <p><TextField
               required
               error={hasError('npi')}
               fullWidth
@@ -217,9 +217,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.npi || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('fname')}
               fullWidth
@@ -232,9 +231,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.fname || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('lname')}
               fullWidth
@@ -247,9 +245,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.lname || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('specialty')}
               fullWidth
@@ -262,9 +259,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.specialty || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('credential')}
               fullWidth
@@ -277,9 +273,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.credential || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('email')}
               fullWidth
@@ -292,9 +287,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.email || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('username')}
               fullWidth
@@ -307,9 +301,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.username || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('password')}
               fullWidth
@@ -322,9 +315,8 @@ const Register = (props) => {
               type="password"
               value={formState.values.password || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('address')}
               fullWidth
@@ -337,9 +329,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.address || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('city')}
               fullWidth
@@ -352,9 +343,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.city || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('state')}
               fullWidth
@@ -367,9 +357,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.state || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('zipcode')}
               fullWidth
@@ -382,9 +371,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.zipcode || ''}
               variant="outlined"
-            />
-
-            <TextField
+            /></p>
+            <p><TextField
               required
               error={hasError('phone')}
               fullWidth
@@ -397,18 +385,8 @@ const Register = (props) => {
               type="text"
               value={formState.values.phone || ''}
               variant="outlined"
-            />
-
-            <FormControl component="fieldset" required>
-              <FormLabel component="legend">Sex</FormLabel>
-              <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
-                <FormControlLabel value="Female" control={<Radio />} label="Female" />
-                <FormControlLabel value="Male" control={<Radio />} label="Male" />
-                <FormControlLabel value="Other" control={<Radio />} label="Other" />
-              </RadioGroup>
-            </FormControl>
-
-            <Autocomplete
+            /></p>
+            <p><Autocomplete
               multiple
               options={formState.activities || []}
               onChange={(event, values) => {
@@ -432,48 +410,33 @@ const Register = (props) => {
               renderInput={(params) => (
                 <TextField {...params} variant="outlined" label="Activities" placeholder="Add an Activity" />
               )}
-            />
+            /></p>
+            <FormControl component="fieldset" required>
+              <FormLabel component="legend">Sex</FormLabel>
+              <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
+                <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                <FormControlLabel value="Other" control={<Radio />} label="Other" />
+              </RadioGroup>
+            </FormControl>
 
-            <div>
+            {/* <div>
               <span>
-                <Checkbox
-                  checked={formState.values.policy || false}
-                  color="primary"
-                  name="policy"
-                  onChange={handleChange}
-                />
-                  I have read the{' '}
-                <Link
-                  color="primary"
-                  component={RouterLink}
-                  to="#"
-                  underline="always"
-                  variant="h6"
-                >
-                  Terms and Conditions
-                </Link>
+                <Checkbox checked={formState.values.policy || false} color="primary" name="policy" onChange={handleChange}/>
+                  I have read the{' '} <Link color="primary" component={RouterLink} to="#" underline="always" variant="h6"> Terms and Conditions </Link>
               </span>
-            </div>
+            </div> */}
+
             {hasError('policy') && (
               <FormHelperText error>
                 {formState.errors.policy[0]}
               </FormHelperText>
             )}
 
-            <Button
-              color="primary"
-              disabled={!formState.isValid}
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-            >
-              Register
-            </Button>
+            <Button color="primary" disabled={!formState.isValid} size="large" type="submit" variant="contained" fullWidth> Register </Button>
 
             <Typography color="textSecondary" variant="body1">
-              Have an account?{' '}
-              <Link component={RouterLink} to="/providers/login" variant="h6">Log In</Link>
+              Have an account?{' '} <Link component={RouterLink} to="/providers/login" variant="h6"> Log In </Link>
             </Typography>
           </form>
         </div>
