@@ -3,10 +3,10 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import { Grid, Button, IconButton, TextField, Link, FormHelperText, Checkbox, Typography } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import { FcLeft } from 'react-icons/fc';
 // import { makeStyles } from '@material-ui/styles';
 // import validate from 'validate.js';
 
@@ -194,9 +194,7 @@ const Register = (props) => {
     <div>
       <div>
         <div>
-          <IconButton onClick={handleBack}>
-            <ArrowBackIcon />
-          </IconButton>
+          <IconButton onClick={handleBack}> <FcLeft/> </IconButton>
         </div>
         <div>
           <form onSubmit={handleRegister}>

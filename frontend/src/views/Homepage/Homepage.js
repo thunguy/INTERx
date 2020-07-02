@@ -8,10 +8,15 @@ const Homepage = (props) => {
   const { history } = props;
 
   return (
-    <div className="container">
-        <center><Button variant="outlined" color="primary" href="/patients/login" size="large">PATIENT LOGIN</Button></center>
+    <div>
+      <div className="container">
+        <video id="background-video" loop autoPlay muted>
+          <source src="/video.mp4" type="video/mp4"/>
+        </video>
+        <center><Button variant="contained" color="primary" href="/patients/login" size="large">PATIENT</Button></center>
         <br/>
-        <center><Button variant="outlined" color="primary" href="/providers/login" size="large">PROVIDER LOGIN</Button></center>
+        <center><Button variant="contained" color="primary" href="/providers/login" size="large">PROVIDER</Button></center>
+      </div>
     </div>
   )
 }

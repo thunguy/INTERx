@@ -3,7 +3,7 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import { Button, IconButton, TextField, Link, Typography } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { FcLeft } from 'react-icons/fc';
 
 const schema = {
   username: {
@@ -90,50 +90,49 @@ const PatientLogin = (props) => {
   return (
     <div>
       <div>
-        <div>
-          <IconButton onClick={handleBack}>
-            <ArrowBackIcon/>
-          </IconButton>
-        </div>
-        <div>
-          <form onSubmit={handlePatientLogin}>
+        <IconButton onClick={handleBack}> <FcLeft/> </IconButton>
+      </div>
+      <div className="container">
+        <form onSubmit={handlePatientLogin}>
 
-            <Typography variant="h2">
-              <center>PATIENT LOGIN</center>
-            </Typography>
+          <Typography variant="h2">
+            <center>PATIENT LOGIN</center>
+          </Typography>
 
-            <p><TextField
-              error={hasError('username')}
-              fullWidth
-              helperText={
-                hasError('username') ? formState.errors.username[0] : null
-              }
-              label="Username"
-              name="username"
-              onChange={handleChange}
-              type="text"
-              value={formState.values.username || ''}
-              variant="outlined"
-            /></p>
-            <p><TextField
-              error={hasError('password')}
-              fullWidth
-              helperText={
-                hasError('password') ? formState.errors.password[0] : null
-              }
-              label="Password"
-              name="password"
-              onChange={handleChange}
-              type="password"
-              value={formState.values.password || ''}
-              variant="outlined"
-            /></p>
-            <Button color="primary" disabled={!formState.isValid} fullWidth size="large" type="submit" variant="contained"> LOG IN </Button>
-            <Typography color="textSecondary" variant="body1">
-              <p>Don't have an account?{' '} <Link component={RouterLink} to="/patients/register" variant="h6"> REGISTER </Link></p>
-            </Typography>
-          </form>
-        </div>
+          <p><TextField
+            error={hasError('username')}
+            fullWidth
+            helperText={
+              hasError('username') ? formState.errors.username[0] : null
+            }
+            label="Username"
+            name="username"
+            onChange={handleChange}
+            type="text"
+            value={formState.values.username || ''}
+            variant="outlined"
+          /></p>
+          <p><TextField
+            error={hasError('password')}
+            fullWidth
+            helperText={
+              hasError('password') ? formState.errors.password[0] : null
+            }
+            label="Password"
+            name="password"
+            onChange={handleChange}
+            type="password"
+            value={formState.values.password || ''}
+            variant="outlined"
+          /></p>
+          <Button color="primary" disabled={!formState.isValid} fullWidth size="large" type="submit" variant="contained"> LOG IN </Button>
+          <Typography color="textSecondary" variant="body1">
+            <p>Don't have an account?{' '} <Link component={RouterLink} to="/patients/register" variant="h6"> Register </Link></p>
+          </Typography>
+        </form>
+      </div>
+      <div>
+        <img id="login-photo" src="/photo5.jpg"/>
       </div>
     </div>
   );

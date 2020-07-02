@@ -34,3 +34,19 @@ code {
   height: auto;
   padding: 10px;
 }
+
+#background-video {
+  height: 100%;
+  width: 100%;
+  float: left;
+  top: 0;
+  padding: none;
+  position: fixed;
+  width: auto;
+  opacity: 0.7;
+  /* filter: saturate(90%) */
+}
+
+#login-photo {
+  opacity: 0.7;
+}

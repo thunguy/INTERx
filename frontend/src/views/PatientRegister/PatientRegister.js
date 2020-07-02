@@ -6,7 +6,7 @@ import validate from 'validate.js';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, Button, IconButton, TextField, Link, FormHelperText, Checkbox, Typography } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { FcLeft } from 'react-icons/fc';
 import { RegionDropdown } from 'react-country-region-selector';
 
 
@@ -140,9 +140,7 @@ const PatientRegister = (props) => {
     <div>
       <div>
         <div>
-          <IconButton onClick={handleBack}>
-            <ArrowBackIcon/>
-          </IconButton>
+          <IconButton onClick={handleBack}> <FcLeft/> </IconButton>
         </div>
         <div>
           <form onSubmit={handleRegister}>
