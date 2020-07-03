@@ -34,12 +34,12 @@ const ProviderNavigationBar = (props) => {
 
   // BUTTON COMPONENT: view user's schedule
   const ViewSchedule = () => {
-    return (<div><Button color="primary" href='/providers/view-schedule'>MY SCHEDULE</Button></div>)
+    return (<div><Button color="primary" href='/providers/view-schedule'>VIEW MY SCHEDULE</Button></div>)
   }
 
   // BUTTON COMPONENT: view user's patients
   const ViewPatients = () => {
-    return (<div><Button color="primary" href='/providers/view-patients'>MY PATIENTS</Button></div>)
+    return (<div><Button color="primary" href='/providers/view-patients'>VIEW MY PATIENTS</Button></div>)
   }
 
   // BUTTON COMPONENT: manage user's account details

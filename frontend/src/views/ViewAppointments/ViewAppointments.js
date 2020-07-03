@@ -47,7 +47,7 @@ const ViewAppointments = (props) => {
     <div>
       {console.log(appointments)}
       <MaterialTable
-        title="My Appointments"
+        title="ALL APPOINTMENTS"
         options={{
           search: false,
           filtering: true,
@@ -65,10 +65,10 @@ const ViewAppointments = (props) => {
           SortArrow: FaAngleDown,
         }}
         columns={[
-          { title: 'Provider', field: 'provider' },
           { title: 'Date', field: 'date', type: 'date' },
           { title: 'Time', field: 'time' },
           { title: 'Duration', field: 'duration', filtering: false },
+          { title: 'Provider', field: 'provider' },
           { title: 'Activity', field: 'activityid' },
           { title: 'Status', field: 'status' },
         ]}
@@ -100,7 +100,7 @@ const ViewAppointments = (props) => {
               .then((response) => response.json())
               .then((result) => setAppointments(appointments.filter((appointment) => appointment.npi !== result.npi).concat([result])))
               .catch(console.error)
-              alert("You have canceled your appointment with  " + rowData.provider + " on " + rowData.date + " at " + rowData.time)
+              alert("You have canceled your appointment with " + rowData.provider + " on " + rowData.date + " at " + rowData.time)
               history.go(0)
             },
             disabled: rowData.status !== 'Scheduled'
@@ -112,10 +112,10 @@ const ViewAppointments = (props) => {
             tooltip: 'Details',
             render: () => {
               return (
-                <div class='container-table'style={{ fontFamily: 'Lucida Console', fontSize: 18, textAlign: 'center', color: '#515050' }}>
-                  <div class='item'><FaMapMarkedAlt color='#3754A4' fontSize='25'/>&nbsp;&nbsp;&nbsp;{rowData.location}</div>
-                  <div class='item'><FaNotesMedical color='#3754A4' fontSize='25'/>&nbsp;&nbsp;{rowData.reason}</div>
-                  <div class='item'><FaTrophy color='#3754A4' fontSize='25'/>&nbsp;&nbsp;{rowData.goal}</div>
+                <div class='container-table'style={{ fontFamily: 'Lucida Console', fontSize: 18, textAlign: 'center', color: '#3754A4' }}>
+                  <div class='item'><FaMapMarkedAlt color='#8B0000' fontSize='25'/>&nbsp;&nbsp;&nbsp;{rowData.location}</div>
+                  <div class='item'><FaNotesMedical color='#8B0000' fontSize='25'/>&nbsp;&nbsp;{rowData.reason}</div>
+                  <div class='item'><FaTrophy color='#8B0000' fontSize='25'/>&nbsp;&nbsp;{rowData.goal}</div>
                 </div>
               )
             },

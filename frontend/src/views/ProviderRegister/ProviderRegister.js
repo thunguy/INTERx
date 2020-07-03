@@ -7,69 +7,14 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { FcLeft } from 'react-icons/fc';
+import '../../index.css';
 // import { makeStyles } from '@material-ui/styles';
 // import validate from 'validate.js';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const schema = {
-  npi: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 32
-    }
-  },
-  fname: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 32
-    }
-  },
-  lname: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 32
-    }
-  },
-  email: {
-    presence: { allowEmpty: false, message: 'is required' },
-    email: true,
-    length: {
-      maximum: 64
-    }
-  },
-  username: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 128
-    }
-  },
-  password: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 128
-    }
-  },
-  dob: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 128
-    }
-  },
-  sex: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 128
-    }
-  },
-  policy: {
-    presence: { allowEmpty: false, message: 'is required' },
-    checked: true
-  }
-};
-
-const Register = (props) => {
+const ProviderRegister = (props) => {
   const { history } = props;
 
   const [formState, setFormState] = useState({
@@ -169,7 +114,7 @@ const Register = (props) => {
     history.goBack();
   };
 
-  const handleRegister = (event) => {
+  const handleProviderRegister = (event) => {
     if (formState.values.activities)
       formState.values.activities = formState.values.activities.map((activity) => activity.activityid)
 
@@ -192,199 +137,225 @@ const Register = (props) => {
 
   return (
     <div>
-      <div>
-        <div>
-          <IconButton onClick={handleBack}> <FcLeft/> </IconButton>
-        </div>
-        <div>
-          <form onSubmit={handleRegister}>
-            <Typography variant="h2">
-              <center>NEW PROVIDER</center>
-            </Typography>
-
-            <p><TextField
+      <IconButton onClick={handleBack}> <FcLeft/> </IconButton>
+      <form onSubmit={handleProviderRegister}>
+        <div className="provider-reg-title">PROVIDER REGISTRATION</div>
+        <Grid container spacing={1} direction="row" justify="center" alignItems="center">
+          <Grid item xs>
+            <TextField
               required
               error={hasError('npi')}
               fullWidth
-              helperText={
-                hasError('npi') ? formState.errors.npi[0] : null
-              }
+              helperText={ hasError('npi') ? formState.errors.npi[0] : null }
               label="NPI"
               name="npi"
               onChange={handleChange}
               type="text"
               value={formState.values.npi || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+          <Grid item xs>
+            <TextField
               required
               error={hasError('fname')}
               fullWidth
-              helperText={
-                hasError('fname') ? formState.errors.fname[0] : null
-              }
-              label="First name"
+              helperText={ hasError('fname') ? formState.errors.fname[0] : null }
+              label="FIRST NAME"
               name="fname"
               onChange={handleChange}
               type="text"
               value={formState.values.fname || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+          <Grid item xs>
+            <TextField
               required
               error={hasError('lname')}
               fullWidth
-              helperText={
-                hasError('lname') ? formState.errors.lname[0] : null
-              }
-              label="Last name"
+              helperText={ hasError('lname') ? formState.errors.lname[0] : null }
+              label="LAST NAME"
               name="lname"
               onChange={handleChange}
               type="text"
               value={formState.values.lname || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+        </Grid>
+        <br/>
+        <Grid container spacing={1} direction="row" justify="center" alignItems="center">
+          <Grid item xs>
+            <TextField
               required
               error={hasError('specialty')}
               fullWidth
-              helperText={
-                hasError('specialty') ? formState.errors.specialty[0] : null
-              }
-              label="Specialty"
+              helperText={ hasError('specialty') ? formState.errors.specialty[0] : null }
+              label="SPECIALTY"
               name="specialty"
               onChange={handleChange}
               type="text"
               value={formState.values.specialty || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+          <Grid item xs>
+            <TextField
               required
               error={hasError('credential')}
               fullWidth
-              helperText={
-                hasError('credential') ? formState.errors.credential[0] : null
-              }
-              label="Credential"
+              helperText={ hasError('credential') ? formState.errors.credential[0] : null }
+              label="CREDENTIAL"
               name="credential"
               onChange={handleChange}
               type="text"
               value={formState.values.credential || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+        </Grid>
+        <br/>
+        <Grid container>
+          <Grid item xs>
+            <TextField
               required
               error={hasError('email')}
               fullWidth
-              helperText={
-                hasError('email') ? formState.errors.email[0] : null
-              }
-              label="Email address"
+              helperText={ hasError('email') ? formState.errors.email[0] : null }
+              label="EMAIL ADDRESS"
               name="email"
               onChange={handleChange}
               type="text"
               value={formState.values.email || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+        </Grid>
+        <br/>
+        <Grid container spacing={1} direction="row" justify="center" alignItems="center">
+          <Grid item xs>
+            <TextField
               required
               error={hasError('username')}
               fullWidth
-              helperText={
-                hasError('username') ? formState.errors.username[0] : null
-              }
-              label="Username"
+              helperText={ hasError('username') ? formState.errors.username[0] : null }
+              label="USERNAME"
               name="username"
               onChange={handleChange}
               type="text"
               value={formState.values.username || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+          <Grid item xs>
+            <TextField
               required
               error={hasError('password')}
               fullWidth
-              helperText={
-                hasError('password') ? formState.errors.password[0] : null
-              }
-              label="Password"
+              helperText={ hasError('password') ? formState.errors.password[0] : null }
+              label="PASSWORD"
               name="password"
               onChange={handleChange}
               type="password"
               value={formState.values.password || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+        </Grid>
+        <br/>
+        <Grid container>
+          <Grid item xs>
+            <TextField
               required
               error={hasError('address')}
               fullWidth
-              helperText={
-                hasError('address') ? formState.errors.address[0] : null
-              }
-              label="Address"
+              helperText={ hasError('address') ? formState.errors.address[0] : null }
+              label="ADDRESS"
               name="address"
               onChange={handleChange}
               type="text"
               value={formState.values.address || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+        </Grid>
+        <br/>
+        <Grid container spacing={1} direction="row" justify="center" alignItems="center">
+          <Grid item xs>
+            <TextField
               required
               error={hasError('city')}
               fullWidth
-              helperText={
-                hasError('city') ? formState.errors.city[0] : null
-              }
-              label="City"
+              helperText={ hasError('city') ? formState.errors.city[0] : null }
+              label="CITY"
               name="city"
               onChange={handleChange}
               type="text"
               value={formState.values.city || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+          <Grid item xs>
+            <TextField
               required
               error={hasError('state')}
               fullWidth
-              helperText={
-                hasError('state') ? formState.errors.state[0] : null
-              }
-              label="State"
+              helperText={ hasError('state') ? formState.errors.state[0] : null }
+              label="STATE"
               name="state"
               onChange={handleChange}
               type="text"
               value={formState.values.state || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+          <Grid item xs>
+            <TextField
               required
               error={hasError('zipcode')}
               fullWidth
-              helperText={
-                hasError('zipcode') ? formState.errors.zipcode[0] : null
-              }
-              label="Zip Code"
+              helperText={ hasError('zipcode') ? formState.errors.zipcode[0] : null }
+              label="ZIP CODE"
               name="zipcode"
               onChange={handleChange}
               type="text"
               value={formState.values.zipcode || ''}
               variant="outlined"
-            /></p>
-            <p><TextField
+            />
+          </Grid>
+        </Grid>
+        <br/>
+        <Grid container spacing={1} direction="row" justify="center" alignItems="center">
+          <Grid item xs>
+            <TextField
               required
               error={hasError('phone')}
               fullWidth
-              helperText={
-                hasError('phone') ? formState.errors.phone[0] : null
-              }
-              label="Primary Phone"
+              helperText={ hasError('phone') ? formState.errors.phone[0] : null }
+              label="PRIMARY PHONE"
               name="phone"
               onChange={handleChange}
               type="text"
               value={formState.values.phone || ''}
               variant="outlined"
-            /></p>
-            <p><Autocomplete
+            />
+          </Grid>
+          <Grid item xs>
+            <FormControl component="fieldset" required>
+            <FormLabel component="legend">SEX</FormLabel>
+              <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
+                <FormControlLabel value="Female" control={<Radio />} label="FEMALE" labelPlacement="start"/>
+                <FormControlLabel value="Male" control={<Radio />} label="MALE" labelPlacement="start"/>
+                <FormControlLabel value="Other" control={<Radio />} label="OTHER" labelPlacement="start"/>
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <br/>
+        <Grid container>
+          <Grid item xs>
+            <Autocomplete
               multiple
               options={formState.activities || []}
               onChange={(event, values) => {
@@ -401,50 +372,27 @@ const Register = (props) => {
                     style={{ marginRight: 8 }}
                     checked={selected}
                   />
-                  {option.activityid}
+                    {option.activityid}
                 </React.Fragment>
               )}
-              style={{ width: 500 }}
               renderInput={(params) => (
-                <TextField {...params} variant="outlined" label="Activities" placeholder="Add an Activity" />
+                <TextField {...params} variant="outlined" label="ACTIVITIES" placeholder="Add an Activity" fullWidth/>
               )}
-            /></p>
-            <FormControl component="fieldset" required>
-              <FormLabel component="legend">Sex</FormLabel>
-              <RadioGroup aria-label="sex" name="sex" onChange={handleChange} row>
-                <FormControlLabel value="Female" control={<Radio />} label="Female" />
-                <FormControlLabel value="Male" control={<Radio />} label="Male" />
-                <FormControlLabel value="Other" control={<Radio />} label="Other" />
-              </RadioGroup>
-            </FormControl>
-
-            {/* <div>
-              <span>
-                <Checkbox checked={formState.values.policy || false} color="primary" name="policy" onChange={handleChange}/>
-                  I have read the{' '} <Link color="primary" component={RouterLink} to="#" underline="always" variant="h6"> Terms and Conditions </Link>
-              </span>
-            </div> */}
-
-            {hasError('policy') && (
-              <FormHelperText error>
-                {formState.errors.policy[0]}
-              </FormHelperText>
-            )}
-
-            <Button color="primary" disabled={!formState.isValid} size="large" type="submit" variant="contained" fullWidth> Register </Button>
-
-            <Typography color="textSecondary" variant="body1">
-              Have an account?{' '} <Link component={RouterLink} to="/providers/login" variant="h6"> Log In </Link>
-            </Typography>
-          </form>
-        </div>
-      </div>
+            />
+          </Grid>
+        </Grid>
+        <br/>
+        <Button color="primary" disabled={!formState.isValid} size="large" type="submit" variant="contained" fullWidth> REGISTER </Button>
+        <Typography color="textSecondary" variant="body1">
+          <h5><center> HAVE AN ACCOUNT{' '} <Link component={RouterLink} to="/providers/login"> PROVIDER LOGIN </Link></center></h5>
+        </Typography>
+      </form>
     </div>
   );
 };
 
-Register.propTypes = {
+ProviderRegister.propTypes = {
   history: PropTypes.object
 };
 
-export default withRouter(Register);
+export default withRouter(ProviderRegister);

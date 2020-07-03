@@ -13,6 +13,7 @@ import { FcEmptyFilter, FcLeft, FcCalendar, FcApproval } from 'react-icons/fc';
 import { MdEventBusy } from 'react-icons/md';
 import { BsPersonLinesFill } from 'react-icons/bs'
 import { FaLink } from 'react-icons/fa';
+import '../../index.css';
 
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -162,13 +163,13 @@ const SelectProvider = (props) => {
           )}
           style={{ width: 'auto' }}
           renderInput={(params) => (
-            <TextField {...params} variant='outlined' label='Activity' placeholder='Search for activity...' />
+            <TextField {...params} variant='outlined' label='Activity' placeholder='Search for activity...'/>
           )}
         />
       </div>
-      <div>
+      <div class="table-text">
         <MaterialTable
-          title=''
+          title='Schedule Appointment'
           options={{
             search: false,
             filtering: true
@@ -202,16 +203,7 @@ const SelectProvider = (props) => {
               tooltip: `About ${rowData.fname}`,
               render: () => {
                 return (
-                  <div
-                    style={{
-                      fontSize: 100,
-                      textAlign: 'center',
-                      color: 'white',
-                      backgroundColor: '#43A047',
-                    }}
-                  >
-                    About {rowData.fname}
-                  </div>
+                  <div style={{ fontSize: 100, textAlign: 'center', color: 'white', backgroundColor: '#43A047' }}> About {rowData.fname} </div>
                 )
               },
             }),
@@ -227,14 +219,7 @@ const SelectProvider = (props) => {
               tooltip: 'Consent Required',
               render: () => {
                 return (
-                  <div
-                    style={{
-                      fontSize: 100,
-                      textAlign: 'center',
-                      color: '#000000',
-                      backgroundColor: '#FFFFFF',
-                    }}
-                  >
+                  <div style={{ fontSize: 100, textAlign: 'center', color: '#000000', backgroundColor: '#FFFFFF' }}>
                     <ConsentAgreement
                       provider={rowData}
                       relation={relations.filter((relation) => relation.npi === rowData.npi)[0]}
@@ -256,12 +241,14 @@ const SelectProvider = (props) => {
               tooltip: 'View Availability',
               render: () => {
                 return (
-                  <BookAppointment
-                    provider={rowData}
-                    relation={relations.filter((relation) => relation.npi === rowData.npi)[0]}
-                    patient={patient}
-                    activity={activity}
-                  />
+                  <div style={{ display: 'flex', justifyContent:'center', textAlign: 'center' }}>
+                    <BookAppointment
+                      provider={rowData}
+                      relation={relations.filter((relation) => relation.npi === rowData.npi)[0]}
+                      patient={patient}
+                      activity={activity}
+                    />
+                  </div>
                 )
               },
             })

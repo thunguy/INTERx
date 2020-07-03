@@ -63,7 +63,7 @@ const ViewProviders = (props) => {
       {console.log(providers, 'line 65')}
       {console.log(appointments, 'line 66')}
       <MaterialTable
-        title="My Providers"
+        title="MY PROVIDERS"
         options={{
           search: false,
           filtering: true,

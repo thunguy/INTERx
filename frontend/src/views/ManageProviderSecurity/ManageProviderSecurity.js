@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
-import { Button, TextField } from '@material-ui/core';
+import { Grid, Button, TextField } from '@material-ui/core';
+import '../../index.css';
 
 
-const ManageProviderSecurity= (props) => {
-  const { history } = props
+const ManageProviderSecurity= ({history}) => {
   const [provider, setProvider] = useState({})
 
   // fetch session object and appointments of user in session
@@ -29,9 +29,10 @@ const ManageProviderSecurity= (props) => {
 
   // BUTTON COMPONENT: submit to update user password
   const UpdatePassword = () => {
-    return (<Button type="submit" variant="outlined" color="primary">UPDATE PASSWORD</Button>)
+    return (<Button type="submit" variant="outlined" color="primary" fullWidth>UPDATE PASSWORD</Button>)
   }
 
+  // HANDLE PASSWORD UPDATE SUBMISSION: post fetch request to update user password
   const handleUpdatePassword = (values, { setSubmitting }) => {
     values.npi = provider.npi
     console.log(values)
@@ -46,16 +47,16 @@ const ManageProviderSecurity= (props) => {
     .then((response) => response.json())
     .then((result) => console.log(result))
     .catch(console.error)
-
     alert(JSON.stringify(values, null, 2));
     setSubmitting(false);
   };
 
   // BUTTON COMPONENT: submit to update user email
   const UpdateEmail = () => {
-    return (<Button type="submit" variant="outlined" color="primary">UPDATE EMAIL</Button>)
+    return (<Button type="submit" variant="outlined" color="primary" fullWidth>UPDATE EMAIL</Button>)
   }
 
+  // HANDLE EMAIL UPDATE SUBMISSION: post fetch request to update user email
   const handleUpdateEmail = (values, { setSubmitting }) => {
     values.npi = provider.npi
     console.log(values)
@@ -70,7 +71,6 @@ const ManageProviderSecurity= (props) => {
     .then((response) => response.json())
     .then((result) => console.log(result))
     .catch(console.error)
-
     alert(JSON.stringify(values, null, 2));
     setSubmitting(false);
   };
@@ -88,34 +88,41 @@ const ManageProviderSecurity= (props) => {
           {({values, handleChange, handleUpdatePassword}) => {
             return (
               <form onSubmit={handleUpdatePassword}>
+                <h2><center>UPDATE LOGIN PASSWORD</center></h2>
                 <Form>
-                  <p><TextField
-                    label="Current Password"
-                    name="old_password"
-                    onChange={handleChange}
-                    type="password"
-                    value={values.old_password}
-                    variant="outlined"
-                    fullWidth
-                  /></p>
-                  <p><TextField
-                    label="New Password"
-                    name="new_password"
-                    onChange={handleChange}
-                    type="password"
-                    value={values.new_password}
-                    variant="outlined"
-                    fullWidth
-                  /></p>
-                  <center><UpdatePassword/></center>
+                  <Grid container spacing={2} direction="row" justify="center" alignItems="center">
+                    <Grid item xs>
+                      <TextField
+                        label="CURRENT PASSWORD"
+                        name="old_password"
+                        onChange={handleChange}
+                        type="password"
+                        value={values.old_password}
+                        variant="outlined"
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs>
+                      <TextField
+                        label="NEW PASSWORD"
+                        name="new_password"
+                        onChange={handleChange}
+                        type="password"
+                        value={values.new_password}
+                        variant="outlined"
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+                  <br/>
+                  <UpdatePassword/>
                 </Form>
               </form>
             )
           }}
         </Formik>
       </div>
-      <br/>
-      <br/>
+      <br/><br/>
       <div>
         <Formik
           initialValues={{
@@ -128,35 +135,49 @@ const ManageProviderSecurity= (props) => {
           {({values, handleChange, handleUpdateEmail}) => {
             return (
               <form onSubmit={handleUpdateEmail}>
+                <h2><center>UPDATE CONTACT EMAIL</center></h2>
                 <Form>
-                  <p><TextField
-                    label="Current Email"
-                    name="old_email"
-                    onChange={handleChange}
-                    type="email"
-                    value={values.old_email}
-                    variant="outlined"
-                    fullWidth
-                  /></p>
-                  <p><TextField
-                    label="New Email"
-                    name="new_email"
-                    onChange={handleChange}
-                    type="email"
-                    value={values.new_email}
-                    variant="outlined"
-                    fullWidth
-                  /></p>
-                  <p><TextField
-                    label="Current Password"
-                    name="password"
-                    onChange={handleChange}
-                    type="password"
-                    value={values.password}
-                    variant="outlined"
-                    fullWidth
-                  /></p>
-                  <center><UpdateEmail/></center>
+                  <Grid container spacing={2} direction="row" justify="center" alignItems="center">
+                    <Grid item xs>
+                      <TextField
+                        label="CURRENT EMAIL"
+                        name="old_email"
+                        onChange={handleChange}
+                        type="email"
+                        value={values.old_email}
+                        variant="outlined"
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={2} direction="row" justify="center" alignItems="center">
+                    <Grid item xs>
+                      <TextField
+                        label="NEW EMAIL"
+                        name="new_email"
+                        onChange={handleChange}
+                        type="email"
+                        value={values.new_email}
+                        variant="outlined"
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={2} direction="row" justify="center" alignItems="center">
+                    <Grid item xs>
+                      <TextField
+                        label="CURRENT PASSWORD"
+                        name="password"
+                        onChange={handleChange}
+                        type="password"
+                        value={values.password}
+                        variant="outlined"
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+                  <br/>
+                  <UpdateEmail/>
                 </Form>
               </form>
             )

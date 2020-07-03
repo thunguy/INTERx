@@ -5,6 +5,7 @@ import validate from 'validate.js';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, Button, IconButton, TextField, Link, Typography } from '@material-ui/core';
 import { FcLeft } from 'react-icons/fc';
+import '../../index.css';
 
 
 const schema = {
@@ -54,10 +55,7 @@ const ProviderLogin = props => {
       ...formState,
       values: {
         ...formState.values,
-        [event.target.name]:
-          event.target.type === 'checkbox'
-            ? event.target.checked
-            : event.target.value
+        [event.target.name]: event.target.type === 'checkbox' ? event.target.checked : event.target.value
       },
       touched: {
         ...formState.touched,
@@ -78,7 +76,7 @@ const ProviderLogin = props => {
     })
     .then((response) => {
       if (response.status === 200)
-        history.push('/providers/dashboard')
+        history.push('/providers/view-schedule')
       else
         history.push('/providers/login')
       return response.json()
@@ -97,18 +95,12 @@ const ProviderLogin = props => {
       </div>
       <div className="container">
         <form onSubmit={handleProviderLogin}>
-
-          <Typography variant="h2">
-            <center>PROVIDER LOGIN</center>
-          </Typography>
-
+          <h1><center>PROVIDER LOGIN</center></h1>
           <p><TextField
             error={hasError('username')}
             fullWidth
-            helperText={
-              hasError('username') ? formState.errors.username[0] : null
-            }
-            label="Username"
+            helperText={hasError('username') ? formState.errors.username[0] : null}
+            label="USERNAME"
             name="username"
             onChange={handleChange}
             type="text"
@@ -118,10 +110,8 @@ const ProviderLogin = props => {
           <p><TextField
             error={hasError('password')}
             fullWidth
-            helperText={
-              hasError('password') ? formState.errors.password[0] : null
-            }
-            label="Password"
+            helperText={hasError('password') ? formState.errors.password[0] : null}
+            label="PASSWORD"
             name="password"
             onChange={handleChange}
             type="password"
@@ -130,7 +120,7 @@ const ProviderLogin = props => {
           /></p>
           <Button color="primary" disabled={!formState.isValid} fullWidth size="large" type="submit" variant="contained"> LOG IN </Button>
           <Typography color="textSecondary" variant="body1">
-            <p>Don't have an account?{' '} <Link component={RouterLink} to="/providers/register" variant="h6"> Register </Link></p>
+            <h5><center> DON'T HAVE AN ACCOUNT{' '} <Link component={RouterLink} to="/providers/register"> PROVIDER REGISTRATION </Link></center></h5>
           </Typography>
         </form>
       </div>

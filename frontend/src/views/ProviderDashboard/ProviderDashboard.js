@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
+import '../../index.css';
 
 
 const ProviderDashboard = (props) => {
