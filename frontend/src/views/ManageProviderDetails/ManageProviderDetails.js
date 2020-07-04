@@ -2,12 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
-import { Grid, Select, Button, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { Grid, Select, Button, TextField, FormControl, FormLabel, RadioGroup, Checkbox, FormControlLabel, Radio } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import '../../index.css';
+import ProviderRegister from '../ProviderRegister/ProviderRegister';
 
-const ManageProviderDetails = (props) => {
-  const { history } = props
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+const ManageProviderDetails = ({history}) => {
   const [provider, setProvider] = useState({})
+  const [allActivities, setAllActivities] = useState([])
+  const [values, setValues] = useState({})
+  const [links, setLinks] = useState([])
 
   // fetch session object and appointments of user in session
   useEffect(() => {
@@ -27,13 +36,77 @@ const ManageProviderDetails = (props) => {
     .catch(console.error)
   }, [])
 
+  // fetch list of activities
+  useEffect(() => {
+    fetch("/activities")
+    .then((response) => response.json())
+    .then((result) => setAllActivities(result))
+    .catch(error => console.log('error', error));
+  }, [])
+
+  // fetch list of user's activities
+  useEffect(() => {
+    fetch("/providers/activities")
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result)
+      return result
+    })
+    .then((result) => setLinks(result))
+    .catch(error => console.log('error', error));
+  }, [])
+
+  const handleChange = (event) => {
+    event.persist();
+    const {name, value, type, checked} = event.target
+
+    type === 'checkbox' ? setValues({ [name]: checked }) : setValues({ [name]: value })
+    // if (type === 'checkbox')
+    // return setValues({ [name]: checked })
+    // return setValues({ [name]: value })
+  }
+
   // BUTTON COMPONENT: submit to update user account information
   const UpdateDetails = () => {
     return (<Button type="submit" variant="outlined" color="primary" fullWidth>SAVE CHANGES</Button>)
   }
 
+  // BUTTON COMPONENT: update to ADD activities to provider's list of activities
+  const AddActivities = () => {
+    return (<Button type="submit" variant="outlined" color="primary" fullWidth>ADD ACTIVITIES</Button>)
+  }
+
+  // BUTTON COMPONENT: update to REMOVE activities to provider's list of activities
+  const RemoveActivities = () => {
+    return (<Button type="submit" variant="outlined" color="primary" fullWidth>REMOVE ACTIVITIES</Button>)
+  }
+
+  const handleRemoveActivities = (values, { setSubmitting }) => {
+    values.npi = provider.npi
+    values.activities = values.activities.map((activity) => activity.activityid)
+    console.log(values)
+
+    fetch(`/providers/${provider.npi}/delete-activities`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'},
+      mode: 'cors',
+      body: JSON.stringify(values)
+    })
+    .then((response) => response.json())
+    .then((result) => console.log(result))
+    .catch(console.error)
+    alert(JSON.stringify(values, null, 2));
+    setSubmitting(false);
+    history.go(0)
+  }
+
   const handleSubmit = (values, { setSubmitting }) => {
     values.npi = provider.npi
+
+    if (values.activities)
+      values.activities = values.activities.map((activity) => activity.activityid)
+
     console.log(values)
 
     fetch(`http://localhost:3000/providers/${provider.npi}`, {
@@ -46,13 +119,88 @@ const ManageProviderDetails = (props) => {
     .then((response) => response.json())
     .then((result) => console.log(result))
     .catch(console.error)
-
     alert(JSON.stringify(values, null, 2));
     setSubmitting(false);
+    history.go(0)
   };
 
   return (
     <div>
+      <h2><center>UPDATE PROVIDER ACTIVITIES</center></h2>
+      <Grid container spacing={2} direction="row" justify="center" alignItems="stretch">
+        <Grid item xs>
+          <Formik initialValues={{ activities: provider.activities }} onSubmit={handleSubmit}>
+            {({values, handleChange, handleSubmit}) => {
+              return (
+                <form onSubmit={handleSubmit}>
+                  <Form>
+                    <Autocomplete
+                      multiple
+                      options={allActivities.filter((activity) => !links.find(({ activityid }) => activity.activityid === activityid))|| []}
+                      onChange={(event, values) => {
+                        event.target = {name: 'activities', value: values}
+                        handleChange(event);
+                      }}
+                      disableCloseOnSelect
+                      getOptionLabel={(option) => option.activityid}
+                      renderOption={(option, { selected }) => (
+                        <React.Fragment>
+                          <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected}/>
+                            {option.activityid}
+                        </React.Fragment>
+                      )}
+                      style={{ width: 300 }}
+                      renderInput={(params) => (
+                        <TextField {...params} variant="outlined" label="ADD ACTIVITIES" placeholder="Add an Activity"/>
+                      )}
+                    />
+                    <br/>
+                    <AddActivities/>
+                  </Form>
+                </form>
+              )
+            }}
+          </Formik>
+        </Grid>
+        <Grid item xs>
+          <Formik initialValues={{ activities: provider.activities }} onSubmit={handleRemoveActivities}>
+            {({values, handleChange, handleRemoveActivities}) => {
+              return (
+                <form onSubmit={handleRemoveActivities}>
+                  <Form>
+                    <Grid item xs>
+                      <Autocomplete
+                        multiple
+                        options={links || []}
+                        onChange={(event, values) => {
+                          event.target = {name: 'activities', value: values}
+                          handleChange(event);
+                        }}
+                        disableCloseOnSelect
+                        getOptionLabel={(option) => option.activityid}
+                        renderOption={(option, { selected }) => (
+                          <React.Fragment>
+                            <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected}/>
+                              {option.activityid}
+                          </React.Fragment>
+                        )}
+                        style={{ width: 300 }}
+                        renderInput={(params) => (
+                          <TextField {...params} variant="outlined" label="REMOVE ACTIVITIES" placeholder="Remove an Activity"/>
+                        )}
+                      />
+                    </Grid>
+                    <br/>
+                    <RemoveActivities/>
+                  </Form>
+                </form>
+              )
+            }}
+          </Formik>
+        </Grid>
+      </Grid>
+      <br/><br/>
+      <div>
       <Formik
         initialValues={{
           npi: provider.npi,
@@ -68,7 +216,6 @@ const ManageProviderDetails = (props) => {
           phone: provider.phone,
           virtualid: provider.virtualid,
           summary: provider.summary,
-          // activities: provider.activities,
           // accepting_new_patients: provider.accepting_new_patients,
           // inperson: provider.inperson,
           // virtual: provider.virtual,
@@ -270,6 +417,7 @@ const ManageProviderDetails = (props) => {
           )
         }}
       </Formik>
+    </div>
     </div>
   )
 }

@@ -54,7 +54,7 @@ class Patient(db.Model):
             'sex': self.sex,
             'virtualid': self.virtualid,
             'summary': self.summary,
-            'user': 'patient'
+            # 'user': 'patient'
         }
 
 
@@ -115,7 +115,7 @@ class Provider(db.Model):
             'inperson': self.inperson,
             'virtual': self.virtual,
             'virtualid': self.virtualid,
-            'user': 'provider'
+            # 'user': 'provider'
         }
 
 
@@ -145,6 +145,13 @@ class ProviderActivity(db.Model):
 
     def __repr__(self):
         return f'ProviderActivity provider={self.npi} activity={self.activityid}'
+
+    def to_dict(self):
+        return {
+            'linkid': self.linkid,
+            'npi': self.npi,
+            'activityid': self.activityid
+        }
 
 
 class MedicalRelation(db.Model):

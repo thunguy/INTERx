@@ -92,7 +92,12 @@ const ProviderRegister = (props) => {
             'lname': data.results[0].basic.last_name,
             'credential': data.results[0].basic.credential,
             'specialty': data.results[0].taxonomies[0].desc,
-            'state': data.results[0].taxonomies[0].state            }
+            'address': data.results[0].addresses[0].address_1,
+            'city': data.results[0].addresses[0].city,
+            'state': data.results[0].taxonomies[0].state,
+            'zipcode': data.results[0].addresses[0].postal_code,
+            'phone': data.results[0].addresses[0].telephone_number
+          }
         }));
 
       else
@@ -375,8 +380,9 @@ const ProviderRegister = (props) => {
                     {option.activityid}
                 </React.Fragment>
               )}
+              style={{ width: 600 }}
               renderInput={(params) => (
-                <TextField {...params} variant="outlined" label="ACTIVITIES" placeholder="Add an Activity" fullWidth/>
+                <TextField {...params} variant="outlined" label="ACTIVITIES" placeholder="Add an Activity"/>
               )}
             />
           </Grid>

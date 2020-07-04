@@ -222,7 +222,6 @@ def get_provider(npi):
 def update_provider(npi):
 
     if 'activities' in request.json:
-
         for activity in request.json['activities']:
             provider_activity = db.session.query(ProviderActivity).filter_by(npi=request.json['npi'], activityid=activity).first()
             provider_activities = db.session.query(ProviderActivity).all()
@@ -241,6 +240,26 @@ def update_provider(npi):
             db.session.query(Provider).filter(Provider.npi == npi).update(request.json)
             db.session.commit()
             return jsonify(request.json)
+        else:
+            return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
+
+
+# Remove activities from a provider's list of activities
+@app.route('/providers/<npi>/delete-activities', methods=['PUT'])
+def remove_provider_activities(npi):
+
+    if 'npi' in session:
+        npi = session.get('npi')
+
+        if npi == request.json['npi']:
+
+            for activity in request.json['activities']:
+                db.session.query(ProviderActivity).filter_by(npi=npi, activityid=activity).delete()
+            db.session.commit()
+            provider = db.session.query(Provider).filter_by(npi=npi).one()
+            return jsonify(provider.to_dict())
         else:
             return jsonify({'message': 'unauthorized access -- invalid session'}), 403
     else:
@@ -347,6 +366,18 @@ def get_providers_by_activity():
     providers = Provider.query.join(ProviderActivity).filter(ProviderActivity.activityid == activity).all()
 
     return jsonify([provider.to_dict() for provider in providers])
+
+
+# Get all activities of a provider
+@app.route('/providers/activities', methods=['GET'])
+def get_provider_activities():
+
+    if 'npi' in session:
+        npi = session.get('npi')
+        provider_activities = db.session.query(ProviderActivity).filter_by(npi=npi).all()
+        return jsonify([provider_activity.to_dict() for provider_activity in provider_activities])
+    else:
+        return jsonify({'message': 'invalid session -- login required'}), 401
 
 
 # ####################################### LOGIN / LOGOUT ######################################## #
