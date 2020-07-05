@@ -401,6 +401,7 @@ const ManageProviderDetails = ({history}) => {
                       multiline
                       margin="dense"
                       value={values.summary}
+                      defaultValue={provider.summary}
                       placeholder={provider.summary ? provider.summary : "Introduce yourself..."}
                       rows={4}
                       variant="outlined"

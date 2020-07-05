@@ -21,16 +21,10 @@ const ViewAppointments = (props) => {
   useEffect(() => {
     fetch('/session')
     .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      return result;
-    })
+    .then((result) => {console.log(result); return result})
     .then((result) => fetch(`/patients/${result.patientid}`))
     .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      return result
-    })
+    .then((result) => {console.log(result); return result})
     .then((result) => setPatient(result))
     .catch(console.error)
   }, [])
@@ -65,12 +59,12 @@ const ViewAppointments = (props) => {
           SortArrow: FaAngleDown,
         }}
         columns={[
-          { title: 'Date', field: 'date', type: 'date' },
-          { title: 'Time', field: 'time' },
-          { title: 'Duration', field: 'duration', filtering: false },
-          { title: 'Provider', field: 'provider' },
-          { title: 'Activity', field: 'activityid' },
-          { title: 'Status', field: 'status' },
+          { title: 'Date', field: 'date', type: 'date', cellStyle: {width: 150, minWidth: 150}, headerStyle: {width:150, minWidth: 150} },
+          { title: 'Time', field: 'time', cellStyle: {width: 190, minWidth: 190}, headerStyle: {width: 190, minWidth: 190} },
+          { title: 'Duration', field: 'duration', filtering: false, cellStyle: {width: 110, minWidth: 110}, headerStyle: {width:110, minWidth: 110} },
+          { title: 'Provider', field: 'provider', cellStyle: {width: 230, minWidth: 230}, headerStyle: {width:230, minWidth: 230} },
+          { title: 'Activity', field: 'activityid', cellStyle: {width: 200, minWidth: 200}, headerStyle: {width:200, minWidth: 200}},
+          { title: 'Status', field: 'status', cellStyle: {width: 90, maxWidth: 90}, headerStyle: {width:90, maxWidth: 90} },
         ]}
         data={appointments.map((appointment) => ({
           ...appointment,
@@ -112,10 +106,10 @@ const ViewAppointments = (props) => {
             tooltip: 'Details',
             render: () => {
               return (
-                <div class='container-table'style={{ fontFamily: 'Lucida Console', fontSize: 18, textAlign: 'center', color: '#3754A4' }}>
-                  <div class='item'><FaMapMarkedAlt color='#8B0000' fontSize='25'/>&nbsp;&nbsp;&nbsp;{rowData.location}</div>
-                  <div class='item'><FaNotesMedical color='#8B0000' fontSize='25'/>&nbsp;&nbsp;{rowData.reason}</div>
-                  <div class='item'><FaTrophy color='#8B0000' fontSize='25'/>&nbsp;&nbsp;{rowData.goal}</div>
+                <div class='container-table' style={{ fontSize: 18, textAlign: 'justify', color: '#3754A4' }}>
+                  <div class='item'><b>Location:</b> {rowData.location}</div>
+                  <div class='item'><b>Reason:</b> {rowData.reason}</div>
+                  <div class='item'><b>Goal:</b> {rowData.goal}</div>
                 </div>
               )
             },

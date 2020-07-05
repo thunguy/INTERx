@@ -22,20 +22,11 @@ const ViewProviders = (props) => {
   useEffect(() => {
     fetch('/session')
     .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      return result;
-    })
+    .then((result) => {console.log(result); return result})
     .then((result) => fetch(`/patients/${result.patientid}`))
     .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      return result
-    })
-    .then((result) => {
-      setPatient(result);
-      return result
-    })
+    .then((result) => {console.log(result); return result})
+    .then((result) => {setPatient(result); return result})
     .then((result) => fetch(`/patient/${result.patientid}/providers`))
     .then((response) => response.json())
     .then((result) => setProviders(result))
@@ -115,7 +106,7 @@ const ViewProviders = (props) => {
             tooltip: `About ${rowData.fname}`,
             render: () => {
               return (
-                <div class="container-table" style={{ fontSize: 18, fontFamily: 'Lucida Console', color: '#515050' }}>
+                <div class="container-table" style={{ color: '#515050' }}>
                   <div class="item"><MdPhoneInTalk color='#3754A4' fontSize='25'/>&nbsp;&nbsp;{rowData.phone}</div>
                   <div class="item"><TiLocation color='#3754A4' fontSize='25'/>&nbsp;{rowData.address}, {rowData.city}, {rowData.state}, {rowData.zipcode}</div>
                   <div class="item"><GiEnvelope color='#3754A4' fontSize='25'/>&nbsp;{rowData.email}</div>

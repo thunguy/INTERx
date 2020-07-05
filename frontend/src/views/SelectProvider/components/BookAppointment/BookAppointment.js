@@ -65,12 +65,10 @@ const PatientText = (props) => {
   );
 }
 
-
-// COMPONENT: book appointment with provider
+// BUTTON COMPONENT: book appointment with provider
 const Book = ({fname, lname, credential}) => {
 return (<Button type="submit" variant="outlined" color="primary" >BOOK: {fname} {lname}, {credential}</Button>)
 }
-
 
 const BookAppointment = ({provider, patient, activity, history}) => {
 
@@ -107,7 +105,7 @@ const BookAppointment = ({provider, patient, activity, history}) => {
     .then((response) => response.json())
     .then((result) => console.log(result))
     .catch(console.error)
-    alert(JSON.stringify(values, null, 2));
+    // alert(JSON.stringify(values, null, 2));
     setSubmitting(false);
     history.push('/patients/view-appointments')
   };

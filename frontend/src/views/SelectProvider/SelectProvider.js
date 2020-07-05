@@ -4,7 +4,7 @@ import { BookAppointment } from './components';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { Button, IconButton, TextField, Checkbox } from '@material-ui/core';
+import { Grid, Button, IconButton, TextField, Checkbox } from '@material-ui/core';
 import queryString from 'query-string';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
@@ -55,13 +55,13 @@ const SelectProvider = (props) => {
 
   // fetch patientid of patient in sesion
   useEffect(() => {
-    fetch ("/session", {
-      method: 'GET',
-      credentials: 'include',
-      headers: {'Content-Type': 'application/json'},
-    })
+    fetch ("/session")
     .then((response) => response.json())
-    .then((result) => {console.log(result); setPatient(result)})
+    .then((result) => {console.log(result); return result})
+    .then((result) => fetch(`/patients/${result.patientid}`))
+    .then((response) => response.json())
+    .then((result) => {console.log(result); return result})
+    .then((result) => setPatient(result))
     .catch((error) => console.error('error', error));
   }, [])
 
@@ -110,8 +110,9 @@ const SelectProvider = (props) => {
         variant="outlined"
         color="primary"
         onClick={handleAgree}
+        fullWidth
       >
-        I CONSENT TO TREATMENT WITH {provider.fname} {provider.lname}, {provider.credential}
+        I, {patient.fname} {patient.lname}, CONSENT TO TREATMENT WITH {provider.fname} {provider.lname}, {provider.credential}
       </Button>
     )
   }
@@ -121,7 +122,6 @@ const SelectProvider = (props) => {
     const {name, value, type, checked} = event.target
 
     // type === 'checkbox' ? setValues({ [name]: checked }) : setValues({ [name]: value })
-
     if (type === 'checkbox')
     return setValues({ [name]: checked })
     return setValues({ [name]: value })
@@ -167,12 +167,13 @@ const SelectProvider = (props) => {
           )}
         />
       </div>
-      <div class="table-text">
+      <div>
         <MaterialTable
           title='Schedule Appointment'
           options={{
             search: false,
-            filtering: true
+            filtering: true,
+            pageSize: 10,
           }}
           icons={{
             ResetSearch: IoMdClose,
@@ -203,7 +204,23 @@ const SelectProvider = (props) => {
               tooltip: `About ${rowData.fname}`,
               render: () => {
                 return (
-                  <div style={{ fontSize: 100, textAlign: 'center', color: 'white', backgroundColor: '#43A047' }}> About {rowData.fname} </div>
+                  <div style={{ width: 'auto', marginTop: '1rem', marginBottom: '1rem', alignContent:'center', alignItems:'center', justifyContent:'center' }}>
+                    <Grid container direction="row" alignItems='center'>
+                      <Grid item xs={3}>
+                        <Grid container direction="column" alignItems='center'>
+                          <Grid item xs>
+                            {rowData.sex === 'Female' ? <img src="/profile_female.jpg"/> : <img src="/profile_male.jpg"/>}
+                          </Grid>
+                          <Grid item xs>
+                            <strong>{rowData.fname} {rowData.lname}, {rowData.credential}</strong>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <div className="about-provider" style={{ textAlign: 'justify' }}>{rowData.summary}</div>
+                      </Grid>
+                    </Grid>
+                  </div>
                 )
               },
             }),
@@ -219,7 +236,29 @@ const SelectProvider = (props) => {
               tooltip: 'Consent Required',
               render: () => {
                 return (
-                  <div style={{ fontSize: 100, textAlign: 'center', color: '#000000', backgroundColor: '#FFFFFF' }}>
+                  <div class="provider-consent" style={{ fontSize: 15, textAlign: 'justify' }}>
+                    <p><strong>Treatment by {rowData.fname} {rowData.lname}, {rowData.credential}:</strong> The purpose of treatment by {rowData.fname}{' '}
+                      {rowData.lname}, {rowData.credential} is to treat disease, injury and disability by examination, evaluation and intervention by{' '}
+                      use of rehabilitative procedures, mobilization, manual techniques, exercises, and physical agents to aid the patient in achieving their{' '}
+                      maximum potential within their capabilities and to accelerate convalescence and reduce the length of functional recovery. All procedures{' '}
+                      will be thoroughly explained to me before they are performed.</p>
+                    <p><strong>Informed Consent for Treatment:</strong> The term “informed consent” means that the potential risks, benefits, and alternatives{' '}
+                      of treatment have been explained to me. I understand that {rowData.fname} {rowData.lname}, {rowData.credential} provides{' '}
+                      a wide range of services and I will receive information at the initial visit concerning the treatment and options available{' '}
+                      for my condition. I will notify my practitioner if I am pregnant, become pregnant, or am trying to get pregnant. I understand{' '}
+                      I am encouraged to communicate with a physician the potential benefits and risks of treatment relevant to my pregnancy.</p>
+                    <p><strong>Potential Benefits:</strong> Benefits may include an improvement in my symptoms and an increase in my ability to perform my{' '}
+                      daily activities. I may experience increased strength, awareness, flexibility and endurance in my movements. I may{' '}
+                      experience decreased pain and discomfort. I should gain a greater knowledge about managing my condition and the{' '}
+                      recourses available to me.</p>
+                    <p><strong>Potential Risks:</strong> I may experience an increase in my current level of pain or discomfort, or aggravation of my existing{' '}
+                      injury during treatment. This discomfort is usually temporary; if it does not subside in 24 hours, I agree to contact{' '}
+                      {rowData.fname} {rowData.lname}, {rowData.credential}.</p>
+                    <p><strong>No Warranty:</strong> I understand that {rowData.fname} {rowData.lname}, {rowData.credential} cannot make any promises or guarantees{' '}
+                      regarding a cure for or improvements in my condition. I understand that {rowData.fname} {rowData.lname}, {rowData.credential}{' '}
+                      will share with me his/her opinions regarding potential results of physical therapy treatment for my condition and will discuss{' '}
+                      treatment options with me before I consent to treatment.</p>
+                    <br/>
                     <ConsentAgreement
                       provider={rowData}
                       relation={relations.filter((relation) => relation.npi === rowData.npi)[0]}
