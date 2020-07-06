@@ -44,10 +44,13 @@ const ManagePatientSecurity= ({history}) => {
       mode: 'cors',
       body: JSON.stringify(values)
     })
-    .then((response) => response.json())
+    .then((response) => {
+      response.status === 200 ? alert("Your password has been successfully changed.") : alert("access denied -- incorrect password.")
+      return response.json()
+    })
     .then((result) => console.log(result))
     .catch(console.error)
-    alert(JSON.stringify(values, null, 2));
+    // alert(JSON.stringify(values, null, 2));
     setSubmitting(false);
   };
 

@@ -12,10 +12,11 @@ import { PatientRegister,
          ProviderDashboard,
          ManagePatientDetails,
          ManagePatientSecurity,
-         ViewAppointments,
+         ViewPatientAppointments,
          ViewProviders,
          ManageProviderDetails,
-         ManageProviderSecurity
+         ManageProviderSecurity,
+         ViewProviderSchedule,
         } from './views';
 
 // import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
@@ -35,10 +36,11 @@ const Routes = () => {
       <WithNavigationBar exact path='/patients/select-provider' navbar={PatientNavigationBar} component={SelectProvider}/>
       <WithNavigationBar exact path='/patients/account-details' navbar={PatientNavigationBar} component={ManagePatientDetails}/>
       <WithNavigationBar exact path='/patients/manage-security' navbar={PatientNavigationBar} component={ManagePatientSecurity}/>
-      <WithNavigationBar exact path='/patients/view-appointments' navbar={PatientNavigationBar} component={ViewAppointments}/>
+      <WithNavigationBar exact path='/patients/view-appointments' navbar={PatientNavigationBar} component={ViewPatientAppointments}/>
       <WithNavigationBar exact path='/patients/view-providers' navbar={PatientNavigationBar} component={ViewProviders}/>
 
       <WithNavigationBar exact path='/providers/dashboard' navbar={ProviderNavigationBar} component={ProviderDashboard}/>
+      <WithNavigationBar exact path='/providers/view-schedule' navbar={ProviderNavigationBar} component={ViewProviderSchedule}/>
       <WithNavigationBar exact path='/providers/account-details' navbar={ProviderNavigationBar} component={ManageProviderDetails}/>
       <WithNavigationBar exact path='/providers/manage-security' navbar={ProviderNavigationBar} component={ManageProviderSecurity}/>
     </Switch>

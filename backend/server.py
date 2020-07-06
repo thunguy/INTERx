@@ -563,9 +563,9 @@ def book_appt():
             return jsonify({'message': 'invalid session -- login required'}), 401
 
 
-# Cancel an appointment
-@app.route('/appointments/<apptid>/cancel-appointment', methods=['PUT'])
-def cancel_appt(apptid):
+# Update the status of an appointment
+@app.route('/appointments/<apptid>/update-status', methods=['PUT'])
+def update_appt(apptid):
 
     if 'patientid' in session:
         patientid = session.get('patientid')
@@ -579,6 +579,20 @@ def cancel_appt(apptid):
             return jsonify(request.json)
         else:
             return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+
+    elif 'npi' in session:
+        npi = session.get('npi')
+
+        if npi == request.json['npi']:
+            patientid = request.json['patientid']
+            start = request.json['start']
+            apptid = request.json['apptid']
+            db.session.query(Appointment).filter_by(patientid=patientid, npi=npi, start=start, apptid=apptid).update(request.json)
+            db.session.commit()
+            return jsonify(request.json)
+        else:
+            return jsonify({'message': 'unauthorized access -- invalid session'}), 403
+
     else:
         return jsonify({'message': 'invalid session -- login required'}), 401
 

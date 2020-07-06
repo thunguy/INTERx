@@ -1,1 +1,1 @@
-export {default} from './ViewProviders'
+export { default } from './ViewProviders'

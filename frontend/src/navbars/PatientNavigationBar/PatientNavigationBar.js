@@ -33,7 +33,7 @@ const PatientNavigationBar = (props) => {
     .catch(console.error)
   }, [])
 
-  const ViewAppointments = () => {
+  const ViewPatientAppointments = () => {
     return (<div><Button color="primary" href='/patients/view-appointments'>VIEW ALL APPOINTMENTS</Button></div>)
   }
 
@@ -102,7 +102,7 @@ const PatientNavigationBar = (props) => {
         </div>
         <Divider/>
         <List>
-          <ListItem> <ViewAppointments/> </ListItem>
+          <ListItem> <ViewPatientAppointments/> </ListItem>
           <ListItem> <ViewProviders/> </ListItem>
           <ListItem> <ScheduleAppointment/> </ListItem>
         </List>

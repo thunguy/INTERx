@@ -3,12 +3,12 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MaterialTable from 'material-table';
 import { IoMdSkipForward, IoMdSkipBackward, IoIosArrowForward, IoIosArrowBack, IoMdClose } from "react-icons/io";
-import { FaNotesMedical, FaMapMarkedAlt, FaTrophy, FaAngleDown } from "react-icons/fa";
+import { FaAngleDown } from "react-icons/fa";
 import { FcCancel, FcInfo, FcEmptyFilter } from "react-icons/fc";
 import '../../index.css'
 
 
-const ViewAppointments = (props) => {
+const ViewPatientAppointments = (props) => {
   const { history } = props;
   const [patient, setPatient] = useState({})
   const [appointments, setAppointments] = useState([])
@@ -84,7 +84,7 @@ const ViewAppointments = (props) => {
                 apptid: rowData.apptid,
                 status: "Canceled"
               }
-              fetch(`/appointments/${rowData.apptid}/cancel-appointment`, {
+              fetch(`/appointments/${rowData.apptid}/update-status`, {
                 method: 'PUT',
                 credentials: 'include',
                 headers: {'Content-Type': 'application/json'},
@@ -97,7 +97,7 @@ const ViewAppointments = (props) => {
               alert("You have canceled your appointment with " + rowData.provider + " on " + rowData.date + " at " + rowData.time)
               history.go(0)
             },
-            disabled: rowData.status !== 'Scheduled'
+            disabled: rowData.status !== 'Scheduled' || new Date() > new Date(rowData.start)
           })
         ]}
         detailPanel={[
@@ -120,8 +120,8 @@ const ViewAppointments = (props) => {
   )
 }
 
-ViewAppointments.propTypes = {
+ViewPatientAppointments.propTypes = {
   history: PropTypes.object
 };
 
-export default withRouter(ViewAppointments);
+export default withRouter(ViewPatientAppointments);

@@ -239,7 +239,9 @@ class Appointment(db.Model):
             'npi': self.npi,
             'relationid': self.relationid,
             'activityid': self.activityid,
-            'provider': f'{self.provider.fname.title()} {self.provider.lname.title()}, {self.provider.credential}'
+            'provider': f'{self.provider.fname.title()} {self.provider.lname.title()}, {self.provider.credential}',
+            'patient': f'{self.patient.fname.title()} {self.patient.lname.title()}',
+            'dob': f'{self.patient.dob}'
         }
 
 

@@ -48,7 +48,8 @@ const ManagePatientDetails = ({history}) => {
     .then((response) => response.json())
     .then((result) => console.log(result))
     .catch(console.error)
-    alert(JSON.stringify(values, null, 2));
+    alert("Your changes have been saved.")
+    // alert(JSON.stringify(values, null, 2));
     setSubmitting(false);
     history.go(0)
   };
