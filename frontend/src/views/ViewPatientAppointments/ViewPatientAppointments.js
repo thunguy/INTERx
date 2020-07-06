@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MaterialTable from 'material-table';
+import { Grid} from '@material-ui/core';
 import { IoMdSkipForward, IoMdSkipBackward, IoIosArrowForward, IoIosArrowBack, IoMdClose } from "react-icons/io";
 import { FaAngleDown } from "react-icons/fa";
 import { FcCancel, FcInfo, FcEmptyFilter } from "react-icons/fc";
@@ -74,7 +75,7 @@ const ViewPatientAppointments = (props) => {
         }))}
         actions={[
           (rowData) => ({
-            icon: rowData.status === 'Scheduled' ? FcCancel : '',
+            icon: (rowData.status ===  'Canceled') || (new Date() > new Date(rowData.start)) ? '' : FcCancel,
             tooltip: rowData.status === 'Scheduled' ? 'Cancel Appointment' : null,
             onClick: (event, rowData) => {
               const values = {
@@ -106,10 +107,20 @@ const ViewPatientAppointments = (props) => {
             tooltip: 'Details',
             render: () => {
               return (
-                <div class='container-table' style={{ fontSize: 18, textAlign: 'justify', color: '#3754A4' }}>
-                  <div class='item'><b>Location:</b> {rowData.location}</div>
-                  <div class='item'><b>Reason:</b> {rowData.reason}</div>
-                  <div class='item'><b>Goal:</b> {rowData.goal}</div>
+                <div class='container-table' style={{ fontSize: 18, textAlign: 'justify', color: '#3754A4', width: 'auto', marginTop: '1rem', marginBottom: '1rem', alignContent:'center', alignItems:'center', justifyContent:'center' }}>
+                  <Grid container direction='column' alignItems='center'>
+                    <Grid item xs>
+                      <div class='item' id='location-text'><b>Location:</b> {rowData.location}</div>
+                    </Grid>
+                    <Grid container direction='row' alignItems='baseline'>
+                      <Grid item xs>
+                        <div class='item'><b>Reason:</b> {rowData.reason}</div>
+                      </Grid>
+                      <Grid item xs>
+                        <div class='item'><b>Goal:</b> {rowData.goal}</div>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </div>
               )
             },

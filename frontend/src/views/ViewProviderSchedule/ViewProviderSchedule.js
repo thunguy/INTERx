@@ -38,6 +38,7 @@ const ViewProviderSchedule = (props) => {
 
   return (
     <div>
+      {console.log(appointments)}
       <MaterialTable
         title="ALL APPOINTMENTS"
         options={{

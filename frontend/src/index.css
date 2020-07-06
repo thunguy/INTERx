@@ -136,3 +136,7 @@ code {
   justify-content: center;
   align-items: center;
 }
+
+#location-text{
+  text-transform: uppercase;
+}
