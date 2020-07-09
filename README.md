@@ -44,11 +44,11 @@ Create database tables:
 $ python3 -i model.py
 >>> db.create_all()
 ```
-Start server:
+Start backend Flask server:
 ```
 (env) $ python3 server.py
 ```
-In the terminal, navigate to frontend folder to run node server:
+In the terminal, navigate to frontend folder to run frontend node server:
 ```
 $ cd frontend
 $ npm start
