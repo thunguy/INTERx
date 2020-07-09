@@ -37,14 +37,14 @@ Install dependencies:
 ```
 Create database `interx`:
 ```
-$ createdb interx
+(env) $ createdb interx
 ```
 Create database tables:
 ```
-$ python3 -i model.py
+(env) $ python3 -i model.py
 >>> db.create_all()
 ```
-Start backend Flask server:
+Start backend server:
 ```
 (env) $ python3 server.py
 ```
