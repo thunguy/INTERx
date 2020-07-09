@@ -9,10 +9,6 @@ __Database:__ PostgreSQL\
 __API:__ NPPES NPI Registry API\
 __Deployment:__ Coming soon!
 
-## Features
-
-## Future Features
-
 ## Installation
 
 #### Requirements:
