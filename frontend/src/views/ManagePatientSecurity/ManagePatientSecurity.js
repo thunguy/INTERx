@@ -45,7 +45,13 @@ const ManagePatientSecurity= ({history}) => {
       body: JSON.stringify(values)
     })
     .then((response) => {
-      response.status === 200 ? alert("Your password has been successfully changed.") : alert("access denied -- incorrect password.")
+      if (response.status === 200) {
+        alert("Your password has been successfully changed.")
+      } else if (response.status === 403) {
+        alert("403 FORBIDDEN: Current password incorrect.")
+      } else if (response.status === 409) {
+        alert("409 CONFLICT: New password must be different from current password.")
+      }
       return response.json()
     })
     .then((result) => console.log(result))
@@ -71,10 +77,19 @@ const ManagePatientSecurity= ({history}) => {
       mode: 'cors',
       body: JSON.stringify(values)
     })
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === 200) {
+        alert("Your email has been successfully changed.")
+      } else if (response.status === 403) {
+        alert("403 FORBIDDEN: Current credential(s) incorrect.")
+      } else if (response.status === 409) {
+        alert("409 CONFLICT: Email address already registered with an existing account.")
+      }
+      return response.json()
+    })
     .then((result) => console.log(result))
     .catch(console.error)
-    alert(JSON.stringify(values, null, 2));
+    // alert(JSON.stringify(values, null, 2));
     setSubmitting(false);
   };
 

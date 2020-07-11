@@ -96,7 +96,7 @@ const ViewProviderSchedule = (props) => {
               .then((response) => response.json())
               .then((result) => setAppointments(appointments.filter((appointment) => appointment.npi !== result.npi).concat([result])))
               .catch(console.error)
-              alert("You have marked your appointment with " + rowData.patient + " on " + rowData.date + " at " + rowData.time + " as completed.")
+              // alert("You have marked your appointment with " + rowData.patient + " on " + rowData.date + " at " + rowData.time + " as completed.")
               history.go(0)
             },
             disabled: rowData.status === 'Completed' || new Date() < new Date(rowData.start)

@@ -44,9 +44,9 @@ def add_patient():
 
     else:
         if Patient.query.filter_by(email=email).all() or Provider.query.filter_by(email=email).all():
-            return jsonify({'message': 'email address already registered with an existing account -- registration or login required'})
+            return jsonify({'message': 'email address already registered with an existing account -- registration or login required'}), 409
         else:
-            return jsonify({'message': 'username unavailable -- registration required'})
+            return jsonify({'message': 'username unavailable'}), 409
 
 
 # Get all patients
@@ -143,7 +143,7 @@ def update_patient_email(patientid):
                     return jsonify(patient.to_dict())
 
                 else:
-                    return jsonify({'message': 'access denied -- email address already registered with an existing account'}), 403
+                    return jsonify({'message': 'access denied -- email address already registered with an existing account'}), 409
             else:
                 return jsonify({'message': 'access denied -- incorrect credentials'}), 403
         else:
@@ -194,9 +194,9 @@ def add_provider():
 
     else:
         if Provider.query.filter_by(email=email).all() or Patient.query.filter_by(email=email).all():
-            return jsonify({'message': 'email is already registered -- registration/login required'})
+            return jsonify({'message': 'email is already registered -- registration/login required'}), 409
         else:
-            return jsonify({'message': 'username unavailable -- registration/login required'})
+            return jsonify({'message': 'username unavailable'}), 409
 
 
 # Get all providers
@@ -325,13 +325,14 @@ def update_provider_email(npi):
                     return jsonify(provider.to_dict())
 
                 else:
-                    return jsonify({'message': 'access denied -- email address already registered with an existing account'}), 403
+                    return jsonify({'message': 'access denied -- email address already registered with an existing account'}), 409
             else:
                 return jsonify({'message': 'access denied -- incorrect credentials'}), 403
         else:
             return jsonify({'message': 'unauthorized access -- invalid session'}), 403
     else:
         return jsonify({'message': 'invalid session -- login required'}), 401
+
 
 # ####################################### ACTIVITIES ######################################## #
 
@@ -626,15 +627,6 @@ def get_provider_appt_times(npi):
     scheduled_times = [{k: appt[k] for k in keepers} for appt in appt_obj_list]
 
     return jsonify(scheduled_times)
-
-
-# If patient in session, get all provider's past apppointments
-# If provider in session, get all provider's future appointments
-# If provider in session, get all provider's appointments for today
-
-# If patient in session, get all patient's past apppointments
-# If patient in session, get all patient's future appointments
-# If patient in session, get all patient's appointments for today
 
 
 # ####################################### TESTING ######################################## #
