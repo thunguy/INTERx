@@ -175,7 +175,7 @@ class MedicalRelation(db.Model):
             'consent': self.consent,
             'patientid': self.patientid,
             'npi': self.npi,
-            'patient': f'{self.patient.fname.title()} {self.patient.lname.title()}',
+            'patientname': f'{self.patient.fname.title()} {self.patient.lname.title()}',
             'provider': f'{self.provider.fname.title()} {self.provider.lname.title()}, {self.provider.credential}'
         }
 
@@ -240,7 +240,7 @@ class Appointment(db.Model):
             'relationid': self.relationid,
             'activityid': self.activityid,
             'provider': f'{self.provider.fname.title()} {self.provider.lname.title()}, {self.provider.credential}',
-            'patient': f'{self.patient.fname.title()} {self.patient.lname.title()}',
+            'patientname': f'{self.patient.fname.title()} {self.patient.lname.title()}',
             'dob': f'{self.patient.dob}'
         }
 

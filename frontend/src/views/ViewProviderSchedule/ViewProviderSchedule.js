@@ -68,7 +68,7 @@ const ViewProviderSchedule = (props) => {
         ]}
         data={appointments.map((appointment) => ({
           ...appointment,
-          patient: `${appointment.patient} (${appointment.patientid})`,
+          patient: `${appointment.patientname} (${appointment.patientid})`,
           dob: `${new Date(appointment.dob).toLocaleDateString('en-US', {timeZone: 'UTC'})}`,
           date: `${new Date(appointment.start).toLocaleString('en-us', {  weekday: 'short' })} ${new Date(appointment.start).toLocaleDateString()}`,
           time: `${new Date(appointment.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${new Date(appointment.end).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`,
