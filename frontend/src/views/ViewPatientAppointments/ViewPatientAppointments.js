@@ -93,10 +93,9 @@ const ViewPatientAppointments = (props) => {
                 body: JSON.stringify(values)
               })
               .then((response) => response.json())
-              .then((result) => setAppointments(appointments.filter((appointment) => appointment.npi !== result.npi).concat([result])))
+              .then((result) => setAppointments(appointments.map((appointment) => appointment.apptid === result.apptid ? {...rowData, ...result} : appointment)))
               .catch(console.error)
               alert("You have canceled your appointment with " + rowData.provider + " on " + rowData.date + " at " + rowData.time)
-              history.go(0)
             },
             disabled: rowData.status !== 'Scheduled' || new Date() > new Date(rowData.start)
           })

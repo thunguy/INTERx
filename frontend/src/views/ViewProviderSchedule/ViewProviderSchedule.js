@@ -94,10 +94,10 @@ const ViewProviderSchedule = (props) => {
                 body: JSON.stringify(values)
               })
               .then((response) => response.json())
-              .then((result) => setAppointments(appointments.filter((appointment) => appointment.npi !== result.npi).concat([result])))
+              .then((result) => setAppointments(appointments.map((appointment) => appointment.apptid === result.apptid ? {...rowData, ...result} : appointment)))
               .catch(console.error)
               // alert("You have marked your appointment with " + rowData.patient + " on " + rowData.date + " at " + rowData.time + " as completed.")
-              history.go(0)
+              // history.go(0)
             },
             disabled: rowData.status === 'Completed' || new Date() < new Date(rowData.start)
           }),
@@ -120,10 +120,10 @@ const ViewProviderSchedule = (props) => {
                 body: JSON.stringify(values)
               })
               .then((response) => response.json())
-              .then((result) => setAppointments(appointments.filter((appointment) => appointment.npi !== result.npi).concat([result])))
+              .then((result) => setAppointments(appointments.map((appointment) => appointment.apptid === result.apptid ? {...rowData, ...result} : appointment)))
               .catch(console.error)
               // alert("You have canceled your appointment with " + rowData.patient + " on " + rowData.date + " at " + rowData.time)
-              history.go(0)
+              // history.go(0)
             },
             disabled: rowData.status === 'Canceled'
           }),
@@ -146,10 +146,14 @@ const ViewProviderSchedule = (props) => {
                 body: JSON.stringify(values)
               })
               .then((response) => response.json())
-              .then((result) => setAppointments(appointments.filter((appointment) => appointment.npi !== result.npi).concat([result])))
+              .then((result) => {
+                console.log(result)
+                return result
+              })
+              .then((result) => setAppointments(appointments.map((appointment) => appointment.apptid === result.apptid ? {...rowData, ...result} : appointment)))
               .catch(console.error)
               // alert("You have marked " + rowData.patient + " as 'No-Show' for " + rowData.date + " at " + rowData.time)
-              history.go(0)
+              // history.go(0)
             },
             disabled: rowData.status === 'No-Show' || (new Date() < new Date(rowData.start))
           })
