@@ -30,7 +30,7 @@ PROVIDER | PATIENT
 <img src="https://user-images.githubusercontent.com/39027613/87715737-a52af600-c762-11ea-945e-9da6901b15a5.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/87722268-9fd2a900-c76c-11ea-8dfa-5196088093cd.gif"/>
 
 **PROVIDER | UPDATE APPOINTMENT STATUS = TIME-SENSITIVE CONTROL**
-| <img width="1200" src="https://user-images.githubusercontent.com/39027613/87866341-613c1a80-c935-11ea-8451-6836c6cdb634.png"/> | <img src="https://user-images.githubusercontent.com/39027613/87866169-318c1300-c933-11ea-9b66-3825c961f99b.gif"/> |
+|<img src="https://user-images.githubusercontent.com/39027613/87866169-318c1300-c933-11ea-9b66-3825c961f99b.gif"/>|<img width="1200" src="https://user-images.githubusercontent.com/39027613/87866341-613c1a80-c935-11ea-8451-6836c6cdb634.png"/>|
 | ------------- | ------------- |
 
 
