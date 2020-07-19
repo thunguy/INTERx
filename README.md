@@ -30,7 +30,7 @@ __Deployment:__ Coming soon!
 
 ### PROVIDER SCHEDULE
 
-> **TIME-SENSITIVE OPTION ENABLING**
+> **TIME-BASED OPTION ENABLING**
 
 | <img src="https://user-images.githubusercontent.com/39027613/87866169-318c1300-c933-11ea-9b66-3825c961f99b.gif"/> | <img width="1200" src="https://user-images.githubusercontent.com/39027613/87866341-613c1a80-c935-11ea-8451-6836c6cdb634.png"/> |
 | ------------- | ------------- |
@@ -40,6 +40,8 @@ __Deployment:__ Coming soon!
 | View Appointment Details | Update Appointment Status & Filter |
 | -------------------------| ---------------------------------- |
 | <img src="https://user-images.githubusercontent.com/39027613/87867615-c139bd80-c943-11ea-8156-8051cd62072e.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/87868468-b7678880-c94a-11ea-907f-4bb49bc2459d.gif"/> |
+
+<img src="https://user-images.githubusercontent.com/39027613/87867082-107cef80-c93e-11ea-9d7a-e985e5471eb1.gif">
 
 
 
