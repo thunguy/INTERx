@@ -36,9 +36,9 @@ __Deployment:__ Coming soon!
 | <img src="https://user-images.githubusercontent.com/39027613/87866169-318c1300-c933-11ea-9b66-3825c961f99b.gif"/> | <img width="1200" src="https://user-images.githubusercontent.com/39027613/87866341-613c1a80-c935-11ea-8451-6836c6cdb634.png"/> |
 | ------------- | ------------- |
 
-> **VIEW APPT DETAILS / UPDATE APPT STATUS / FILTER APPTS**
+> **VIEW APPOINTMENT DETAILS / UPDATE APPOINTMENT STATUS / FILTER APPOINTMENTS**
 
-| <img src="https://user-images.githubusercontent.com/39027613/87866953-bcbdd680-c93c-11ea-9f99-2d6fcbc95d94.gif"/> ||
+| <img src="https://user-images.githubusercontent.com/39027613/87867082-107cef80-c93e-11ea-9d7a-e985e5471eb1.gif"/> ||
 | ------------- | ------------- |
 
 
