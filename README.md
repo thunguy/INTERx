@@ -25,18 +25,21 @@ __Deployment:__ Coming soon!
 
 > <p align="justify"> Users of INTERx are either registered as a patient or a provider, where anyone is able to register as a patient, but a provider is required to register with a National Provider ID (NPI). When the form receives an 'NPI' input by the user, that input is verified using an HTTPS fetch request to NPPES NPI Registry's API, and if valid, I implement the data returned to auto-fill provider registration text fields including first name, last name, specialty, credential, address, city, state, zip code, and phone number. Lastly, providers are prompted to select for their activities by using the text-autocomplete lookup feature, or by scrolling through the database's entire activity list. Activities that providers select for and add to their provider activity list will initialize their searchability by patients who search and select for the same activities. </p>
 
-PROVIDER | PATIENT
+| PROVIDER | PATIENT |
 ------------ | -------------
-<img src="https://user-images.githubusercontent.com/39027613/87715737-a52af600-c762-11ea-945e-9da6901b15a5.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/87722268-9fd2a900-c76c-11ea-8dfa-5196088093cd.gif"/>
+| <img src="https://user-images.githubusercontent.com/39027613/87715737-a52af600-c762-11ea-945e-9da6901b15a5.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/87722268-9fd2a900-c76c-11ea-8dfa-5196088093cd.gif"/> |
 
-**PROVIDER | UPDATE APPOINTMENT STATUS**
+**PROVIDER SCHEDULE**
 
 > **TIME-SENSITIVE CONTROL**
 
-|<img src="https://user-images.githubusercontent.com/39027613/87866169-318c1300-c933-11ea-9b66-3825c961f99b.gif"/>|<img width="1200" src="https://user-images.githubusercontent.com/39027613/87866341-613c1a80-c935-11ea-8451-6836c6cdb634.png"/>|
+| <img src="https://user-images.githubusercontent.com/39027613/87866169-318c1300-c933-11ea-9b66-3825c961f99b.gif"/> | <img width="1200" src="https://user-images.githubusercontent.com/39027613/87866341-613c1a80-c935-11ea-8451-6836c6cdb634.png"/> |
 | ------------- | ------------- |
 
+> **UPDATE APPOINTMENT STATUS**
 
+| <img src="https://user-images.githubusercontent.com/39027613/87866660-56838480-c939-11ea-9732-37276c90734f.gif"/> ||
+| ------------- | ------------- |
 
 
 
