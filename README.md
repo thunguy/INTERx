@@ -25,9 +25,8 @@ __Deployment:__ Coming soon!
 
 > <p align="justify"> Users of INTERx are either registered as a patient or a provider, where anyone is able to register as a patient, but a provider is required to register with a National Provider ID (NPI). When the form receives an 'NPI' input by the user, that input is verified using an HTTPS fetch request to NPPES NPI Registry's API, and if valid, I implement the data returned to auto-fill provider registration text fields including first name, last name, specialty, credential, address, city, state, zip code, and phone number. Lastly, providers are prompted to select for their activities by using the text-autocomplete lookup feature, or by scrolling through the database's entire activity list. Activities that providers select for and add to their provider activity list will initialize their searchability by patients who search and select for the same activities. </p>
 
-| PROVIDER | PATIENT |
------------- | -------------
 | <img src="https://user-images.githubusercontent.com/39027613/87715737-a52af600-c762-11ea-945e-9da6901b15a5.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/87722268-9fd2a900-c76c-11ea-8dfa-5196088093cd.gif"/> |
+| ------------ | ------------- |
 
 **PROVIDER SCHEDULE**
 
@@ -38,8 +37,7 @@ __Deployment:__ Coming soon!
 
 > **VIEW APPOINTMENT DETAILS / UPDATE APPOINTMENT STATUS / FILTER APPOINTMENTS**
 
-| <img src="https://user-images.githubusercontent.com/39027613/87867082-107cef80-c93e-11ea-9d7a-e985e5471eb1.gif"/> ||
-| ------------- | ------------- |
+> <img src="https://user-images.githubusercontent.com/39027613/87867082-107cef80-c93e-11ea-9d7a-e985e5471eb1.gif"/>
 
 
 
