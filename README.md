@@ -31,14 +31,14 @@ __Deployment:__ Coming soon!
 
 **PROVIDER SCHEDULE**
 
-> **TIME-SENSITIVE CONTROL**
+> **TIME-SENSITIVE OPTION ENABLING**
 
 | <img src="https://user-images.githubusercontent.com/39027613/87866169-318c1300-c933-11ea-9b66-3825c961f99b.gif"/> | <img width="1200" src="https://user-images.githubusercontent.com/39027613/87866341-613c1a80-c935-11ea-8451-6836c6cdb634.png"/> |
 | ------------- | ------------- |
 
-> **UPDATE APPOINTMENT STATUS**
+> **VIEW APPT DETAILS / UPDATE APPT STATUS / FILTER APPTS**
 
-| <img src="https://user-images.githubusercontent.com/39027613/87866660-56838480-c939-11ea-9732-37276c90734f.gif"/> ||
+| <img src="https://user-images.githubusercontent.com/39027613/87866953-bcbdd680-c93c-11ea-9f99-2d6fcbc95d94.gif"/> ||
 | ------------- | ------------- |
 
 
