@@ -30,7 +30,7 @@ __Deployment:__ Coming soon!
 
 ### PROVIDER SCHEDULE
 
-> **TIME-BASED OPTION ENABLING**
+> **TIME-BASED ACTIONS ENABLING**
 
 | <img src="https://user-images.githubusercontent.com/39027613/87869202-ab7fc480-c952-11ea-80d6-16007b2ce185.gif"/> | <img width="1200" src="https://user-images.githubusercontent.com/39027613/87866341-613c1a80-c935-11ea-8451-6836c6cdb634.png"/> |
 | ------------- | ------------- |
