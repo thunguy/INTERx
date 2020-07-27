@@ -41,7 +41,7 @@ __Deployment:__ Coming soon!
 
 <img src="https://user-images.githubusercontent.com/39027613/87868845-3068df00-c94f-11ea-9e48-22b80035f0bc.gif"/>
 
-### RENDER PROVIDERS BY PROVIDER ACTIVITIES**
+### SEARCH PROVIDERS
 
 | Search Provider by Activity | Edit Provider Activities |
 | --------------------------- | ------------------------ |
