@@ -43,8 +43,11 @@ __Deployment:__ Coming soon!
 
 <img src="https://user-images.githubusercontent.com/39027613/87868845-3068df00-c94f-11ea-9e48-22b80035f0bc.gif"/>
 
-### EDIT PROVIDER ACTIVITIES
-<img src="https://user-images.githubusercontent.com/39027613/88584737-f9599400-d006-11ea-95c4-ba3ce0d72b98.gif"/>
+> **RENDER PROVIDERS BY PROVIDER ACTIVITIES**
+
+| Search Provider by Activity | Edit Provider Activities |
+| --------------------------- | ------------------------ |
+| <img src="https://user-images.githubusercontent.com/39027613/88588571-9d920980-d00c-11ea-87c9-2ef739c8ef78.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/88584737-f9599400-d006-11ea-95c4-ba3ce0d72b98.gif"/> |
 
 ### EDIT USER DETAILS
 
