@@ -21,10 +21,18 @@ __Deployment:__ Coming soon!
 
 ### REGISTRATION & LOGIN
 
-> <p align="justify"> Users either register as a patient or a provider, where anyone can register as a patient, but a provider is required to register with a National Provider ID (NPI). When the form receives an 'NPI' input by the user, that input is verified using an HTTPS fetch request to NPPES NPI Registry's API, which I've also implemented to auto-fill provider registration text fields based on the data returned. Lastly, providers are prompted to select for their activities by using the text-autocomplete lookup feature, or by scrolling through the database's activity list. Activities that providers select for and add to their provider activity list will allow them to be searchable by patients who search and select for those same activities. </p>
+> <p align="justify"> Users either register as a patient or a provider, where anyone can register as a patient, but a provider is required to register with a National Provider ID (NPI). When the form receives an 'NPI' input by the user, that input is verified using an HTTPS fetch request to NPPES NPI Registry's API, which I've also implemented to auto-fill provider registration text fields based on the data returned. Lastly, providers are prompted to select for their activities by using the text-autocomplete lookup feature, or by scrolling through the database's activity list. </p>
 
 | <img src="https://user-images.githubusercontent.com/39027613/87715737-a52af600-c762-11ea-945e-9da6901b15a5.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/87722268-9fd2a900-c76c-11ea-8dfa-5196088093cd.gif"/> |
 | ------------ | ------------- |
+
+### SEARCH PROVIDERS
+
+> <p align="justify"> Activities that providers select for and add to their provider activity list will allow them to be searchable by patients who search and select for those same activities. </p>
+
+| Search Provider by Activity | Edit Provider Activities |
+| --------------------------- | ------------------------ |
+| <img src="https://user-images.githubusercontent.com/39027613/88588571-9d920980-d00c-11ea-87c9-2ef739c8ef78.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/88584737-f9599400-d006-11ea-95c4-ba3ce0d72b98.gif"/> |
 
 ### PROVIDER SCHEDULE
 
@@ -40,12 +48,6 @@ __Deployment:__ Coming soon!
 | <img src="https://user-images.githubusercontent.com/39027613/87867615-c139bd80-c943-11ea-8156-8051cd62072e.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/87868468-b7678880-c94a-11ea-907f-4bb49bc2459d.gif"/> |
 
 <img src="https://user-images.githubusercontent.com/39027613/87868845-3068df00-c94f-11ea-9e48-22b80035f0bc.gif"/>
-
-### SEARCH PROVIDERS
-
-| Search Provider by Activity | Edit Provider Activities |
-| --------------------------- | ------------------------ |
-| <img src="https://user-images.githubusercontent.com/39027613/88588571-9d920980-d00c-11ea-87c9-2ef739c8ef78.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/88584737-f9599400-d006-11ea-95c4-ba3ce0d72b98.gif"/> |
 
 ### EDIT USER DETAILS
 
