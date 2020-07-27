@@ -6,9 +6,7 @@ INTERx is a platform that connects patients to their next provider based on a mu
 **CONTENTS**
 - [Tech Stack](#tech-stack)
 - [Features](#features)
-- [Future Features](#future-features)
 - [Installation](#installation)
-- [About the Developer](#about-the-developer)
 
 
 ## Tech Stack
