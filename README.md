@@ -47,7 +47,7 @@ __Deployment:__ Coming soon!
 | -------------------------| ---------------------------------- |
 | <img src="https://user-images.githubusercontent.com/39027613/87867615-c139bd80-c943-11ea-8156-8051cd62072e.gif"/> | <img src="https://user-images.githubusercontent.com/39027613/87868468-b7678880-c94a-11ea-907f-4bb49bc2459d.gif"/> |
 
-<img src="https://user-images.githubusercontent.com/39027613/87868845-3068df00-c94f-11ea-9e48-22b80035f0bc.gif"/>
+<!--- <img src="https://user-images.githubusercontent.com/39027613/87868845-3068df00-c94f-11ea-9e48-22b80035f0bc.gif"/> --->
 
 ### EDIT USER DETAILS
 
