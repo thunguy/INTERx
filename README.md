@@ -1,6 +1,6 @@
 # INTERx
 
-INTERx is a platform that that connects patients to providers based on a shared passion for a sport or fitness regimen. A registered patient is able to schedule and manage their appointments with verified providers who are listed for the patient's chosen activity.
+INTERx is a platform that connects patients to providers based on a shared passion for a sport or fitness regimen. A registered patient is able to schedule and manage their appointments with verified providers who are listed for the patient's chosen activity.
 
 **CONTENTS**
 - [Tech Stack](#tech-stack)
