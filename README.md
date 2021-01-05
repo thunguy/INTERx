@@ -9,11 +9,10 @@ INTERx is a platform that connects patients to providers based on a shared passi
 
 
 ## Tech Stack
-__Backend:__ Flask, Python3, SQLAlchemy, bycrypt, RESTful API\
-__Frontend:__ React (functional | Hooks), JavaScript, HTML5, CSS3, Material-UI\
+__Backend:__ Flask, Python3, SQLAlchemy, bycrypt, REST API\
+__Frontend:__ React, React Hooks, JavaScript, HTML5, CSS3, Material-UI\
 __Database:__ PostgreSQL\
 __API:__ NPPES NPI Registry API\
-__Deployment:__ Coming soon!
 
 
 ## Features
