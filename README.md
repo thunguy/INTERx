@@ -102,5 +102,6 @@ Start backend server:
 In the terminal, navigate to frontend folder to run frontend node server:
 ```
 $ cd frontend
+$ npm install
 $ npm start
 ```
