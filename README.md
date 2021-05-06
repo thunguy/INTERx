@@ -1,6 +1,6 @@
 # INTERx
 
-INTERx is a platform that connects patients to providers based on a shared passion for a sport or fitness regimen. A registered patient is able to schedule and manage their appointments with verified providers who are listed for the patient's chosen activity.
+INTERx is a platform for patients to search and schedule appointments with registered providers who can best serve the patient's health-fitness needs and goals. A registered patient is able to book and manage their appointments with any verified, registered provider who is actively listed under the patient's chosen activity  using the internal scheduling feature. Although anyone is authorized to sign up as a patient, a provider must first be verified by their unique National Provider ID upon registration, which is authenticated using the NPPES NPI Registry API. Once verified, providers will be prompted to add relevant activities to their provider activity list to enable their visibility to patients who select for the same activities. Registered providers are able to update their provider activity list at any time, regulate their patient load size, manage their schedule, and document their patients’ appointments.
 
 https://bit.ly/about-INTERx
 
@@ -11,7 +11,7 @@ https://bit.ly/about-INTERx
 
 
 ## Tech Stack
-__Backend:__ Flask, Python3, SQLAlchemy, bycrypt, REST API\
+__Backend:__ Flask, Python3, REST API, SQLAlchemy, bycrypt\
 __Frontend:__ React, React Hooks, JavaScript, HTML5, CSS3, Material-UI\
 __Database:__ PostgreSQL\
 __API:__ NPPES NPI Registry API
