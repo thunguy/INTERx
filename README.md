@@ -1,6 +1,6 @@
 # INTERx
 
-INTERx is a platform to search and schedule appointments with registered providers who can provide adept care to patients with specific fitness requisites and goals for a particular activity. A registered patient is able to book and manage their appointments with any verified provider who is actively listed under the patient's chosen activity using the internal scheduling feature. Although anyone is authorized to sign up as a patient, a provider must first be verified by their unique National Provider ID upon registration, which is authenticated using the NPPES NPI Registry API. Once verified, providers will be prompted to add relevant activities to their provider activity list to make themselves visible to patients who select for the same activities. Registered providers are able to update their provider activity list at any time, regulate their patient load size, manage their schedule, and document their patients’ appointments.
+INTERx is a platform to search and schedule appointments with registered providers who focus treatment around patients' specialized health requisites and fitness objectives for niched activities. Providers are verified at registration by providing their unique National Provider ID which INTERx sends to the NPI Registry API to await authentication. Registered providers are authorized to update their activities to be recommended for, accept/refuse new patients, modify their schedule, and document appointment notes. Registered patients are permitted to book customizable appointments with any provider listed for a queried activity using the in-app scheduling feature with an autocomplete search tool, review and manage their appointments, and will soon be able to securely communicate with their providers using the in-app messaging feature that is currently in development.
 
 https://bit.ly/about-INTERx
 
@@ -11,7 +11,7 @@ https://bit.ly/about-INTERx
 
 
 ## Tech Stack
-__Backend:__ Flask, Python3, REST API, SQLAlchemy, bycrypt\
+__Backend:__ Flask, Python3, RESTful API, SQLAlchemy, bycrypt\
 __Frontend:__ React, React Hooks, JavaScript, HTML5, CSS3, Material-UI\
 __Database:__ PostgreSQL\
 __API:__ NPPES NPI Registry API
