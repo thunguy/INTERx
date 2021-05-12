@@ -175,7 +175,7 @@ class MedicalRelation(db.Model):
             'consent': self.consent,
             'patientid': self.patientid,
             'npi': self.npi,
-            'patientname': f'{self.patient.fname.title()} {self.patient.lname.title()}',
+            'patient': f'{self.patient.fname.title()} {self.patient.lname.title()}',
             'provider': f'{self.provider.fname.title()} {self.provider.lname.title()}, {self.provider.credential}'
         }
 
@@ -240,8 +240,40 @@ class Appointment(db.Model):
             'relationid': self.relationid,
             'activityid': self.activityid,
             'provider': f'{self.provider.fname.title()} {self.provider.lname.title()}, {self.provider.credential}',
-            'patientname': f'{self.patient.fname.title()} {self.patient.lname.title()}',
+            'patient': f'{self.patient.fname.title()} {self.patient.lname.title()}',
             'dob': f'{self.patient.dob}'
+        }
+
+
+class Message(db.Model):
+    __tablename__ = 'messages'
+    
+    messageid = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    message = db.Column(db.Text)
+    sent = db.Column(db.DateTime(timezone=True))
+    read = db.Column(db.Boolean, default=False)
+    edited = db.Column(db.Boolean, default=False)
+    patientid = db.Column(db.Integer, db.ForeignKey('patients.patientid'))
+    npi = db.Column(db.Integer, db.ForeignKey('providers.npi'))
+
+    patient = db.relationship('Patient', backref='messages')
+    provider = db.relationship('Provider', backref='messages')
+
+    def __repr__(self):
+        return (f'<Message messageid={self.messageid} patient={self.patientid} provider={self.npi} '
+                f'sent={self.sent} message={self.message} read={self.read} edited={self.edited}>')
+
+    def to_dict(self):
+        return {
+            'messageid': self.messageid,
+            'message': self.message,
+            'sent': self.sent,
+            'read': self.read,
+            'edited': self.edited,
+            'patientid': self.patientid,
+            'npi': self.npi,
+            'provider': f'{self.provider.fname.title()} {self.provider.lname.title()}, {self.provider.credential}',
+            'patient': f'{self.patient.fname.title()} {self.patient.lname.title()}',
         }
 
 
