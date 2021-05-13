@@ -24,14 +24,14 @@
     "material-ui-confirm": "^2.1.1",
     "material-ui-theme-state": "^1.0.17",
     "moment": "^2.27.0",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-country-region-selector": "^2.1.0",
     "react-datepicker": "^3.0.0",
-    "react-dom": "^16.13.1",
-    "react-icons": "^3.10.0",
+    "react-dom": "^16.14.0",
+    "react-icons": "^3.11.0",
     "react-jotform-embed": "^1.0.4",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^4.0.3",
     "validate.js": "^0.13.1"
   },
   "scripts": {
