@@ -5,8 +5,7 @@ node_modules
 
 # testing
 coverage
-seed
-tests
+seed.py
 
 # production
 build
