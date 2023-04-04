@@ -1,6 +1,7 @@
 """Models for INTERx app."""
 
 from flask_sqlalchemy import SQLAlchemy
+from os import environ
 import bcrypt
 # from datetime import datetime
 
@@ -247,7 +248,7 @@ class Appointment(db.Model):
 
 class Message(db.Model):
     __tablename__ = 'messages'
-    
+
     messageid = db.Column(db.Integer, autoincrement=True, primary_key=True)
     message = db.Column(db.Text)
     sent = db.Column(db.DateTime(timezone=True))
@@ -280,7 +281,7 @@ class Message(db.Model):
 def connect_to_db(app):
     """Connect the database to our Flask app."""
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///interx"
+    app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('DATABASE_URI')
     app.config["SQLALCHEMY_ECHO"] = False
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app

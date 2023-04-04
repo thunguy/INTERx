@@ -1,15 +1,15 @@
-from flask import Flask, request, jsonify
-from flask import session
-import requests
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from model import connect_to_db, db, Patient, Provider, Activity, ProviderActivity, Appointment, MedicalRelation
+from os import environ
 import bcrypt
 import dateutil.parser
+import requests
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 cors = CORS(app)
-app.secret_key = 'dev'
+app.secret_key = environ.get('SECRET_KEY')
 
 
 # Generate hash for user passwords

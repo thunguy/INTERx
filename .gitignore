@@ -12,12 +12,14 @@ build
 
 # misc
 env
+.env
 .vscode
 .DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+secrets.sh
 __pycache__
 
 npm-debug.log*
